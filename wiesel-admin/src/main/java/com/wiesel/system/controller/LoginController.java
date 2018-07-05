@@ -46,8 +46,29 @@ public class LoginController {
 		return "login";
 	}
 	
-	@PostMapping("/login")
+	
+	@GetMapping({ "/index" })
+	String index(Model model) {
+		System.out.println("a");
+//		List<Tree<MenuDO>> menus = menuService.listMenuTree(getUserId());
+//		model.addAttribute("menus", menus);
+//		model.addAttribute("name", getUser().getName());
+//		FileDO fileDO = fileService.get(getUser().getPicId());
+//		if(fileDO!=null&&fileDO.getUrl()!=null){
+//			if(fileService.isExist(fileDO.getUrl())){
+//				model.addAttribute("picUrl",fileDO.getUrl());
+//			}else {
+//				model.addAttribute("picUrl","/img/photo_s.jpg");
+//			}
+//		}else {
+//			model.addAttribute("picUrl","/img/photo_s.jpg");
+//		}
+//		model.addAttribute("username", getUser().getUsername());
+		return "index_v1";
+	}
+	
 	@ResponseBody
+	@PostMapping(value="/login",produces="application/json;charset=UTF-8")
 	R ajaxLogin(String username, String password) {
 
 		password = MD5Utils.encrypt(username, password);
