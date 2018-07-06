@@ -28,7 +28,7 @@ public class Menu extends Model<Menu> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "menu_id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long menuId;
     /**
      * 父菜单ID，一级菜单为0

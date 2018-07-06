@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="signup-footer">
-        <div class="pull-left">&copy; 2017 All Rights Reserved. BootDo
+        <div class="pull-left">&copy; 2017 All Rights Reserved. WIESEL-ADMIN
         </div>
     </div>
 </div>
@@ -123,6 +123,8 @@
             url: ctx+"login",
             data: $('#signupForm').serialize(),
             success: function (r) {
+        		console.log("code类型:"+typeof(r.code));
+        		
                  if (r.code == 0) {
                     var index = layer.load(1, {
                         shade: [0.1,'#fff'] //0.1透明度的白色背景

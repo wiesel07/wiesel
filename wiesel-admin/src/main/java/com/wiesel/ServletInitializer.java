@@ -1,11 +1,9 @@
-package com.wiesel.common.config;
+package com.wiesel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-
-import com.wiesel.WieselAdminApplication;
 
 /** 
 *
