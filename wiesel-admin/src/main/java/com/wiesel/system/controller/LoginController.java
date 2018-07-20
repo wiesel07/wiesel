@@ -15,9 +15,6 @@ import com.wiesel.common.utils.MD5Utils;
 import com.wiesel.common.utils.R;
 import com.wiesel.common.utils.ShiroUtils;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
