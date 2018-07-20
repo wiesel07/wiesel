@@ -1,8 +1,5 @@
 package com.wiesel.system.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -16,11 +13,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wiesel.common.controller.BaseController;
 import com.wiesel.common.utils.MD5Utils;
 import com.wiesel.common.utils.R;
+import com.wiesel.common.utils.ShiroUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  *
  * @ClassName 类名：LoginController
- * @Description 功能说明：
+ * @Description 功能说明：登录操作类
  *              <p>
  *              TODO
  *              </p>
@@ -36,22 +41,27 @@ import com.wiesel.common.utils.R;
  ***********************************************************************
  *          </p>
  */
+@ApiModel(value="用户登录接口")
 @Controller
 public class LoginController extends BaseController {
+	
+	@ApiIgnore
 	@GetMapping({ "/", "" })
 	String welcome(Model model) {
 		// return "redirect:/blog";
 		return "index_v1";
 	}
 
+	@ApiIgnore
 	@GetMapping("/login")
 	String login() {
 		return "login";
 	}
 
+	@ApiIgnore
 	@GetMapping({ "/index" })
 	String index(Model model) {
-		System.out.println("a");
+
 		// List<Tree<MenuDO>> menus = menuService.listMenuTree(getUserId());
 		// model.addAttribute("menus", menus);
 		model.addAttribute("name", getUser().getName());
@@ -65,11 +75,12 @@ public class LoginController extends BaseController {
 		// }else {
 		// model.addAttribute("picUrl","/img/photo_s.jpg");
 		// }
-		 model.addAttribute("picUrl","/img/photo_s.jpg");
-		 model.addAttribute("username", getUser().getUsername());
+		model.addAttribute("picUrl", "/img/photo_s.jpg");
+		model.addAttribute("username", getUser().getUsername());
 		return "index_v1";
 	}
 
+	@ApiOperation(value = "登录", notes = "用户填写账号密码进入后台")
 	@ResponseBody
 	@PostMapping(value = "/login")
 	R ajaxLogin(String username, String password) {
@@ -85,6 +96,14 @@ public class LoginController extends BaseController {
 		}
 	}
 
+	@ApiOperation(value = "登出")
+	@GetMapping("/logout")
+	String logout() {
+		ShiroUtils.logout();
+		return "redirect:/login";
+	}
+
+	@ApiIgnore
 	@GetMapping("/main")
 	String main() {
 		return "main";

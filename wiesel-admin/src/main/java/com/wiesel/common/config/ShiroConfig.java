@@ -30,7 +30,7 @@ import net.sf.ehcache.CacheManager;
 /**
  *
  * @ClassName 类名：ShiroConfig
- * @Description 功能说明：
+ * @Description 功能说明：shiro配置信息
  *              <p>
  *              TODO
  *              </p>
