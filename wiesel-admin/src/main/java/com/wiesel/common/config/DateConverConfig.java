@@ -11,7 +11,7 @@ import org.springframework.core.convert.converter.Converter;
 /** 
 *
 * @ClassName   类名：DateConverConfig 
-* @Description 功能说明：
+* @Description 功能说明：日期转换
 * <p>
 * TODO
 *</p>

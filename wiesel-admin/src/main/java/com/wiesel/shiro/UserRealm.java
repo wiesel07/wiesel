@@ -85,6 +85,14 @@ public class UserRealm extends AuthorizingRealm {
 		// 明文: 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user,user.getPassword(), getName());
 
+		
+//		 SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+//	                user, //用户
+//	                user.getPassword(), //密码
+//	                ByteSource.Util.bytes(username),
+//	                getName()  //realm name
+//	        );
+		
 		// 当验证都通过后，把用户信息放在session里
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("userSession", user);

@@ -9,6 +9,9 @@ security:
   basic:
     enabled: false
 spring:
+  output: #日志多彩输出，DETECT：会检查终端是否支持ANSI，是的话就采用彩色输出（推荐项）
+    ansi:
+       enabled: DETECT
   thymeleaf:
     mode: LEGACYHTML5
     cache: false
