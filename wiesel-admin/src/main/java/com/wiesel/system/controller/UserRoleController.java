@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
  * 用户与角色对应关系 前端控制器
  * </p>
  *
- * @author wuj123
+ * @author wuj
  * @since 2018-07-04
  */
 @Controller
-@RequestMapping("/system/userRole")
+@RequestMapping("/sys/userRole")
 public class UserRoleController {
 
 }

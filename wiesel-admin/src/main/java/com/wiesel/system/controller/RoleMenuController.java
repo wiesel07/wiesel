@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
  * 角色与菜单对应关系 前端控制器
  * </p>
  *
- * @author wuj123
+ * @author wuj
  * @since 2018-07-04
  */
 @Controller
-@RequestMapping("/system/roleMenu")
+@RequestMapping("/sys/roleMenu")
 public class RoleMenuController {
 
 }

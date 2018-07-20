@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
  * 菜单管理 前端控制器
  * </p>
  *
- * @author wuj123
+ * @author wuj
  * @since 2018-07-04
  */
 @Controller
-@RequestMapping("/system/menu")
+@RequestMapping("/sys/menu")
 public class MenuController {
 
 }
