@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wiesel.common.controller.BaseController;
+import com.wiesel.common.utils.CommonError;
+import com.wiesel.common.utils.ErrorCode;
 import com.wiesel.common.utils.MD5Utils;
 import com.wiesel.common.utils.R;
 import com.wiesel.common.utils.ShiroUtils;
@@ -38,10 +40,10 @@ import springfox.documentation.annotations.ApiIgnore;
  ***********************************************************************
  *          </p>
  */
-@ApiModel(value="用户登录接口")
+@ApiModel(value = "用户登录接口")
 @Controller
 public class LoginController extends BaseController {
-	
+
 	@ApiIgnore
 	@GetMapping({ "/", "" })
 	String welcome(Model model) {
@@ -53,6 +55,12 @@ public class LoginController extends BaseController {
 	@GetMapping("/login")
 	String login() {
 		return "login";
+	}
+
+	@ApiIgnore
+	@GetMapping("/api")
+	String api() {
+		return "redirect:/swagger-ui.html";
 	}
 
 	@ApiIgnore
@@ -87,7 +95,9 @@ public class LoginController extends BaseController {
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.login(token);
-			return R.ok();
+			 CommonError commonError = new CommonError();
+			 commonError.setCode(ErrorCode.LOGIN_FAIL.getCode()).setMsg(ErrorCode.LOGIN_FAIL.getMsg())
+			return new R(commonError);
 		} catch (AuthenticationException e) {
 			return R.error("用户或密码错误");
 		}

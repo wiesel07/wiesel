@@ -5,6 +5,8 @@ import org.apache.shiro.util.ByteSource;
 
 import com.wiesel.system.entity.User;
 
+import lombok.experimental.UtilityClass;
+
 /** 
 *
 * @ClassName   类名：PasswordHelper 
@@ -24,6 +26,7 @@ import com.wiesel.system.entity.User;
 ***********************************************************************
 *</p>
 */
+@UtilityClass
 public class PasswordHelper {
 	//private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 		private String algorithmName = "md5";
@@ -31,11 +34,22 @@ public class PasswordHelper {
 
 		public void encryptPassword(User user) {
 			//String salt=randomNumberGenerator.nextBytes().toHex();
-			String newPassword = new SimpleHash(algorithmName, user.getPassword(),   hashIterations).toHex();
 
-			//String newPassword = new SimpleHash(algorithmName, user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), hashIterations).toHex();
+			String newPassword = new SimpleHash(algorithmName, user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), hashIterations).toHex();
 			//String newPassword = new SimpleHash(algorithmName, user.getPassword()).toHex();
 			user.setPassword(newPassword);
 
 		}
+		
+//		public static void main(String[] args) {
+//			User user = new User();
+//			user.setUsername("admin");
+//			user.setPassword("123456");
+//			
+//			String newPassword = new SimpleHash("MD5", user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), 1).toHex();
+//			//String newPassword = new SimpleHash(algorithmName, user.getPassword()).toHex();
+//			user.setPassword(newPassword);
+//		System.out.println(user.getPassword());
+//		
+//		}
 }
