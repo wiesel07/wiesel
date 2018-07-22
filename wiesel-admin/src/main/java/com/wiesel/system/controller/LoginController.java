@@ -96,8 +96,8 @@ public class LoginController extends BaseController {
 		try {
 			subject.login(token);
 			 CommonError commonError = new CommonError();
-			 commonError.setCode(ErrorCode.LOGIN_FAIL.getCode()).setMsg(ErrorCode.LOGIN_FAIL.getMsg())
-			return new R(commonError);
+			 commonError.setCode(ErrorCode.LOGIN_FAIL.getCode()).setMsg(ErrorCode.LOGIN_FAIL.getMsg());
+			return R.ok();
 		} catch (AuthenticationException e) {
 			return R.error("用户或密码错误");
 		}

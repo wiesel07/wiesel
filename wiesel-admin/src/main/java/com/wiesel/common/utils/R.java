@@ -3,8 +3,6 @@ package com.wiesel.common.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.freeter.common.utils.R;
-
 /**
  *
  * @ClassName 类名：R
