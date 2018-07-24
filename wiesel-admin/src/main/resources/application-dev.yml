@@ -4,6 +4,8 @@ logging:
   level:
     root: info
     com.wiesel: debug
+swagger :
+   enabled: true
 spring:
   # ====================druid====================
   datasource:

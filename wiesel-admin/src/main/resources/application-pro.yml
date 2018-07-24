@@ -3,7 +3,9 @@ bootdo:
 logging:
   level:
     root: error
-    com.bootdo: info
+    com.wiesel: info
+swagger :
+   enabled: false    
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

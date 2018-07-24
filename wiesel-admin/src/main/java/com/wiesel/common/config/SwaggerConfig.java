@@ -3,6 +3,7 @@
  */
 package com.wiesel.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,13 +42,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+	
+	 //是否开启swagger，正式环境一般是需要关闭的，可根据springboot的多环境配置进行设置
+    @Value(value = "${swagger.enabled}")
+    Boolean swaggerEnabled;
+	
 	@Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.wiesel"))
-                .paths(PathSelectors.any())
+                // 是否开启
+                .enable(swaggerEnabled).select()
+                // 指定路径处理PathSelectors.any()代表所有的路径
+                .apis(RequestHandlerSelectors.basePackage("com.wiesel")) 
+                // 指定路径处理PathSelectors.any()代表所有的路径
+                .paths(PathSelectors.any()) 
                 .build();
     }
 
@@ -57,7 +66,7 @@ public class SwaggerConfig {
                 .description("更多Spring Boot相关文章请关注：http://blog.didispace.com/")
               //  .termsOfServiceUrl("http://blog.didispace.com/")
                 //创建人
-                .contact(new Contact("wuj", "502393098@qq.com", ""))
+                .contact(new Contact("wuj", "502393098@qq.com", "502393098@qq.com"))
                 .version("1.0")
                 .build();
     }

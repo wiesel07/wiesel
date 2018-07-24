@@ -1,10 +1,9 @@
 package com.wiesel.system.mapper;
 
-import com.wiesel.system.entity.Menu;
-
 import java.util.List;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.wiesel.system.entity.Menu;
 
 /**
  * <p>
@@ -29,4 +28,19 @@ public interface MenuMapper extends BaseMapper<Menu> {
 	 * @author 作者：wuj
 	 */
 	List<String> listUserPerms(Long id);
+	
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：根据用户Id获取菜单信息
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param id
+	 * @return
+	 *
+	 * @date   创建时间：2018年7月23日
+	 * @author 作者：wuj
+	 */
+	List<Menu> listMenuByUserId(Long id);
 }

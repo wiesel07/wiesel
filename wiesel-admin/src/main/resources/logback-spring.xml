@@ -23,6 +23,7 @@
         </layout>
     </appender>
 
+
     <logger name="com.wiesel" additivity="false">
         <appender-ref ref="console"/>
         <appender-ref ref="logFile" />

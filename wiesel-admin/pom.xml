@@ -25,11 +25,11 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.wiesel</groupId>
 			<artifactId>wiesel-common</artifactId>
 			<version>${com.wiesel.verson}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

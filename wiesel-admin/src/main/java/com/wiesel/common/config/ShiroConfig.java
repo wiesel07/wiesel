@@ -114,9 +114,8 @@ public class ShiroConfig {
 		// 设置realm.
 		securityManager.setRealm(userRealm());
 		// 自定义缓存实现 使用redis
-		log.info("shiro自定义reids缓存实现++++" + cacheType);
+		log.info("shiro自定义缓存实现【" + cacheType+"】");
 		if (CommonConstant.CACHE_TYPE_REDIS.equals(cacheType)) {
-			log.info("shiro自定义reids缓存实现");
 			securityManager.setCacheManager(cacheManager());
 		} else {
 
