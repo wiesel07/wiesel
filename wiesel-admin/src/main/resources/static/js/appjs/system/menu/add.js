@@ -1,4 +1,4 @@
-var prefix = "/sys/menu"
+var prefix = "/system/menu"
 $(function() {
 	validateRule();
 	//打开图标列表

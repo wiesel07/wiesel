@@ -1,7 +1,12 @@
 package com.wiesel.system.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.wiesel.system.entity.Role;
+import com.wiesel.system.entity.RoleMenu;
 
 /** 
 *
@@ -24,4 +29,18 @@ import com.wiesel.system.entity.Role;
 */
 public interface RoleMapper extends BaseMapper<Role>{
 
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：批量插入角色菜单
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param roleMenus
+	 * @return
+	 *
+	 * @date   创建时间：2018年7月31日
+	 * @author 作者：wuj
+	 */
+	public int insertBatchRoleMenu(@Param("roleMenus")List<RoleMenu> roleMenus);
 }

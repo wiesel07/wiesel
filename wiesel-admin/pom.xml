@@ -25,11 +25,8 @@
 	</properties>
 
 	<dependencies>
-		<!-- <dependency>
-			<groupId>com.wiesel</groupId>
-			<artifactId>wiesel-common</artifactId>
-			<version>${com.wiesel.verson}</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.wiesel</groupId> <artifactId>wiesel-common</artifactId> 
+			<version>${com.wiesel.verson}</version> </dependency> -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -231,6 +228,11 @@
 			<version>1.9.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-core</artifactId>
+			<version>4.1.4</version>
+		</dependency>
 		<!--war包部署需要 -->
 		<!--<dependency> -->
 		<!--<groupId>org.springframework.boot</groupId> -->

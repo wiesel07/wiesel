@@ -53,6 +53,8 @@ public class Role extends Model<Role> {
 	private Date gmtCreate;
 	// 创建时间
 	private Date gmtModified;
+	//角色状态:0正常,1禁用
+	private Integer status;
 
 	public static final String MENU_ID = "role_id";
 
@@ -68,6 +70,8 @@ public class Role extends Model<Role> {
 
 	public static final String GMT_MODIFIED = "gmt_modified";
 
+	public static final String STATUS = "status";
+	
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub

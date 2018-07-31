@@ -1,6 +1,19 @@
 /**
  * wuj 20180723
+ * 通用方法封装处理
  */
+/** 消息状态码 */
+web_status = {
+    SUCCESS: 0,
+    FAIL: 500
+};
+
+/** 弹窗状态码 */
+modal_status = {
+    SUCCESS: "success",
+    FAIL: "error",
+    WARNING: "warning"
+};
 var app={};
 
 window.app = app;
@@ -178,3 +191,155 @@ $.fn.serializeObject = function() {
     });
     return o;
 }
+
+// 消息窗体
+app.modalMsg = function(content, type) {
+    if (type != undefined) {
+        var icon = "";
+        if (type == modal_status.WARNING) {
+            icon = 0;
+        }
+        else if (type == modal_status.SUCCESS) {
+            icon = 1;
+        }
+        else if (type == modal_status.FAIL) {
+            icon = 2;
+        }
+        layer.msg(content, { icon: icon, time: 2000, shift: 0 });
+        $(".layui-layer-msg").find('i.' + icon).parents('.layui-layer-msg').addClass('layui-layer-msg-' + type);
+    } else {
+        layer.msg(content);
+    }
+}
+// 弹出窗体
+app.modalAlert = function(content, type) {
+    var icon = "";
+    if (type == modal_status.WARNING) {
+        icon = 0;
+    } else if (type == modal_status.SUCCESS) {
+        icon = 1;
+    } else if (type == modal_status.FAIL) {
+        icon = 2;
+    } else {
+        icon = 3;
+    }
+    layer.alert(content, {
+        icon: icon,
+        title: "系统提示",
+        btn: ['确认'],
+        btnclass: ['btn btn-primary'],
+    });
+}
+// 确认窗体
+app.modalConfirm = function (content, callBack) {
+        layer.confirm(content, {
+        icon: 3,
+        title: "系统提示",
+        btn: ['确认', '取消'],
+        btnclass: ['btn btn-primary', 'btn btn-danger'],
+    }, function () {
+        callBack(true);
+    }, function () {
+        // callBack(false)
+    });
+}
+// 关闭窗体
+app.modalClose = function () {
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var $IsdialogClose = top.$("#layui-layer" + index).find('.layui-layer-btn').find("#IsdialogClose");
+    var IsClose = $IsdialogClose.is(":checked");
+    if ($IsdialogClose.length == 0) {
+        IsClose = true;
+    }
+    if (IsClose) {
+    	parent.layer.close(index);
+    } else {
+    	parent.location.reload();
+    }
+}
+// 刷新父窗体
+app.parentReload = function () {
+//	parent.location.reload();
+	parent.reLoad();
+	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+	parent.layer.close(index)
+    return false;
+}
+
+
+
+/** 弹出层指定宽度 */
+app.layer_show= function(options) {
+	var defaultOptions={
+			type: 2,
+			area:["800px",($(window).height() - 50)+"px"],
+			fix: false,
+	        //不固定
+	        maxmin: true,
+	        shade: 0.4,
+			title:false,
+			content:"404.html"
+	};
+	$.extend(defaultOptions, options);
+    layer.open(defaultOptions);
+}
+
+/** 关闭弹出框口 */
+app.layer_close= function() {
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
+}
+
+/** 对ajax的post方法再次封装 */
+_ajax_save = function(url, data) {
+    var config = {
+        url: url,
+        type: "post",
+        dataType: "json",
+        data: data,
+        success: function(result) {
+        	handleSuccess(result);
+        }
+    };
+    $.ajax(config)
+};
+
+/** 对jquery的ajax方法再次封装 */
+app._ajax = function(options) {
+    var defaultOptions = {
+        url: url,
+        type: "POST",
+        dataType: "json",
+        timeout:30000,
+        data: data,
+        async:true,
+        success: function(result) {
+            simpleSuccess(result);
+        },
+        error: function (xhr, type) {
+        }
+    };
+	$.extend(defaultOptions, options);
+    $.ajax(defaultOptions)
+};
+
+/** 返回结果处理 */
+function simpleSuccess(result) {
+    if (result.code == web_status.SUCCESS) {
+		app.modalMsg(result.msg, modal_status.SUCCESS);
+    } else {
+    	app.modalAlert(result.msg, modal_status.FAIL);
+    }
+}
+
+/** 操作结果处理 */
+function handleSuccess(result) {
+    if (result.code == web_status.SUCCESS) {
+    	parent.layer.msg("新增成功,正在刷新数据请稍后……",{icon:1,time: 500,shade: [0.1,'#fff']},function(){
+			$.parentReload();
+		});
+    } else {
+    	$.modalAlert(result.msg, modal_status.FAIL);
+    }
+}
+

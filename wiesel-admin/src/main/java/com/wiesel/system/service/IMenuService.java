@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.wiesel.common.base.entity.Tree;
+import com.wiesel.common.base.entity.ZtreeNode;
 import com.wiesel.system.entity.Menu;
 
 /**
@@ -46,5 +47,38 @@ public interface IMenuService extends IService<Menu> {
 	 * @author 作者：wuj
 	 */
 	public List<Tree<Menu>> listMenuTree(Long id);
-		
+//
+//	/**
+//	 * 
+//	 * <p>函数名称：        </p>
+//	 * <p>功能说明：根据用户角色获取菜单
+//	 *
+//	 * </p>
+//	 *<p>参数说明：</p>
+//	 * @param id
+//	 * @return
+//	 *
+//	 * @date   创建时间：2018年7月30日
+//	 * @author 作者：wuj
+//	 */
+//	public Tree<Menu> getTree(Long id);
+	
+	
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：获取所有菜单
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @return
+	 *
+	 * @date   创建时间：2018年7月30日
+	 * @author 作者：wuj
+	 */
+	public List<ZtreeNode> getTree();
+
+	
+	
+	
 }

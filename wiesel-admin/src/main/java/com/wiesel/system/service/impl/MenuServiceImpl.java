@@ -12,8 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wiesel.common.base.entity.Tree;
+import com.wiesel.common.base.entity.ZtreeNode;
 import com.wiesel.common.utils.BuildTree;
 import com.wiesel.system.entity.Menu;
 import com.wiesel.system.mapper.MenuMapper;
@@ -64,4 +66,46 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 		return list;
 	}
 
+	
+
+//	@Override
+//	public Tree<Menu> getTree() {
+//		List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
+//		
+//		EntityWrapper< Menu> wrapper = new EntityWrapper<>();
+//		
+//		wrapper.orderBy(false, Menu.MENU_ID);
+//		List<Menu> menus = this.baseMapper.selectList(wrapper);
+//		for (Menu sysMenuDO : menus) {
+//			Tree<Menu> tree = new Tree<Menu>();
+//			tree.setId(sysMenuDO.getMenuId().toString());
+//			tree.setParentId(sysMenuDO.getParentId().toString());
+//			tree.setText(sysMenuDO.getName());
+//			trees.add(tree);
+//		}
+//		// 默认顶级菜单为０，根据数据库实际情况调整
+//		Tree<Menu> t = BuildTree.build(trees);
+//		return t;
+//	}
+	
+	@Override
+	public List<ZtreeNode> getTree() {
+		List<ZtreeNode> trees = new ArrayList<ZtreeNode>();
+		
+		EntityWrapper< Menu> wrapper = new EntityWrapper<>();
+		wrapper.orderBy(Menu.TYPE, true);
+		wrapper.orderBy(Menu.PARENT_ID, true);
+		wrapper.orderBy(Menu.MENU_ID, true);
+		List<Menu> menus = this.baseMapper.selectList(wrapper);
+		
+		for (Menu menu : menus) {
+			ZtreeNode tree = new ZtreeNode();
+			tree.setId(menu.getMenuId().toString());
+			tree.setPid(menu.getParentId().toString());
+			tree.setName(menu.getName());
+			tree.setChecked(false);
+			trees.add(tree);
+		}
+		return trees;
+	}
 }
