@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,9 @@ import com.wiesel.common.base.entity.Tree;
 import com.wiesel.common.base.entity.ZtreeNode;
 import com.wiesel.common.utils.BuildTree;
 import com.wiesel.system.entity.Menu;
+import com.wiesel.system.entity.RoleMenu;
 import com.wiesel.system.mapper.MenuMapper;
+import com.wiesel.system.mapper.RoleMenuMapper;
 import com.wiesel.system.service.IMenuService;
 
 /**
@@ -30,10 +33,12 @@ import com.wiesel.system.service.IMenuService;
  * @since 2018-07-04
  */
 @Service
-@Transactional(readOnly = true,rollbackFor = Exception.class)
+@Transactional(readOnly = true, rollbackFor = Exception.class)
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
-	
+	@Autowired
+	private RoleMenuMapper roleMenuMapper;
+
 	@Override
 	public Set<String> listPerms(Long userId) {
 		List<String> perms = this.baseMapper.listUserPerms(userId);
@@ -45,7 +50,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 		}
 		return permsSet;
 	}
-	
+
 	@Override
 	public List<Tree<Menu>> listMenuTree(Long id) {
 		List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
@@ -66,44 +71,75 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 		return list;
 	}
 
-	
+	// @Override
+	// public Tree<Menu> getTree() {
+	// List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
+	//
+	// EntityWrapper< Menu> wrapper = new EntityWrapper<>();
+	//
+	// wrapper.orderBy(false, Menu.MENU_ID);
+	// List<Menu> menus = this.baseMapper.selectList(wrapper);
+	// for (Menu sysMenuDO : menus) {
+	// Tree<Menu> tree = new Tree<Menu>();
+	// tree.setId(sysMenuDO.getMenuId().toString());
+	// tree.setParentId(sysMenuDO.getParentId().toString());
+	// tree.setText(sysMenuDO.getName());
+	// trees.add(tree);
+	// }
+	// // 默认顶级菜单为０，根据数据库实际情况调整
+	// Tree<Menu> t = BuildTree.build(trees);
+	// return t;
+	// }
 
-//	@Override
-//	public Tree<Menu> getTree() {
-//		List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-//		
-//		EntityWrapper< Menu> wrapper = new EntityWrapper<>();
-//		
-//		wrapper.orderBy(false, Menu.MENU_ID);
-//		List<Menu> menus = this.baseMapper.selectList(wrapper);
-//		for (Menu sysMenuDO : menus) {
-//			Tree<Menu> tree = new Tree<Menu>();
-//			tree.setId(sysMenuDO.getMenuId().toString());
-//			tree.setParentId(sysMenuDO.getParentId().toString());
-//			tree.setText(sysMenuDO.getName());
-//			trees.add(tree);
-//		}
-//		// 默认顶级菜单为０，根据数据库实际情况调整
-//		Tree<Menu> t = BuildTree.build(trees);
-//		return t;
-//	}
-	
 	@Override
 	public List<ZtreeNode> getTree() {
 		List<ZtreeNode> trees = new ArrayList<ZtreeNode>();
-		
-		EntityWrapper< Menu> wrapper = new EntityWrapper<>();
+
+		EntityWrapper<Menu> wrapper = new EntityWrapper<>();
 		wrapper.orderBy(Menu.TYPE, true);
 		wrapper.orderBy(Menu.PARENT_ID, true);
 		wrapper.orderBy(Menu.MENU_ID, true);
 		List<Menu> menus = this.baseMapper.selectList(wrapper);
-		
+
 		for (Menu menu : menus) {
 			ZtreeNode tree = new ZtreeNode();
 			tree.setId(menu.getMenuId().toString());
 			tree.setPid(menu.getParentId().toString());
 			tree.setName(menu.getName());
 			tree.setChecked(false);
+			trees.add(tree);
+		}
+		return trees;
+	}
+
+	@Override
+	public List<ZtreeNode> getTree(Long id) {
+		List<ZtreeNode> trees = new ArrayList<ZtreeNode>();
+
+		EntityWrapper<Menu> menuWrapper = new EntityWrapper<>();
+		menuWrapper.orderBy(Menu.TYPE, true);
+		menuWrapper.orderBy(Menu.PARENT_ID, true);
+		menuWrapper.orderBy(Menu.MENU_ID, true);
+		// 获取所有菜单信息
+		List<Menu> menus = this.baseMapper.selectList(menuWrapper);
+
+		// 获取角色对应菜单信息
+		EntityWrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
+		roleMenuWrapper.eq(RoleMenu.ROLE_ID, id);
+		List<RoleMenu> roleMenus = roleMenuMapper.selectList(roleMenuWrapper);
+
+		for (Menu menu : menus) {
+			ZtreeNode tree = new ZtreeNode();
+			tree.setId(menu.getMenuId().toString());
+			tree.setPid(menu.getParentId().toString());
+			tree.setName(menu.getName());
+			tree.setChecked(false);
+			for (RoleMenu roleMenu : roleMenus) {
+				if (menu.getMenuId() == roleMenu.getMenuId()) {
+					tree.setChecked(true);
+					break;
+				}
+			}
 			trees.add(tree);
 		}
 		return trees;

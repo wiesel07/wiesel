@@ -38,7 +38,7 @@ function load() {
 								var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
 										+ row.roleId
 										+ '\')"><i class="fa fa-edit"></i></a> ';
-								var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
+								var d = '<a class="btn btn-warning btn-sm '+s_delete_h+'" href="#" title="删除"  mce_href="#" onclick="del(\''
 										+ row.roleId
 										+ '\')"><i class="fa fa-remove"></i></a> ';
 								return e + d;
@@ -53,50 +53,47 @@ function load() {
 function reLoad() {
 	$('#table').bootstrapTable('refresh');
 }
+//新增
 function add() {
-	// iframe层
-	layer.open({
-		type : 2,
-		title : '添加角色',
-		maxmin : true,
-		shadeClose : false, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/add' // iframe的url
-	});
+	app.layer_show({title:'添加角色',content : prefix + '/add'});
 }
-function remove(id) {
-	layer.confirm('确定要删除选中的记录？', {
-		btn : [ '确定', '取消' ]
-	}, function() {
-		$.ajax({
-			url : prefix + "/remove",
-			type : "post",
-			data : {
-				'id' : id
-			},
-			success : function(r) {
-				if (r.code === 0) {
-					layer.msg("删除成功");
-					reLoad();
-				} else {
-					layer.msg(r.msg);
-				}
-			}
-		});
-	})
+function del(id) {
+	
+	var data ={"id":id};
+	app.modalConfirm('确定要删除选中的记录？',
+			function() {
+						app._ajax(	{url : prefix + "/delete",
+								     data :data
+								})
+	                    }			
+	     );
+
+//	layer.confirm('确定要删除选中的记录？', {
+//		btn : [ '确定', '取消' ]
+//	}, function() {
+//		$.ajax({
+//			url : prefix + "/remove",
+//			type : "post",
+//			data : {
+//				'id' : id
+//			},
+//			success : function(r) {
+//				if (r.code === 0) {
+//					layer.msg("删除成功");
+//					reLoad();
+//				} else {
+//					layer.msg(r.msg);
+//				}
+//			}
+//		});
+//	})
 
 }
 function edit(id) {
-	layer.open({
-		type : 2,
-		title : '角色修改',
-		maxmin : true,
-		shadeClose : true, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/edit/' + id // iframe的url
-	});
+	var url = prefix + '/edit/' + id;
+	app.layer_show({title:'角色修改',content : url});
 }
-function batchRemove() {
+function batchDelete() {
 	
 	var rows = $('#table').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {

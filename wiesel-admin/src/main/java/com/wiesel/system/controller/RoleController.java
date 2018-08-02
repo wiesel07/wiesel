@@ -1,11 +1,17 @@
 package com.wiesel.system.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -77,5 +83,49 @@ public class RoleController extends BaseController {
 		roleService.addRole(roleReq, getUserId());
 		return R.ok();
 
+	}
+
+	@ApiOperation(value = "编辑角色")
+	@RequiresPermissions("sys:role:edit")
+	@GetMapping("/edit/{id}")
+	String edit(@PathVariable("id") Long id, Model model) {
+		Role role = roleService.selectById(id);
+		model.addAttribute("role", role);
+		return prefix + "/edit";
+	}
+
+	@ApiOperation(value = "修改角色")
+	@RequiresPermissions("sys:role:edit")
+	@PostMapping("/update")
+	@ResponseBody()
+	R update(Role role) {
+
+		if (roleService.updateById(role)) {
+			return R.ok();
+		} else {
+			return R.error(1, "更新失败");
+		}
+	}
+
+	@ApiOperation(value = "删除角色")
+	@RequiresPermissions("sys:role:delete")
+	@PostMapping("/delete")
+	@ResponseBody()
+	R delete(String id) {
+		roleService.deleteRole(Long.valueOf(id));
+		return R.ok();
+	}
+
+	@ApiOperation(value = "批量删除角色")
+	@RequiresPermissions("sys:role:batchDelete")
+	@PostMapping("/batchDelete")
+	@ResponseBody
+	R batchDelete(@RequestParam("ids[]") String[] ids) {
+		List<Long> params = new ArrayList<>();
+		for (String id : ids) {
+			params.add(Long.valueOf(id));
+		}
+		roleService.batchDeleteRole(params);
+		return R.ok();
 	}
 }

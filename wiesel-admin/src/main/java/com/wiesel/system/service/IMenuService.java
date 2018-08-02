@@ -78,7 +78,19 @@ public interface IMenuService extends IService<Menu> {
 	 */
 	public List<ZtreeNode> getTree();
 
-	
-	
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：根据角色ID获取菜单信息
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param id
+	 * @return
+	 *
+	 * @date   创建时间：2018年8月2日
+	 * @author 作者：wuj
+	 */
+	public List<ZtreeNode> getTree(Long id);
 	
 }

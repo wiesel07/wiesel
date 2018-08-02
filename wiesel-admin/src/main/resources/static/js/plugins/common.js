@@ -109,52 +109,7 @@ app.table = function (id, options) {
 };
 
 
-/**
- * 刷新表格
- * @param id
- */
-app.tableRefresh = function (id) {
-    $(id).bootstrapTable('refresh');
-};
 
-/**
- * query查询
- * @param id
- * @param params
- * {
- *    params1:'params1',
- *    params2:'params2'
- * }
- */
-app.tableQuery = function (id,params) {
-    $(id).bootstrapTable('refresh', {
-        pageNumber: 1,
-        query:params
-    });
-};
-
-
-/**
- * query查询(传入新url)
- * @param id
- * @param newUrl
- */
-app.tableQueryUrl = function (id,newUrl) {
-    $(id).bootstrapTable('refresh', {
-        pageNumber: 1,
-        url:app.apiRoot()+ newUrl
-    });
-};
-
-/**
- * 获取表格行数据
- * @param id
- * @param index
- * @return {*}
- */
-app.tableRow = function (id,index) {
-    return $(id).bootstrapTable('getData')[index];
-};
 /**
  * api根url地址
  * @return {string|*}
@@ -276,7 +231,8 @@ app.layer_show= function(options) {
 			fix: false,
 	        //不固定
 	        maxmin: true,
-	        shade: 0.4,
+	       // shade: 0,
+	        shadeClose:false,// 点击遮罩关闭层
 			title:false,
 			content:"404.html"
 	};
@@ -307,14 +263,14 @@ _ajax_save = function(url, data) {
 /** 对jquery的ajax方法再次封装 */
 app._ajax = function(options) {
     var defaultOptions = {
-        url: url,
+        url:'',
         type: "POST",
         dataType: "json",
         timeout:30000,
-        data: data,
+        data: {},
         async:true,
         success: function(result) {
-            simpleSuccess(result);
+            app.simpleSuccess(result);
         },
         error: function (xhr, type) {
         }
@@ -324,9 +280,10 @@ app._ajax = function(options) {
 };
 
 /** 返回结果处理 */
-function simpleSuccess(result) {
+app.simpleSuccess=function(result) {
     if (result.code == web_status.SUCCESS) {
 		app.modalMsg(result.msg, modal_status.SUCCESS);
+		app.refreshTable();
     } else {
     	app.modalAlert(result.msg, modal_status.FAIL);
     }
@@ -343,3 +300,98 @@ function handleSuccess(result) {
     }
 }
 
+
+////初始化表格树，并展开树
+//$.initTreeTable = function (_id, _parentId, _columns, _url) {
+//	$.initTreeTable(_id, _parentId, _columns, _url, true);
+//}
+////初始化表格树，_expandAll true展开 false 不展开
+//$.initTreeTable = function (_id, _parentId, _columns, _url, _expandAll) {
+//	 var defaultOptions = {
+//			  code : _id,                   // 用于设置父子关系
+//		        parentCode : _parentId,       // 用于设置父子关系
+//		    	type: 'get',                  // 请求方式（*）
+//		        url: _url,                    // 请求后台的URL（*）
+//		        ajaxParams : {},              // 请求数据的ajax的data属性
+//				expandColumn : '0',           // 在哪一列上面显示展开按钮
+//				striped : false,              // 是否各行渐变色
+//				bordered : true,              // 是否显示边框
+//				expandAll : _expandAll,       // 是否全部展开
+//				showRefresh: true,            // 是否显示刷新按钮
+//		        columns: _columns
+//	 }
+//}
+// 刷新bootstrap table数据
+app.refreshTable = function () {
+    $('.bootstrap-table').bootstrapTable('refresh');
+}
+// 获取bootstrap table选中项
+app.getSelections = function (_id) {
+    return $.map($('.bootstrap-table').bootstrapTable('getSelections'), function (row) {
+        return row[_id];
+    });
+}
+
+/**
+ * query查询
+ * @param id
+ * @param params
+ * {
+ *    params1:'params1',
+ *    params2:'params2'
+ * }
+ */
+app.tableQuery = function (id,params) {
+    $(id).bootstrapTable('refresh', {
+        pageNumber: 1,
+        query:params
+    });
+};
+
+
+/**
+ * query查询(传入新url)
+ * @param id
+ * @param newUrl
+ */
+app.tableQueryUrl = function (id,newUrl) {
+    $(id).bootstrapTable('refresh', {
+        pageNumber: 1,
+        url:app.apiRoot()+ newUrl
+    });
+};
+
+/**
+ * 获取表格行数据
+ * @param id
+ * @param index
+ * @return {*}
+ */
+app.tableRow = function (index) {
+    return $('.bootstrap-table').bootstrapTable('getData')[index];
+};
+
+// 获取选中复选框项
+app.getCheckeds = function (_name) {
+    var checkeds = "";
+    $('input:checkbox[name="' + _name + '"]:checked').each(function(i) {
+        if (0 == i) {
+        	checkeds = $(this).val();
+        } else {
+        	checkeds += ("," + $(this).val());
+        }
+    });
+    return checkeds;
+}
+// 获取选中复选框项
+app.getSelects = function (_name) {
+    var selects = "";
+    $('#' + _name + ' option:selected').each(function (i) {
+        if (0 == i) {
+        	selects = $(this).val();
+        } else {
+        	selects += ("," + $(this).val());
+        }
+    });
+    return selects;
+}

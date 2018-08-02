@@ -1,5 +1,7 @@
 package com.wiesel.system.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.service.IService;
 import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
@@ -27,4 +29,35 @@ public interface IRoleService extends IService<Role>{
 	 * @author 作者：wuj
 	 */
 	public int  addRole(RoleReq roleReq,Long userId);
+
+
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：根据角色Id删除角色
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param roleId
+	 * @return
+	 *
+	 * @date   创建时间：2018年8月2日
+	 * @author 作者：wuj
+	 */
+	public void deleteRole(Long roleId);
+	
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：根据角色Id集合批量删除角色
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param roleIds
+	 * @return
+	 *
+	 * @date   创建时间：2018年8月2日
+	 * @author 作者：wuj
+	 */
+	public void batchDeleteRole(List<Long> roleIds);
 }

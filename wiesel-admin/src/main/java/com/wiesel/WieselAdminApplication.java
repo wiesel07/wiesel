@@ -2,15 +2,18 @@ package com.wiesel;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.wiesel.common.config.LongObjectSerializer;
 
 /**
  *
@@ -81,29 +84,29 @@ public class WieselAdminApplication {
 	 * 
 	 * @return
 	 */
-//	@Bean
-//	public HttpMessageConverters fastJsonHttpMessageConverters() {
-//		FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
-//		FastJsonConfig fastJsonConfig = new FastJsonConfig();
-//
-//		fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
-//		SerializeConfig config = new SerializeConfig();
-//		config.put(Long.class, new LongObjectSerializer());
-//		fastJsonConfig.setSerializeConfig(config);
-//		fastConverter.setFastJsonConfig(fastJsonConfig);
-//		// List<MediaType> supportedMediaTypes = new ArrayList<MediaType>();
-//		// MediaType formMedia = new MediaType("application", "x-www-form-urlencoded",
-//		// Charset.forName("UTF-8"));
-//		// MediaType jsonMedia = new MediaType("application", "json",
-//		// Charset.forName("UTF-8"));
-//		// MediaType textMedia = new MediaType("text", "*", Charset.forName("UTF-8"));
-//		//
-//		// supportedMediaTypes.add(formMedia);
-//		// supportedMediaTypes.add(jsonMedia);
-//		// supportedMediaTypes.add(textMedia);
-//		// fastConverter.setSupportedMediaTypes(supportedMediaTypes);
-//		return new HttpMessageConverters(fastConverter);
-//	}
+	@Bean
+	public HttpMessageConverters fastJsonHttpMessageConverters() {
+		FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+		FastJsonConfig fastJsonConfig = new FastJsonConfig();
+
+		fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
+		SerializeConfig config = new SerializeConfig();
+		config.put(Long.class, new LongObjectSerializer());
+		fastJsonConfig.setSerializeConfig(config);
+		fastConverter.setFastJsonConfig(fastJsonConfig);
+		// List<MediaType> supportedMediaTypes = new ArrayList<MediaType>();
+		// MediaType formMedia = new MediaType("application", "x-www-form-urlencoded",
+		// Charset.forName("UTF-8"));
+		// MediaType jsonMedia = new MediaType("application", "json",
+		// Charset.forName("UTF-8"));
+		// MediaType textMedia = new MediaType("text", "*", Charset.forName("UTF-8"));
+		//
+		// supportedMediaTypes.add(formMedia);
+		// supportedMediaTypes.add(jsonMedia);
+		// supportedMediaTypes.add(textMedia);
+		// fastConverter.setSupportedMediaTypes(supportedMediaTypes);
+		return new HttpMessageConverters(fastConverter);
+	}
 
 	// 引入Fastjson解析json，不使用默认的jackson
 	// 必须在pom.xml引入fastjson的jar包，并且版必须大于1.2.10

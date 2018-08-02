@@ -13,14 +13,14 @@
 						<form id="queryForm">
 							<div class="fl">
 								<div class="input-group w350">
-									<span class="input-group-addon">收款商户号</span> <input
+									<span class="input-group-addon">条件</span> <input
 										class="form-control" name="merchantcode"
-										placeholder="请输入收款商户号查询">
+										placeholder="请输入条件查询">
 								</div>
 							</div>
 							<!--   <div class="fl">
 		                            <div class="input-group w350">
-		                                <span class="input-group-addon">收款商户名称</span>
+		                                <span class="input-group-addon">条件</span>
 		                                <input class="form-control" name="merchantName" placeholder="请输入收款商户名称查询">
 		                            </div>
 		                        </div> -->
@@ -28,15 +28,15 @@
 								class="btn btn-primary fl ml5" onclick="add()">
 								<i class="fa fa-plus" aria-hidden="true"></i>添加
 							</button>
-							<button shiro:hasPermission="sys:role:batchRemove" type="button"
-								class="btn btn-danger fl ml5" onclick="batchRemove()">
+							<button shiro:hasPermission="sys:role:batchDelete" type="button"
+								class="btn btn-danger fl ml5" onclick="batchDelete()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
 							</button>
 						</form>
 
 
 					</div>
-					<table id="table" data-mobile-responsive="true">
+					<table id="table"  class="bootstrap-table" data-mobile-responsive="true">
 					</table>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 		<div>
 			<script type="text/javascript">
 				var s_edit_h = 'hidden';
-				var s_remove_h = 'hidden';
+				var s_delete_h = 'hidden';
 			</script>
 		</div>
 		<div shiro:hasPermission="sys:role:edit">
@@ -53,9 +53,9 @@
 				s_edit_h = '';
 			</script>
 		</div>
-		<div shiro:hasPermission="sys:role:remove">
+		<div shiro:hasPermission="sys:role:delete">
 			<script type="text/javascript">
-				var s_remove_h = '';
+				var s_delete_h = '';
 			</script>
 		</div>
 

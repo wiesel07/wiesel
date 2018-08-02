@@ -35,13 +35,13 @@ function loadTree(){
 
 $.validator.setDefaults({
 	submitHandler : function() {
-		getCheckeds();
+		getAllSelectNodes();
 		save();
 	}
 });
 
 //获取选中的菜单
-function getCheckeds() {
+function getAllSelectNodes() {
     var menuIds = "";
     var treeNodes = menuTrees.getCheckedNodes(true);
     for (var i = 0; i < treeNodes.length; i++) {
