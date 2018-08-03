@@ -34,6 +34,22 @@ public interface IRoleService extends IService<Role>{
 	/**
 	 * 
 	 * <p>函数名称：        </p>
+	 * <p>功能说明：修改角色
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param roleReq  角色请求实体
+	 * @param userId  用户ID
+	 * @return
+	 *
+	 * @date   创建时间：2018年7月31日
+	 * @author 作者：wuj
+	 */
+	public int  updateRole(RoleReq roleReq,Long userId);
+	
+	/**
+	 * 
+	 * <p>函数名称：        </p>
 	 * <p>功能说明：根据角色Id删除角色
 	 *
 	 * </p>
@@ -60,4 +76,6 @@ public interface IRoleService extends IService<Role>{
 	 * @author 作者：wuj
 	 */
 	public void batchDeleteRole(List<Long> roleIds);
+	
+	
 }

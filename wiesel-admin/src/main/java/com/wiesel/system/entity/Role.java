@@ -56,15 +56,15 @@ public class Role extends Model<Role> {
 	//角色状态:0正常,1禁用
 	private Integer status;
 
-	public static final String MENU_ID = "role_id";
+	public static final String ROLE_ID = "role_id";
 
-	public static final String PARENT_ID = "role_name";
+	public static final String ROLE_NAME = "role_name";
 
-	public static final String NAME = "role_sign";
+	public static final String ROLE_SIGN = "role_sign";
 
-	public static final String URL = "remark";
+	public static final String REMARK = "remark";
 
-	public static final String PERMS = "user_id_create";
+	public static final String USER_ID_CREATE = "user_id_create";
 
 	public static final String GMT_CREATE = "gmt_create";
 

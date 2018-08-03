@@ -1,6 +1,5 @@
 package com.wiesel.system.controller.req;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -31,6 +30,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RoleReq {
 
+	private Long roleId;
 	// 角色名称
 	@NotBlank(message = "角色名称不能为空")
 	private String roleName;

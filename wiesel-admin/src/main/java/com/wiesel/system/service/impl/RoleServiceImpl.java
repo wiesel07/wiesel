@@ -44,6 +44,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 	public int addRole(RoleReq roleReq, Long userId) {
 		Role role = new Role();
 		BeanUtil.copyProperties(roleReq, role);
+		
+		//判断该角色标识是否已存在
+		EntityWrapper<Role>  wrapper = new EntityWrapper<>();
+		wrapper.eq(Role.ROLE_SIGN, role.getRoleSign());
+		if (this.baseMapper.selectCount(wrapper)>0) {
+			throw new CommonException("角色标识【"+role.getRoleSign()+"】已存在");
+		}
+		
 		Long roleId = IDUtils.newID();
 		role.setRoleId(roleId);
 		role.setUserIdCreate(userId);
@@ -103,6 +111,39 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 			// 删除角色
 			this.baseMapper.deleteBatchIds(roleIds);
 		}
+	}
+
+	@Transactional
+	@Override
+	public int updateRole(RoleReq roleReq, Long userId) {
+		Role role = new Role();
+		BeanUtil.copyProperties(roleReq, role);
+		Long roleId = role.getRoleId();
+
+		Integer result = this.baseMapper.updateById(role);
+		if (result != 1) {
+			throw new CommonException("角色信息不存在");
+		}
+
+		// 删除该角色旧的菜单信息
+		EntityWrapper<RoleMenu> wrapper = new EntityWrapper<>();
+		wrapper.eq(RoleMenu.ROLE_ID, roleId);
+		roleMenuMapper.delete(wrapper);
+
+		// 角色菜单信息新增
+		List<String> menuIds = roleReq.getMenuIds();
+		List<RoleMenu> roleMenus = new ArrayList<>();
+		for (String menuId : menuIds) {
+			RoleMenu roleMenu = new RoleMenu();
+			roleMenu.setMenuId(Long.valueOf(menuId));
+			roleMenu.setRoleId(roleId);
+			roleMenus.add(roleMenu);
+		}
+
+		if (roleMenus.size() > 0) {
+			this.baseMapper.insertBatchRoleMenu(roleMenus);
+		}
+		return result;
 	}
 
 }

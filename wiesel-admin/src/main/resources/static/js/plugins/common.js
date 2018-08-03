@@ -77,6 +77,7 @@ app.table = function (id, options) {
 		// pageSize, pageNumber, searchText, sortName,
 		// sortOrder.
 		// 返回false将会终止请求
+        trimOnSearch:true,// 将自动去掉搜索字符的前后空格。
         queryParams: function (params) {
             if (params.limit){
                 var pageParams = {

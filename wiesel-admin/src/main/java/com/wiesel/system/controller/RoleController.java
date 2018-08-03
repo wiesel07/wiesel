@@ -63,8 +63,9 @@ public class RoleController extends BaseController {
 
 		PageResp<Role> pageResp = new PageResp<Role>();
 
-		pageResp.setRows(roleService.selectPage(page, wrapper).getRecords());
-		pageResp.setTotal(roleService.selectCount(wrapper));
+		page = roleService.selectPage(page, wrapper);
+		pageResp.setRows(page.getRecords());
+		pageResp.setTotal(page.getTotal());
 		return R.ok(pageResp);
 	}
 
@@ -98,13 +99,9 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:edit")
 	@PostMapping("/update")
 	@ResponseBody()
-	R update(Role role) {
-
-		if (roleService.updateById(role)) {
-			return R.ok();
-		} else {
-			return R.error(1, "更新失败");
-		}
+	R update(RoleReq roleReq) {
+		roleService.updateRole(roleReq, getUserId());
+		return R.ok();
 	}
 
 	@ApiOperation(value = "删除角色")
