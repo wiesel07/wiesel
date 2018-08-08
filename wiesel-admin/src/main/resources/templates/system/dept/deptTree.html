@@ -3,58 +3,114 @@
 
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+<link href="/css/plugins/zTree/zTreeStyle.css" rel="stylesheet" />
 
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
 
+
+
+		<!-- 		<div class="col-sm-12" id="search">
+
+				<label for="keyword">关键字：</label> <input type="text" id="keyword"
+					maxlength="50">
+				<button class="btn fl ml5" id="btn" onclick="searchNode()">搜索</button>
+
+
+			</div> -->
+
+
 		<div class="row">
 			<div class="col-sm-12">
-
 				<div class="ibox-content">
-					<div id="deptTree"></div>
+					<input id="treeId" name="treeId" type="hidden" /> <input
+						id="treeName" name="treeName" type="hidden" th:value="${treeName}" />
+					<div id="deptTree" class="ztree"></div>
 				</div>
-				<div class="form-group hidden">
+				<div class="form-group ">
 					<div class="col-sm-12 col-sm-offset-12">
-						<button type="submit" class="btn btn-primary">提交</button>
+						<button type="button" class="btn btn-primary" onclick="save()"> 提交</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div th:include="include :: footer"></div>
-
+	<script type="text/javascript"
+		src="/js/plugins/zTree/jquery.ztree.all.js"></script>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
-			getTreeData()
+		// 树结构初始化加载
+		$(function() {
+			loadTree();
 		});
-		function getTreeData() {
+
+		function loadTree() {
+			var setting = {
+				view : {
+					selectedMulti : false
+				},
+				data : {
+					key : {
+						title : "title"
+					},
+					simpleData : {
+						enable : true,
+						idKey : "id",
+						pIdKey : "pid"
+					}
+				},
+				callback : {
+					onClick : function(event, treeId, treeNode) {
+						var treeId = treeNode.id;
+						var treeName = treeNode.name;
+						$("#treeId").val(treeId);
+						$("#treeName").val(treeName);
+					}
+				}
+			}
 			$.ajax({
 				type : "GET",
-				url : "/system/sysDept/tree",
-				success : function(tree) {
-					loadTree(tree);
+				url : "/sys/dept/tree",
+				success : function(result) {
+					tree = $.fn.zTree.init($("#deptTree"), setting, result); //.expandAll(true);
+					var treeId= $("#treeId").val();
+					// 展开第一级节点
+					var nodes = tree.getNodesByParam("level", 0);
+					for (var i = 0; i < nodes.length; i++) {
+						tree.expandNode(nodes[i], true, false, false);
+						selectCheckNode(treeId, nodes[i]);
+					}
+					// 展开第二级节点
+					nodes = tree.getNodesByParam("level", 1);
+					for (var i = 0; i < nodes.length; i++) {
+						tree.expandNode(nodes[i], true, false, false);
+						selectCheckNode(treeId, nodes[i]);
+					}
+					// 展开第二级节点
+					nodes = tree.getNodesByParam("level", 2);
+					for (var i = 0; i < nodes.length; i++) {
+						tree.expandNode(nodes[i], true, false, false);
+						selectCheckNode(treeId, nodes[i]);
+					}
 				}
 			});
-		}
-		function loadTree(tree) {
-			$('#deptTree').jstree({
-				'core' : {
-					'data' : tree
-				},
-				"plugins" : [ "search" ]
-			});
-			$('#deptTree').jstree().open_all();
-		}
-		$('#deptTree').on("changed.jstree", function(e, data) {
-			if(data.node.id!=-1){
-				parent.loadDept(data.node.id,data.node.text);
-				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-				parent.layer.close(index);
+		};
+
+		function selectCheckNode(treeId, node) {
+			if (treeId == node.id) {
+				tree.selectNode(node, true);
 			}
-			
-		});
+		}
 		
+		function save(){
+			var treeId = $("#treeId").val();
+			var treeName = $("#treeName").val();
+			parent.$("#pId").val(treeId);
+			parent.$("#pName").val(treeName);
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			parent.layer.close(index);
+		}
 	</script>
 </body>
 

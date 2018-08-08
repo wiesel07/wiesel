@@ -1,3 +1,4 @@
+var prefix = "/sys/dept"
 $().ready(function() {
 	validateRule();
 });
@@ -7,11 +8,18 @@ $.validator.setDefaults({
 		save();
 	}
 });
+
+function selectDeptTree(){
+	var url=prefix + '/treeView';
+	app.layer_show({title:'选择部门',content : url,area:["360px","360px"]});
+	
+}
+
 function save() {
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : "/system/sysDept/save",
+		url : prefix+"/save",
 		data : $('#signupForm').serialize(),// 你的formid
 		async : false,
 		error : function(request) {

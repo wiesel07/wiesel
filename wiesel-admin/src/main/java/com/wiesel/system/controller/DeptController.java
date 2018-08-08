@@ -1,5 +1,6 @@
 package com.wiesel.system.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wiesel.common.base.entity.Tree;
+import com.wiesel.common.base.entity.ZtreeNode;
 import com.wiesel.common.utils.R;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.service.IDeptService;
@@ -38,7 +40,7 @@ public class DeptController {
 	private IDeptService deptService;
 
 	@GetMapping()
-	@RequiresPermissions("system:sysDept:sysDept")
+	@RequiresPermissions("sys:dept:dept")
 	String dept() {
 		return prefix + "/dept";
 	}
@@ -46,37 +48,38 @@ public class DeptController {
 	@ApiOperation(value = "获取部门列表", notes = "")
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("system:sysDept:sysDept")
+	@RequiresPermissions("sys:dept:dept")
 	public List<Dept> list() {
-		// Map<String, Object> query = new HashMap<>(16);
-		// List<Dept> sysDeptList = sysDeptService.list(query);
 		EntityWrapper<Dept> wrapper = new EntityWrapper<>();
 		return deptService.selectList(wrapper);
 	}
 
+	@RequiresPermissions("sys:dept:add")
 	@GetMapping("/add/{pId}")
-	@RequiresPermissions("system:sysDept:add")
-	String add(@PathVariable("pId") Long pId, Model model) {
-		model.addAttribute("pId", pId);
-		if (pId == 0) {
+	String add(@PathVariable("pId") String pId, Model model) {
+		Long deptId = Long.valueOf(pId);
+		model.addAttribute("pId", deptId);
+		if (deptId == 0) {
 			model.addAttribute("pName", "总部门");
 		} else {
-			//model.addAttribute("pName", sysDeptService.get(pId).getName());
+
+			model.addAttribute("pName", deptService.selectById(deptId).getName());
 		}
 		return prefix + "/add";
 	}
 
-	@GetMapping("/edit/{deptId}")
-	@RequiresPermissions("system:sysDept:edit")
-	String edit(@PathVariable("deptId") Long deptId, Model model) {
-		// DeptDO sysDept = sysDeptService.get(deptId);
-		// model.addAttribute("sysDept", sysDept);
-		// if(Constant.DEPT_ROOT_ID.equals(sysDept.getParentId())) {
-		// model.addAttribute("parentDeptName", "无");
-		// }else {
-		// DeptDO parDept = sysDeptService.get(sysDept.getParentId());
-		// model.addAttribute("parentDeptName", parDept.getName());
-		// }
+	@GetMapping("/edit/{pId}")
+	@RequiresPermissions("sys:dept:edit")
+	String edit(@PathVariable("pId") Long pId, Model model) {
+		Dept dept = deptService.selectById(pId);
+		model.addAttribute("deptId", pId);
+		model.addAttribute("dept", dept);
+		if ("888888".equals(Long.valueOf(dept.getParentId()))) {
+			model.addAttribute("parentDeptName", "无");
+		} else {
+			Dept parDept =  deptService.selectById(dept.getParentId());
+			model.addAttribute("parentDeptName", parDept.getName());
+		}
 		return prefix + "/edit";
 	}
 
@@ -85,7 +88,7 @@ public class DeptController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("system:sysDept:add")
+	@RequiresPermissions("sys:dept:add")
 	public R save(Dept sysDept) {
 		// if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
 		// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
@@ -101,7 +104,7 @@ public class DeptController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("system:sysDept:edit")
+	@RequiresPermissions("sys:dept:edit")
 	public R update(Dept sysDept) {
 		// if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
 		// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
@@ -115,9 +118,9 @@ public class DeptController {
 	/**
 	 * 删除
 	 */
-	@PostMapping("/remove")
+	@PostMapping("/delete")
 	@ResponseBody
-	@RequiresPermissions("system:sysDept:remove")
+	@RequiresPermissions("sys:dept:delete")
 	public R remove(Long deptId) {
 		// if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
 		// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
@@ -140,9 +143,9 @@ public class DeptController {
 	/**
 	 * 删除
 	 */
-	@PostMapping("/batchRemove")
+	@PostMapping("/batchDelete")
 	@ResponseBody
-	@RequiresPermissions("system:sysDept:batchRemove")
+	@RequiresPermissions("sys:delete:batchDelete")
 	public R remove(@RequestParam("ids[]") Long[] deptIds) {
 		// if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
 		// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
@@ -153,11 +156,21 @@ public class DeptController {
 
 	@GetMapping("/tree")
 	@ResponseBody
-	public Tree<Dept> tree() {
-		// Tree<DeptDO> tree = new Tree<DeptDO>();
-		// tree = sysDeptService.getTree();
-		// return tree;
-		return null;
+	public List<ZtreeNode> tree() {
+		List<ZtreeNode> trees = new ArrayList<ZtreeNode>();
+		
+		EntityWrapper<Dept> wrapper = new EntityWrapper<>();
+		List<Dept> depts = deptService.selectList(wrapper);
+		for (Dept dept : depts) {
+			ZtreeNode tree = new ZtreeNode();
+			tree.setId(dept.getDeptId().toString());
+			tree.setPid(dept.getParentId().toString());
+			tree.setName(dept.getName());
+			tree.setChecked(true);
+			trees.add(tree);
+		}
+		
+		return trees;
 	}
 
 	@GetMapping("/treeView")

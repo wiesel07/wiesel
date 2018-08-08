@@ -12,12 +12,12 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">上级部门：</label>
 								<div class="col-sm-8">
-									<input id="parentId" name="parentId" th:value="${pId}"
+									<input id="pId" name="pId" th:value="${pId}"
 										class="form-control hidden" type="text">
 								</div>
 								<div class="col-sm-8">
 									<input id="pName" name="pName" th:value="${pName}"
-										class="form-control" type="text" readonly>
+										class="form-control" onclick="selectDeptTree()" type="text" readonly>
 								</div>
 							</div>
 							<div class="form-group">
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div th:include="include::footer"></div>
-	<script type="text/javascript" src="/js/appjs/system/sysDept/add.js">
+	<script type="text/javascript" src="/js/appjs/system/dept/add.js">
 	</script>
 </body>
 </html>

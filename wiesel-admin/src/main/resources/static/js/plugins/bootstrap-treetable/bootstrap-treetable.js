@@ -41,8 +41,8 @@
 				item.isShow = false;
 				// 这里兼容几种常见Root节点写法
 				// 默认的几种判断
-				var _defaultRootFlag = item[options.parentCode] == '0'
-					|| item[options.parentCode] == 0
+				var _defaultRootFlag = item[options.parentCode] == '888888'
+					|| item[options.parentCode] == 888888
 					|| item[options.parentCode] == null
 					|| item[options.parentCode] == '';
 				if (!item[options.parentCode] || (_root?(item[options.parentCode] == options.rootCodeValue):_defaultRootFlag)){
@@ -289,6 +289,15 @@
 			}
 			return chk_value;
 		},
+		 // 条件查询
+        search: function(formId) {
+        	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+        	var params = {};
+        	$.each($("#" + currentId).serializeArray(), function(i, field) {
+        		params[field.name] = field.value;
+	        });
+        	$.treeTable._treeTable.bootstrapTreeTable('refresh', params);
+        },
 		// 刷新记录
 		refresh : function(target, parms) {
 			if(parms){
