@@ -52,7 +52,7 @@ public class RoleController extends BaseController {
 		return prefix + "/role";
 	}
 
-	@ApiOperation(value = "获取当前登录用户角色信息")
+	@ApiOperation(value = "获取当前登录用户角色列表")
 	@RequiresPermissions("sys:role:role")
 	@GetMapping("/list")
 	@ResponseBody()

@@ -22,8 +22,9 @@ import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 /**
- * <p></p>
- * <p>Created by qrf on 2017/8/30.</p>
+ * 
+ * @author wuj
+ *
  */
 public class MysqlGenerator {
 

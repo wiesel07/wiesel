@@ -1,40 +1,49 @@
-$().ready(function() {
+var prefix = "/sys/dept"
+
+	$().ready(function() {
 	validateRule();
 });
+
 
 $.validator.setDefaults({
 	submitHandler : function() {
 		update();
 	}
 });
+
+function selectDeptTree(){
+	var url=prefix + '/treeView/xxx';
+	app.layer_show({title:'选择部门',content : url,area:["360px","360px"]});
+	
+}
+
 function update() {
+	
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : "/system/sysDept/update",
-		data : $('#signupForm').serialize(),// 你的formid
+		url  : prefix+"/update",
+		data : $('#editForm').serialize(),
 		async : false,
 		error : function(request) {
-			parent.layer.alert("Connection error");
+			app.modalAlert("系统错误", modal_status.FAIL);
 		},
-		success : function(data) {
-			if (data.code == 0) {
-				parent.layer.msg("操作成功");
-				parent.reLoad();
-				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-				parent.layer.close(index);
-
+		success : function(result) {
+			if (result.code == web_status.SUCCESS) {
+				parent.layer.msg("修改成功,正在刷新数据请稍后……",{icon:1,time: 800,shade: [0.1,'#fff']},function(){
+					app.parentReload();
+				});
 			} else {
-				parent.layer.alert(data.msg)
+				app.modalAlert(result.msg, modal_status.FAIL);
 			}
 
 		}
-	});
-
+   });
 }
+
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
+	$("#editForm").validate({
 		rules : {
 			name : {
 				required : true

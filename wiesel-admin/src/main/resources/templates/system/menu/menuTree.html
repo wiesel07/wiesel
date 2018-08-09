@@ -25,7 +25,7 @@
 				<div class="ibox-content">
 					<input id="treeId" name="treeId" type="hidden" th:value="${treeId}" /> <input
 						id="treeName" name="treeName" type="hidden"  />
-					<div id="deptTree" class="ztree"></div>
+					<div id="menuTree" class="ztree"></div>
 				</div>
 				<div class="form-group ">
 					<div class="col-sm-12 col-sm-offset-12">
@@ -71,9 +71,9 @@
 			}
 			$.ajax({
 				type : "GET",
-				url : "/sys/dept/tree",
+				url : "/sys/menu/tree",
 				success : function(result) {
-					tree = $.fn.zTree.init($("#deptTree"), setting, result); //.expandAll(true);
+					tree = $.fn.zTree.init($("#menuTree"), setting, result); //.expandAll(true);
 					var treeId= $("#treeId").val();
 					// 展开第一级节点
 					var nodes = tree.getNodesByParam("level", 0);

@@ -13,8 +13,8 @@
 								class="btn  btn-primary" onclick="add(0)">
 								<i class="fa fa-plus hidden" aria-hidden="true"></i>添加
 							</button>
-							<button shiro:hasPermission="sys:dept:batchDelete"
-								type="button" class="btn  btn-danger" onclick="batchDelete()">
+							<button shiro:hasPermission="sys:dept:batchDelete" type="button"
+								class="btn  btn-danger" onclick="batchDelete()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
 							</button>
 						</div>
@@ -27,14 +27,10 @@
 								placeholder="">
 						</div>
 					</div>
-				<!-- 	<table id="table" class="bootstrap-table"
-						data-mobile-responsive="true">
-					</table> -->
 
+					<table id="bootstrap-treeTable" data-mobile-responsive="true">
+					</table>
 
-					<div class="col-sm-12 select-info table-striped">
-						<table id="bootstrap-treeTable" data-mobile-responsive="true"></table>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -59,7 +55,7 @@
 	</div>
 	<div shiro:hasPermission="sys:dept:delete">
 		<script type="text/javascript">
-		   s_delete_h = '';
+			s_delete_h = '';
 		</script>
 	</div>
 	<div th:include="include :: footer"></div>

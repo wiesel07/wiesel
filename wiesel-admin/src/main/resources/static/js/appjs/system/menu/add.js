@@ -1,44 +1,44 @@
-var prefix = "/system/menu"
+var prefix = "/sys/menu"
 $(function() {
 	validateRule();
-	//打开图标列表
-    $("#ico-btn").click(function(){
-        layer.open({
-            type: 2,
-			title:'图标列表',
-            content: '/FontIcoList.html',
-            area: ['480px', '90%'],
-            success: function(layero, index){
-                //var body = layer.getChildFrame('.ico-list', index);
-                //console.log(layero, index);
-            }
-        });
-    });
 });
+
+function selectMenuTree(){
+	var parentId = $("#parentId").val();
+	var url=prefix + '/treeView/'+parentId;
+	app.layer_show({title:'选择菜单',content : url,area:["360px","360px"]});
+	
+}
+//打开图标列表
+function selectIcon(){
+	var url = "/FontIcoList.html";
+	app.layer_show({title:'图标列表',content : url, area: ['600px', '90%']});
+}
+
 $.validator.setDefaults({
 	submitHandler : function() {
-		submit01();
+		save();
 	}
 });
-function submit01() {
+function save() {
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : prefix + "/save",
-		data : $('#signupForm').serialize(),
+		url : prefix+"/save",
+		data : $('#addForm').serialize(),// 你的formid
 		async : false,
 		error : function(request) {
-			laryer.alert("Connection error");
+			parent.layer.alert("Connection error");
 		},
 		success : function(data) {
 			if (data.code == 0) {
-				parent.layer.msg("保存成功");
+				parent.layer.msg("操作成功");
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 				parent.layer.close(index);
 
 			} else {
-				layer.alert(data.msg)
+				parent.layer.alert(data.msg)
 			}
 		}
 	});
@@ -46,7 +46,7 @@ function submit01() {
 
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
+	$("#addForm").validate({
 		rules : {
 			name : {
 				required : true

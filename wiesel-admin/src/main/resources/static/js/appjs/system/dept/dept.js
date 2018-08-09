@@ -77,57 +77,53 @@ function edit(pId) {
 
 
 function del(id) {
+	var data ={"id":id};
+//	app.modalConfirm('确定要删除选中的记录？',
+//			function() {
+//						app._ajax(	{url : prefix + "/delete",
+//								     data :data
+//								})
+//	                    }			
+//	     );
 	layer.confirm('确定要删除选中的记录？', {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url : prefix + "/remove",
+			url :  prefix + "/delete",
 			type : "post",
-			data : {
-				'deptId' : id
-			},
+			data :data,
 			success : function(r) {
 				if (r.code == 0) {
-					layer.msg(r.msg);
+					layer.msg(r.msg,{time:600});
 					reLoad();
 				} else {
-					layer.msg(r.msg);
+					layer.msg(r.msg,{time:600});
 				}
 			}
 		});
 	})
+	
 }
 
 function batchDelete() {
-	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
+	
+	var rows = $('#bootstrap-treeTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {
-		layer.msg("请选择要删除的数据");
+		layer.msg("请选择要删除的数据",{time:600});
 		return;
 	}
-	layer.confirm("确认要删除选中的'" + rows.length + "'条数据吗?", {
-		btn : [ '确定', '取消' ]
-	// 按钮
-	}, function() {
-		var ids = new Array();
-		// 遍历所有选择的行数据，取每条数据对应的ID
-		$.each(rows, function(i, row) {
-			ids[i] = row['deptId'];
-		});
-		$.ajax({
-			type : 'POST',
-			data : {
-				"ids" : ids
-			},
-			url : prefix + '/batchRemove',
-			success : function(r) {
-				if (r.code == 0) {
-					layer.msg(r.msg);
-					reLoad();
-				} else {
-					layer.msg(r.msg);
-				}
-			}
-		});
-	}, function() {});
+	
+	app.modalConfirm('确定要删除选中的记录？',
+			function() {
+						var ids = new Array();
+						$.each(rows, function(i, row) {
+							ids[i] = row['deptId'];
+						});
+						var data ={"ids":ids};
+						app._ajax(	{url : prefix + "/batchDelete",
+								     data :data
+								})
+	                    }			
+	 );
 }
 

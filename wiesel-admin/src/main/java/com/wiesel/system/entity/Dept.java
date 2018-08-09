@@ -45,7 +45,7 @@ public class Dept extends Model<Dept> {
      */
     private Integer orderNum;
     /**
-     * 是否删除  -1：已删除  0：正常
+     * 部门状态（0正常 1停用）
      */
     private Integer delFlag;
 

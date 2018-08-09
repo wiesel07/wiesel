@@ -28,7 +28,7 @@ public interface IRoleService extends IService<Role>{
 	 * @date   创建时间：2018年7月31日
 	 * @author 作者：wuj
 	 */
-	public int  addRole(RoleReq roleReq,Long userId);
+	public void  addRole(RoleReq roleReq,Long userId);
 
 
 	/**
@@ -45,7 +45,7 @@ public interface IRoleService extends IService<Role>{
 	 * @date   创建时间：2018年7月31日
 	 * @author 作者：wuj
 	 */
-	public int  updateRole(RoleReq roleReq,Long userId);
+	public void  updateRole(RoleReq roleReq,Long userId);
 	
 	/**
 	 * 

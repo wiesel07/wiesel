@@ -41,8 +41,8 @@
 				item.isShow = false;
 				// 这里兼容几种常见Root节点写法
 				// 默认的几种判断
-				var _defaultRootFlag = item[options.parentCode] == '888888'
-					|| item[options.parentCode] == 888888
+				var _defaultRootFlag = item[options.parentCode] == '0'
+					|| item[options.parentCode] == 0
 					|| item[options.parentCode] == null
 					|| item[options.parentCode] == '';
 				if (!item[options.parentCode] || (_root?(item[options.parentCode] == options.rootCodeValue):_defaultRootFlag)){

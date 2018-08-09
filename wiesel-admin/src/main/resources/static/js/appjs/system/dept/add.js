@@ -10,7 +10,8 @@ $.validator.setDefaults({
 });
 
 function selectDeptTree(){
-	var url=prefix + '/treeView';
+	var parentId = $("#parentId").val();
+	var url=prefix + '/treeView/'+parentId;
 	app.layer_show({title:'选择部门',content : url,area:["360px","360px"]});
 	
 }
@@ -20,7 +21,7 @@ function save() {
 		cache : true,
 		type : "POST",
 		url : prefix+"/save",
-		data : $('#signupForm').serialize(),// 你的formid
+		data : $('#addForm').serialize(),// 你的formid
 		async : false,
 		error : function(request) {
 			parent.layer.alert("Connection error");
@@ -42,7 +43,7 @@ function save() {
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
+	$("#addForm").validate({
 		rules : {
 			name : {
 				required : true

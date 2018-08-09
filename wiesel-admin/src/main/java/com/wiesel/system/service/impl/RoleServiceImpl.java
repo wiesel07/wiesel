@@ -41,7 +41,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 	@Transactional
 	@Override
-	public int addRole(RoleReq roleReq, Long userId) {
+	public void addRole(RoleReq roleReq, Long userId) {
 		Role role = new Role();
 		BeanUtil.copyProperties(roleReq, role);
 		
@@ -69,7 +69,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 		if (roleMenus.size() > 0) {
 			this.baseMapper.insertBatchRoleMenu(roleMenus);
 		}
-		return result;
 	}
 
 	@Transactional
@@ -115,7 +114,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 	@Transactional
 	@Override
-	public int updateRole(RoleReq roleReq, Long userId) {
+	public void updateRole(RoleReq roleReq, Long userId) {
 		Role role = new Role();
 		BeanUtil.copyProperties(roleReq, role);
 		Long roleId = role.getRoleId();
@@ -143,7 +142,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 		if (roleMenus.size() > 0) {
 			this.baseMapper.insertBatchRoleMenu(roleMenus);
 		}
-		return result;
 	}
 
 }
