@@ -75,7 +75,6 @@ public class MenuController {
 		Long menuId = Long.valueOf(pId);
 		Menu menu = menuService.selectById(menuId);
 		Long parentId = menu.getParentId();
-		model.addAttribute("pId", pId);
 		if (parentId == 0) {
 			model.addAttribute("pName", "根目录");
 		} else {

@@ -25,7 +25,7 @@ $.validator.setDefaults({
 });
 
 function save() {
-	app.doSave({url:prefix+'/save',data : $('#addForm').serialize()});
+	app.doSave({url:prefix+'/save',data : $('#addForm').serialize(),action:ACTION.ADD});
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";

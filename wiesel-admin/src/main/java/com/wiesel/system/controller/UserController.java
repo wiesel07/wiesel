@@ -1,13 +1,7 @@
 package com.wiesel.system.controller;
 
-import static org.mockito.Matchers.anyObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-
 import com.wiesel.common.base.entity.PageReq;
 import com.wiesel.common.base.entity.PageResp;
 import com.wiesel.common.controller.BaseController;
@@ -41,14 +32,12 @@ import com.wiesel.system.service.IDeptService;
 import com.wiesel.system.service.IRoleService;
 import com.wiesel.system.service.IUserRoleService;
 import com.wiesel.system.service.IUserService;
-import com.wiesel.system.service.impl.UserRoleServiceImpl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javassist.expr.NewArray;
 
 /**
  * <p>
@@ -131,18 +120,18 @@ public class UserController extends BaseController {
 		List<Object> roleIds = userRoleService.selectObjs(userRoleWrapper);
 
 		List<Role> userRoles = new ArrayList<>();
-		
+
 		if (roleIds.size() > 0) {
 			EntityWrapper<Role> roleWrapper = new EntityWrapper<>();
 			roleWrapper.in(Role.ROLE_ID, roleIds);
 			userRoles = roleService.selectList(roleWrapper);
 		}
 		// 获取所有角色信息
-		List<Role>roles = roleService.selectList(new EntityWrapper<>());
+		List<Role> roles = roleService.selectList(new EntityWrapper<>());
 		// 遍历设置用户角色状态
 		for (Role role : roles) {
 			for (Role userRole : userRoles) {
-				if (role.getRoleId().longValue()==userRole.getRoleId().longValue()) {
+				if (role.getRoleId().longValue() == userRole.getRoleId().longValue()) {
 					role.setFlag(true);
 					break;
 				}
@@ -168,11 +157,11 @@ public class UserController extends BaseController {
 	R save(UserReq userReq, String[] role) {
 
 		User user = new User();
+		
 		BeanUtil.copyProperties(userReq, user);
+		user.setUserId(IDUtils.newID()).setUserIdCreate(getUserId());
 		PasswordHelper.encryptPassword(user);
 
-		user.setUserIdCreate(getUserId());
-		user.setUserId(IDUtils.newID());
 		List<Long> roleIds = new ArrayList<>();
 		for (String roleId : role) {
 			roleIds.add(Long.valueOf(roleId));
@@ -188,10 +177,7 @@ public class UserController extends BaseController {
 	R update(UserReq userReq, String[] role) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
-		PasswordHelper.encryptPassword(user);
 
-		user.setUserIdCreate(getUserId());
-		user.setUserId(IDUtils.newID());
 		List<Long> roleIds = new ArrayList<>();
 		for (String roleId : role) {
 			roleIds.add(Long.valueOf(roleId));
@@ -240,12 +226,28 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:resetPwd")
 	@PostMapping("/resetPwd")
 	@ResponseBody
-	R resetPwd(UserReq userReq) {
+	R resetPwd(UserReq userReq, String newPassword, String confirmPassword) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
 
-		if (!userService.updateById(user)) {
-			throw new CommonException("用户密码修改失败");
+		String password = user.getPassword();
+		if (StrUtil.isEmpty(newPassword) || StrUtil.isEmpty(confirmPassword) || StrUtil.isEmpty(password)) {
+			return R.error("密码不能为空");
+		}
+		if (!newPassword.equals(confirmPassword)) {
+			return R.error("两次输入密码不一致");
+		}
+
+		PasswordHelper.encryptPassword(user);
+		password= user.getPassword();
+	
+		EntityWrapper<User> wrapper = new EntityWrapper<>();
+		wrapper.eq(User.USER_ID, user.getUserId());
+		wrapper.eq(User.PASSWORD, password);
+		
+		user.setPassword(newPassword);
+		if (!userService.update(user, wrapper)) {
+			throw new CommonException("旧密码不正确");
 		}
 		return R.ok();
 	}
@@ -261,18 +263,11 @@ public class UserController extends BaseController {
 		return !(userService.selectCount(wrapper) > 0);
 	}
 
-	// @GetMapping("/tree")
-	// @ResponseBody
-	// public Tree<DeptDO> tree() {
-	// Tree<DeptDO> tree = new Tree<DeptDO>();
-	// tree = userService.getTree();
-	// return tree;
-	// }
 
-	@GetMapping("/treeView")
-	String treeView() {
-		return prefix + "/userTree";
-	}
+//	@GetMapping("/treeView")
+//	String treeView() {
+//		return prefix + "/userTree";
+//	}
 
 	// @ResponseBody
 	// @PostMapping("/uploadImg")

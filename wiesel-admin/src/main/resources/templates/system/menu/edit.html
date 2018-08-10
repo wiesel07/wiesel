@@ -10,7 +10,7 @@
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="editForm">
 							<input id="parentId" name="parentId" type="hidden"
-								th:value="${pId}" /> 
+								th:value="*{menu.parentId}" /> 
 								<input id="menuId" name="menuId"
 								type="hidden" th:value="${menu.menuId}" />
 							<div class="form-group">

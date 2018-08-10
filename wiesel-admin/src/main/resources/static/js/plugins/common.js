@@ -14,6 +14,13 @@ modal_status = {
     FAIL: "error",
     WARNING: "warning"
 };
+
+ACTION={
+		EDIT:"EDIT",
+		ADD:"ADD",
+		DELETE:"DELETE"
+}
+
 var app={};
 
 window.app = app;
@@ -34,7 +41,7 @@ window.app = app;
 app.table = function (id, options) {
     var defaultOptions = {
 		method: 'post',
-        striped: true,                      // 是否显示行间隔色
+        striped: false,                      // 是否显示行间隔色
         cache: false,                       // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pagination: true,                   // 是否显示分页（*）
         sortable: false,                     // 是否启用排序
@@ -55,6 +62,7 @@ app.table = function (id, options) {
         // showToggle:true, //是否显示详细视图和列表视图的切换按钮
         cardView: false,                    // 是否显示详细视图
         detailView: false,                   // 是否显示父子表
+        maintainSelected:false,             //设置为 true 在点击分页按钮或搜索按钮时，将记住checkbox的选择项
         undefinedText:'-',                   // 当数据为 undefined 时显示的字符
         exportTypes:[ 'csv', 'excel'], // 导出文件类型 ，支持多种类型文件导出
         // 请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -236,6 +244,22 @@ app.layer_close= function() {
 
 /** 对ajax的post方法再次封装 */
 app.doSave = function(options) {
+	var msg ="操作成功,正在刷新数据请稍后……";
+	if(!options.msg){
+		if(options.action){
+			switch(options.action){
+				case ACTION.ADD:msg='新增成功,正在刷新数据请稍后……';
+					break;
+				case ACTION.EDIT:msg='修改成功,正在刷新数据请稍后……';
+				break;
+				case ACTION.DELETE:msg='删除成功,正在刷新数据请稍后……';
+				break;
+				default:'操作成功,正在刷新数据请稍后……'
+			}
+		}
+		
+	}
+	
 	var defaultOptions = {
 			   cache : true,
 		        url: '',
@@ -248,7 +272,7 @@ app.doSave = function(options) {
 				},
 		        success: function(result) {
 		        	if (result.code == web_status.SUCCESS) {
-						parent.layer.msg("新增成功,正在刷新数据请稍后……",{icon:1,time: 800,shade: [0.1,'#fff']},function(){
+						parent.layer.msg(msg,{icon:1,time: 800,shade: [0.1,'#fff']},function(){
 							app.parentReload();
 						});
 					} else {
@@ -272,8 +296,9 @@ app._ajax = function(options) {
         success: function(result) {
             app.simpleSuccess(result);
         },
-        error: function (xhr, type) {
-        }
+        error : function(request) {
+			parent.layer.msg("系统错误，联系管理员");
+		}
     };
 	$.extend(defaultOptions, options);
     $.ajax(defaultOptions)

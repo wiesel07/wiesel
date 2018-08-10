@@ -103,14 +103,8 @@ function edit(id) {
 	app.layer_show({title:'用户修改',content : url});
 }
 function resetPwd(id) {
-	layer.open({
-		type : 2,
-		title : '重置密码',
-		maxmin : true,
-		shadeClose : false, // 点击遮罩关闭层
-		area : [ '400px', '260px' ],
-		content : prefix + '/resetPwd/' + id // iframe的url
-	});
+	var url=prefix + '/resetPwd/'+ id;
+	app.layer_show({title:'重置密码',content : url,area:["600px","400px"]});
 }
 function batchDelete() {
 	var ids=app.getTableSelections('userId');
