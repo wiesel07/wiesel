@@ -1,5 +1,7 @@
 package com.wiesel.system.controller;
 
+import static org.mockito.Matchers.anyObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,18 +29,23 @@ import com.wiesel.common.base.entity.PageReq;
 import com.wiesel.common.base.entity.PageResp;
 import com.wiesel.common.controller.BaseController;
 import com.wiesel.common.exception.CommonException;
+import com.wiesel.common.utils.IDUtils;
 import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.common.utils.R;
 import com.wiesel.system.controller.req.UserReq;
+import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.Role;
 import com.wiesel.system.entity.User;
 import com.wiesel.system.entity.UserRole;
+import com.wiesel.system.service.IDeptService;
 import com.wiesel.system.service.IRoleService;
 import com.wiesel.system.service.IUserRoleService;
 import com.wiesel.system.service.IUserService;
 import com.wiesel.system.service.impl.UserRoleServiceImpl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javassist.expr.NewArray;
@@ -67,6 +74,9 @@ public class UserController extends BaseController {
 	@Autowired
 	private IUserRoleService userRoleService;
 
+	@Autowired
+	private IDeptService deptService;
+
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("")
 	String user(Model model) {
@@ -77,14 +87,21 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("/list")
 	@ResponseBody()
-	R list(PageReq<User> pageReq) {
+	R list(PageReq<User> pageReq, UserReq userReq) {
 
 		Page<User> page = new Page<User>(pageReq.getPageNo(), pageReq.getPageSize());
 		EntityWrapper<User> wrapper = new EntityWrapper<User>();
 
-		PageResp<User> pageResp = new PageResp<User>();
+		if (StrUtil.isNotBlank(userReq.getUsername())) {
+			wrapper.eq(User.USERNAME, userReq.getUsername());
+		}
+		if (ObjectUtil.isNotNull(userReq.getDeptId())) {
+			wrapper.eq(User.DEPT_ID, userReq.getDeptId());
+		}
 
 		page = userService.selectPage(page, wrapper);
+
+		PageResp<User> pageResp = new PageResp<User>();
 		pageResp.setRows(page.getRecords());
 		pageResp.setTotal(page.getTotal());
 		return R.ok(pageResp);
@@ -110,18 +127,37 @@ public class UserController extends BaseController {
 		// 获取用户角色信息
 		EntityWrapper<UserRole> userRoleWrapper = new EntityWrapper<>();
 		userRoleWrapper.eq(UserRole.USER_ID, userId);
-		List<UserRole> userRoles = userRoleService.selectList(userRoleWrapper);
-		List<Long>roleIds = new ArrayList<>();
-		for (UserRole userRole : userRoles) {
-			roleIds.add(userRole.getRoleId());
-		}
-		List<Role> roles = new ArrayList<>();
-		if (roleIds.size()>0) {
+		userRoleWrapper.setSqlSelect(UserRole.ROLE_ID);
+		List<Object> roleIds = userRoleService.selectObjs(userRoleWrapper);
+
+		List<Role> userRoles = new ArrayList<>();
+		
+		if (roleIds.size() > 0) {
 			EntityWrapper<Role> roleWrapper = new EntityWrapper<>();
 			roleWrapper.in(Role.ROLE_ID, roleIds);
-			roles= roleService.selectList(roleWrapper);
+			userRoles = roleService.selectList(roleWrapper);
+		}
+		// 获取所有角色信息
+		List<Role>roles = roleService.selectList(new EntityWrapper<>());
+		// 遍历设置用户角色状态
+		for (Role role : roles) {
+			for (Role userRole : userRoles) {
+				if (role.getRoleId().longValue()==userRole.getRoleId().longValue()) {
+					role.setFlag(true);
+					break;
+				}
+				role.setFlag(false);
+			}
 		}
 		model.addAttribute("roles", roles);
+
+		// 获取用户部门信息
+		Long deptId = user.getDeptId();
+		EntityWrapper<Dept> deptWrapper = new EntityWrapper<>();
+		deptWrapper.setSqlSelect(Dept.NAME);
+		deptWrapper.eq(Dept.DEPT_ID, deptId);
+		Object deptName = deptService.selectObj(deptWrapper);
+		model.addAttribute("deptName", deptName);
 		return prefix + "/edit";
 	}
 
@@ -129,14 +165,19 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:add")
 	@PostMapping("/save")
 	@ResponseBody
-	R save(UserReq userReq) {
+	R save(UserReq userReq, String[] role) {
+
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
 		PasswordHelper.encryptPassword(user);
 
-		if (!userService.insert(user)) {
-			throw new CommonException("用户新增失败");
+		user.setUserIdCreate(getUserId());
+		user.setUserId(IDUtils.newID());
+		List<Long> roleIds = new ArrayList<>();
+		for (String roleId : role) {
+			roleIds.add(Long.valueOf(roleId));
 		}
+		userService.addUser(user, roleIds);
 		return R.ok();
 	}
 
@@ -144,29 +185,32 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:edit")
 	@PostMapping("/update")
 	@ResponseBody
-	R update(UserReq userReq) {
+	R update(UserReq userReq, String[] role) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
 		PasswordHelper.encryptPassword(user);
 
-		if (!userService.updateById(user)) {
-			throw new CommonException("用户更新失败");
+		user.setUserIdCreate(getUserId());
+		user.setUserId(IDUtils.newID());
+		List<Long> roleIds = new ArrayList<>();
+		for (String roleId : role) {
+			roleIds.add(Long.valueOf(roleId));
 		}
+		userService.updateUser(user, roleIds);
 		return R.ok();
 	}
 
 	@ApiOperation(value = "删除用户")
-	@RequiresPermissions("sys:user:remove")
+	@RequiresPermissions("sys:user:delete")
 	@PostMapping("/delete")
 	@ResponseBody
 	R delete(String id) {
 		Long userId = Long.valueOf(id);
-		
+
 		userService.deleteUser(userId);
 		return R.ok();
 	}
 
-	
 	@ApiOperation(value = "批量删除用户")
 	@RequiresPermissions("sys:user:batchDelete")
 	@PostMapping("/batchDelete")
@@ -180,14 +224,13 @@ public class UserController extends BaseController {
 		return R.ok();
 	}
 
-
 	@ApiOperation(value = "用户密码修改")
 	@RequiresPermissions("sys:user:resetPwd")
 	@GetMapping("/resetPwd/{id}")
 	String resetPwd(@PathVariable("id") String id, Model model) {
 
 		Long userId = Long.valueOf(id);
-		
+
 		User user = userService.selectById(userId);
 		model.addAttribute("user", user);
 		return prefix + "/reset_pwd";
@@ -200,45 +243,54 @@ public class UserController extends BaseController {
 	R resetPwd(UserReq userReq) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
-	
+
 		if (!userService.updateById(user)) {
 			throw new CommonException("用户密码修改失败");
 		}
 		return R.ok();
 	}
 
-	
+	@ApiOperation(value = "校验用户名是否存在")
+	@PostMapping("/checkUsername")
+	@ResponseBody
+	boolean checkUsername(@RequestParam String username) {
 
-//	@GetMapping("/tree")
-//	@ResponseBody
-//	public Tree<DeptDO> tree() {
-//		Tree<DeptDO> tree = new Tree<DeptDO>();
-//		tree = userService.getTree();
-//		return tree;
-//	}
+		EntityWrapper<User> wrapper = new EntityWrapper<>();
+		wrapper.eq(User.USERNAME, username);
+
+		return !(userService.selectCount(wrapper) > 0);
+	}
+
+	// @GetMapping("/tree")
+	// @ResponseBody
+	// public Tree<DeptDO> tree() {
+	// Tree<DeptDO> tree = new Tree<DeptDO>();
+	// tree = userService.getTree();
+	// return tree;
+	// }
 
 	@GetMapping("/treeView")
 	String treeView() {
 		return prefix + "/userTree";
 	}
 
-	
-//	@ResponseBody
-//	@PostMapping("/uploadImg")
-//	R uploadImg(@RequestParam("avatar_file") MultipartFile file, String avatar_data, HttpServletRequest request) {
-//		if ("test".equals(getUsername())) {
-//			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-//		}
-//		Map<String, Object> result = new HashMap<>();
-//		try {
-//			result = userService.updatePersonalImg(file, avatar_data, getUserId());
-//		} catch (Exception e) {
-//			return R.error("更新图像失败！");
-//		}
-//		if (result != null && result.size() > 0) {
-//			return R.ok(result);
-//		} else {
-//			return R.error("更新图像失败！");
-//		}
-//	}
+	// @ResponseBody
+	// @PostMapping("/uploadImg")
+	// R uploadImg(@RequestParam("avatar_file") MultipartFile file, String
+	// avatar_data, HttpServletRequest request) {
+	// if ("test".equals(getUsername())) {
+	// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+	// }
+	// Map<String, Object> result = new HashMap<>();
+	// try {
+	// result = userService.updatePersonalImg(file, avatar_data, getUserId());
+	// } catch (Exception e) {
+	// return R.error("更新图像失败！");
+	// }
+	// if (result != null && result.size() > 0) {
+	// return R.ok(result);
+	// } else {
+	// return R.error("更新图像失败！");
+	// }
+	// }
 }

@@ -1,5 +1,6 @@
 package com.wiesel.common.exception;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -78,4 +79,13 @@ public class CommonExceptionHandler {
 		log.info("必填校验异常:{}({})", fieldError.getDefaultMessage(), fieldError.getField());
 		return R.error(01002, fieldError.getDefaultMessage());
 	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public void handleBindException(AuthorizationException ex) {
+		
+		ex.printStackTrace();
+		log.info("权限校验异常:{}({})", ex.getMessage());
+	}
+	
+	
 }

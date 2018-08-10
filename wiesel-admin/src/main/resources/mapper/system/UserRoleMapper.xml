@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wiesel.system.dao.UserRoleMapper">
+<mapper namespace="com.wiesel.system.mapper.UserRoleMapper">
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, user_id, role_id
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, user_id, role_id
+	</sql>
+
+	<insert id="insertBatchUserRole" parameterType="java.util.List">
+		INSERT INTO sys_user_role ( user_id, role_id )
+		VALUES
+		<foreach collection="userRoles" item="item" index="index"
+			separator=",">
+			(
+			#{item.userId},
+			#{item.roleId}
+			)
+		</foreach>
+	</insert>
 
 </mapper>

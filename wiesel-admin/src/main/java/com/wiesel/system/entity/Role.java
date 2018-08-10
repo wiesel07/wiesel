@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -53,8 +54,13 @@ public class Role extends Model<Role> {
 	private Date gmtCreate;
 	// 创建时间
 	private Date gmtModified;
-	//角色状态:0正常,1禁用
+	// 角色状态:0正常,1禁用
 	private Integer status;
+
+	
+	/** 用户是否存在此角色标识 默认不存在 */
+	@TableField(exist = false)
+	private boolean flag = false;
 
 	public static final String ROLE_ID = "role_id";
 
@@ -71,7 +77,7 @@ public class Role extends Model<Role> {
 	public static final String GMT_MODIFIED = "gmt_modified";
 
 	public static final String STATUS = "status";
-	
+
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub

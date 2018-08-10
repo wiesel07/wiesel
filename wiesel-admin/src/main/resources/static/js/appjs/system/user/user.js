@@ -1,6 +1,5 @@
 var prefix = "/sys/user"
 $(function() {
-
 	loadTree();
 	load();
 });
@@ -17,8 +16,16 @@ function load() {
 						checkbox : true
 					},
 					{
+						title : '序号' ,// 列标题
+						formatter: function (value, row, index) {
+ 							return index+1;
+ 						}
+
+					},
+					{
 						field : 'userId', // 列字段名
-						title : '序号' // 列标题
+						title : '用户ID', // 列标题
+					    visible:false		
 					},
 					{
 						field : 'name',
@@ -52,7 +59,7 @@ function load() {
 							var e = '<a  class="btn btn-success btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
 								+ row.userId
 								+ '\')"><i class="fa fa-edit ">编辑</i></a> ';
-							var d = '<a class="btn btn-danger btn-sm ' + s_delete_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
+							var d = '<a class="btn btn-danger btn-sm ' + s_delete_h + '" href="#" title="删除"  mce_href="#" onclick="del(\''
 								+ row.userId
 								+ '\')"><i class="fa fa-remove">删除</i></a> ';
 							var f = '<a class="btn btn-info btn-sm ' + s_resetPwd_h + '" href="#" title="重置密码"  mce_href="#" onclick="resetPwd(\''
@@ -69,30 +76,27 @@ function load() {
 function reLoad() {
 	$('#table').bootstrapTable('refresh');
 }
+
+/**
+* 搜索
+*/
+function query(){
+    app.tableQuery($("#queryForm").serializeObject());
+}
+
 function add() {
 	var url=prefix + '/add';
 	app.layer_show({title:'添加用户',content : url});
 }
 function del(id) {
-	layer.confirm('确定要删除选中的记录？', {
-		btn : [ '确定', '取消' ]
-	}, function() {
-		$.ajax({
-			url : "/sys/user/remove",
-			type : "post",
-			data : {
-				'id' : id
-			},
-			success : function(r) {
-				if (r.code == 0) {
-					layer.msg(r.msg);
-					reLoad();
-				} else {
-					layer.msg(r.msg);
-				}
-			}
-		});
-	})
+	var data ={"id":id};
+	app.modalConfirm('确定要删除选中的记录？',
+			function() {
+						app._ajax(	{url : prefix + "/delete",
+								     data :data
+								})
+	                    }			
+	     );
 }
 function edit(id) {
 	var url=prefix + '/edit/'+id;
@@ -109,18 +113,14 @@ function resetPwd(id) {
 	});
 }
 function batchDelete() {
-	var rows = $('#table').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
-	if (rows.length == 0) {
+	var ids=app.getTableSelections('userId');
+	if (ids.length == 0) {
 		layer.msg("请选择要删除的数据",{time:600});
 		return;
 	}
 	
 	app.modalConfirm('确定要删除选中的记录？',
 			function() {
-						var ids = new Array();
-						$.each(rows, function(i, row) {
-							ids[i] = row['userId'];
-						});
 						var data ={"ids":ids};
 						app._ajax(	{url : prefix + "/batchDelete",
 								     data :data
@@ -137,7 +137,7 @@ function loadTree() {
 		},
 		data : {
 			key : {
-				title : "title"
+				title : "name"
 			},
 			simpleData : {
 				enable : true,
@@ -147,10 +147,9 @@ function loadTree() {
 		},
 		callback : {
 			onClick : function(event, treeId, treeNode) {
-				tree.expandNode(treeNode);
 				$("#deptId").val(treeNode.id);
 				$("#parentId").val(treeNode.pId);
-				//$.table.search();
+				query();
 			}
 		}
 	}
@@ -172,22 +171,3 @@ function loadTree() {
 		}
 	});
 };
-
-$('#jstree').on("changed.jstree", function(e, data) {
-	if (data.selected == -1) {
-		var opt = {
-			query : {
-				deptId : '',
-			}
-		}
-		$('#exampleTable').bootstrapTable('refresh', opt);
-	} else {
-		var opt = {
-			query : {
-				deptId : data.selected[0],
-			}
-		}
-		$('#exampleTable').bootstrapTable('refresh',opt);
-	}
-
-});

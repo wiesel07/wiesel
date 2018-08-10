@@ -235,17 +235,29 @@ app.layer_close= function() {
 }
 
 /** 对ajax的post方法再次封装 */
-_ajax_save = function(url, data) {
-    var config = {
-        url: url,
-        type: "post",
-        dataType: "json",
-        data: data,
-        success: function(result) {
-        	handleSuccess(result);
-        }
-    };
-    $.ajax(config)
+app.doSave = function(options) {
+	var defaultOptions = {
+			   cache : true,
+		        url: '',
+		        type: "post",
+		        dataType: "json",
+		        data: '',
+		        async : false,
+				error : function(request) {
+					app.modalAlert("系统错误", modal_status.FAIL);
+				},
+		        success: function(result) {
+		        	if (result.code == web_status.SUCCESS) {
+						parent.layer.msg("新增成功,正在刷新数据请稍后……",{icon:1,time: 800,shade: [0.1,'#fff']},function(){
+							app.parentReload();
+						});
+					} else {
+						app.modalAlert(result.msg, modal_status.FAIL);
+					}
+		        }
+		    };
+	$.extend(defaultOptions, options);
+    $.ajax(defaultOptions);
 };
 
 /** 对jquery的ajax方法再次封装 */
@@ -277,24 +289,13 @@ app.simpleSuccess=function(result) {
     }
 }
 
-/** 操作结果处理 */
-function handleSuccess(result) {
-    if (result.code == web_status.SUCCESS) {
-    	parent.layer.msg("新增成功,正在刷新数据请稍后……",{icon:1,time: 500,shade: [0.1,'#fff']},function(){
-			$.parentReload();
-		});
-    } else {
-    	$.modalAlert(result.msg, modal_status.FAIL);
-    }
-}
-
 
 // 刷新bootstrap table数据
 app.refreshTable = function () {
     $('.bootstrap-table').bootstrapTable('refresh');
 }
 // 获取bootstrap table选中项
-app.getSelections = function (_id) {
+app.getTableSelections = function (_id) {
     return $.map($('.bootstrap-table').bootstrapTable('getSelections'), function (row) {
         return row[_id];
     });
@@ -307,8 +308,8 @@ app.getSelections = function (_id) {
  * @param params {
  *            params1:'params1', params2:'params2' }
  */
-app.tableQuery = function (id,params) {
-    $(id).bootstrapTable('refresh', {
+app.tableQuery = function (params) {
+	$('.bootstrap-table').bootstrapTable('refresh', {
         pageNumber: 1,
         query:params
     });
@@ -321,8 +322,8 @@ app.tableQuery = function (id,params) {
  * @param id
  * @param newUrl
  */
-app.tableQueryUrl = function (id,newUrl) {
-    $(id).bootstrapTable('refresh', {
+app.tableQueryUrl = function (newUrl) {
+    $('.bootstrap-table').bootstrapTable('refresh', {
         pageNumber: 1,
         url:app.apiRoot()+ newUrl
     });
@@ -341,25 +342,27 @@ app.tableRow = function (index) {
 
 // 获取选中复选框项
 app.getCheckeds = function (_name) {
-    var checkeds = "";
+	var checkeds=[];
     $('input:checkbox[name="' + _name + '"]:checked').each(function(i) {
-        if (0 == i) {
-        	checkeds = $(this).val();
-        } else {
-        	checkeds += ("," + $(this).val());
-        }
+//        if (0 == i) {
+//        	arrCheckeds.push($(this).val());
+//        } else {
+//        	checkeds += ("," + $(this).val());
+//        }
+    	checkeds.push($(this).val());
     });
     return checkeds;
 }
 // 获取选中复选框项
 app.getSelects = function (_name) {
-    var selects = "";
+    var selects = [];
     $('#' + _name + ' option:selected').each(function (i) {
-        if (0 == i) {
-        	selects = $(this).val();
-        } else {
-        	selects += ("," + $(this).val());
-        }
+    	selects.push($(this).val());
+//    	if (0 == i) {
+//        	selects = $(this).val();
+//        } else {
+//        	selects += ("," + $(this).val());
+//        }
     });
     return selects;
 }

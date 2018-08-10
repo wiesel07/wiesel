@@ -84,4 +84,5 @@ public class UserReq {
 	 * 所在地区
 	 */
 	private String district;
+	
 }

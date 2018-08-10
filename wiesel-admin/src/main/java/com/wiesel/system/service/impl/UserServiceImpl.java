@@ -1,19 +1,20 @@
 package com.wiesel.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wiesel.common.exception.CommonException;
 import com.wiesel.system.entity.User;
 import com.wiesel.system.entity.UserRole;
 import com.wiesel.system.mapper.UserMapper;
 import com.wiesel.system.mapper.UserRoleMapper;
 import com.wiesel.system.service.IUserService;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
+	@Autowired
 	private UserRoleMapper userRoleMapper;
 
 	@Transactional
@@ -36,9 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		EntityWrapper<UserRole> userRoleWrapper = new EntityWrapper<>();
 		userRoleWrapper.eq(UserRole.USER_ID, userId);
 
-		if (userRoleMapper.delete(userRoleWrapper) <= 0) {
-			throw new CommonException("用户角色信息删除失败");
-		}
+		userRoleMapper.delete(userRoleWrapper);
 
 		// 删除用户信息
 		if (this.baseMapper.deleteById(userId) <= 0) {
@@ -46,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		}
 
 	}
-	
+
 	@Transactional
 	@Override
 	public void batchDeleteUser(List<Long> userIds) {
@@ -55,13 +55,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		EntityWrapper<UserRole> userRoleWrapper = new EntityWrapper<>();
 		userRoleWrapper.in(UserRole.USER_ID, userIds);
 
-		if (userRoleMapper.delete(userRoleWrapper) <= 0) {
-			throw new CommonException("用户角色信息删除失败");
-		}
+		userRoleMapper.delete(userRoleWrapper);
 
 		// 删除用户信息
 		if (this.baseMapper.deleteBatchIds(userIds) <= 0) {
 			throw new CommonException("用户删除失败");
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public void addUser(User user, List<Long> roleIds) {
+		List<UserRole> userRoles = new ArrayList<>();
+		Long userId = user.getUserId();
+		for (Long roleId : roleIds) {
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(roleId);
+			userRole.setUserId(userId);
+			userRoles.add(userRole);
+		}
+		// 新增用户角色信息
+		userRoleMapper.insertBatchUserRole(userRoles);
+
+		// 新增用户信息
+		if (this.baseMapper.insert(user) <= 0) {
+			throw new CommonException("用户新增失败");
+		}
+	}
+
+	@Override
+	public void updateUser(User user, List<Long> roleIds) {
+
+		Long userId = user.getUserId();
+		// 删除旧的用户角色信息
+		EntityWrapper<UserRole> userRoleWrapper = new EntityWrapper<>();
+		userRoleWrapper.eq(UserRole.USER_ID, userId);
+		userRoleMapper.delete(userRoleWrapper);
+
+		List<UserRole> userRoles = new ArrayList<>();
+
+		for (Long roleId : roleIds) {
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(roleId);
+			userRole.setUserId(userId);
+			userRoles.add(userRole);
+		}
+		// 新增用户角色信息
+		userRoleMapper.insertBatchUserRole(userRoles);
+
+		// 新增用户信息
+		if (this.baseMapper.updateById(user) <= 0) {
+			throw new CommonException("用户新增失败");
 		}
 
 	}
