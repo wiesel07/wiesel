@@ -31,15 +31,15 @@
 									type="hidden" id="parentId" name="parentId">
 							</form>
 							<div class="columns pull-left ml10">
+						    	<button class="btn btn-success" onclick="query()">查询</button>
 								<button shiro:hasPermission="sys:user:add" type="button"
 									class="btn  btn-primary" onclick="add()">
-									<i class="fa fa-plus hidden" aria-hidden="true"></i>添加
+									<!-- <i class="fa fa-plus hidden" aria-hidden="true"></i> -->添加
 								</button>
 								<button shiro:hasPermission="sys:user:batchDelete" type="button"
 									class="btn  btn-danger" onclick="batchDelete()">
-									<i class="fa fa-trash hidden" aria-hidden="true"></i>删除
+									<!-- <i class="fa fa-trash hidden" aria-hidden="true"></i> -->删除
 								</button>
-								<button class="btn btn-success" onclick="query()">查询</button>
 							</div>
 						</div>
 						<table id="table"  class="bootstrap-table table table-bordered table-hover "
