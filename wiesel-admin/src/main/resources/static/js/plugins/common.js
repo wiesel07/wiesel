@@ -122,6 +122,10 @@ app.apiRoot = function () {
             jsroot=jsroot.substring(0,jsroot.indexOf("/js/common"));
             break;
         }
+        if(jsroot.indexOf("/js/plugins")>-1){
+            jsroot=jsroot.substring(0,jsroot.indexOf("/js/plugins"));
+            break;
+        }
     }
     app.rootUrl = jsroot;
     return app.rootUrl;
