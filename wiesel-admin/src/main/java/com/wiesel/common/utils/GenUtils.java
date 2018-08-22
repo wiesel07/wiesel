@@ -60,18 +60,18 @@ public class GenUtils {
 
 		List<String> templates = new ArrayList<String>();
 		templates.add("template/Entity.java.vm");
-		templates.add("template/Dao.java.vm");
-		templates.add("template/Dao.xml.vm");
-		templates.add("template/Service.java.vm");
-		templates.add("template/ServiceImpl.java.vm");
-		templates.add("template/Controller.java.vm");
-		templates.add("template/list.html.vm");
-		templates.add("template/list.js.vm");
-		templates.add("template/menu.sql.vm");
-		templates.add("template/Api.java.vm");
-		templates.add("template/View.java.vm");
-		templates.add("template/Model.java.vm");
-		templates.add("template/VO.java.vm");
+		// templates.add("template/Dao.java.vm");
+		// templates.add("template/Dao.xml.vm");
+		// templates.add("template/Service.java.vm");
+		// templates.add("template/ServiceImpl.java.vm");
+		// templates.add("template/Controller.java.vm");
+		// templates.add("template/list.html.vm");
+		// templates.add("template/list.js.vm");
+		// templates.add("template/menu.sql.vm");
+		// templates.add("template/Api.java.vm");
+		// templates.add("template/View.java.vm");
+		// templates.add("template/Model.java.vm");
+		// templates.add("template/VO.java.vm");
 		return templates;
 	}
 
@@ -79,11 +79,12 @@ public class GenUtils {
 
 		// 设置velocity资源加载器
 		Properties prop = new Properties();
-		prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		prop.put("file.resource.loader.class",
+				"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 		Velocity.init(prop);
 
-		String mainPath = config.getString("mainPath");
-		mainPath = StringUtils.isBlank(mainPath) ? "com.wiesel" : mainPath;
+		// String mainPath = config.getString("mainPath");
+		// mainPath = StringUtils.isBlank(mainPath) ? "com.wiesel" : mainPath;
 
 		// 封装模板数据
 		Map<String, Object> map = new HashMap<>();
@@ -97,9 +98,9 @@ public class GenUtils {
 		map.put("columns", tableEntity.getColumns());
 		map.put("listReferencedTable", tableEntity.getListReferencedTable());
 		map.put("hasBigDecimal", tableEntity.getHasBigDecimal());
-		map.put("mainPath", mainPath);
+		// map.put("mainPath", mainPath);
 		map.put("package", config.getString("package"));
-		map.put("moduleName", config.getString("moduleName"));
+	//	map.put("moduleName", config.getString("moduleName"));
 		map.put("author", config.getString("author"));
 		map.put("datetime", DateUtil.format(DateUtil.date(), DatePattern.NORM_DATETIME_PATTERN));
 
@@ -123,6 +124,7 @@ public class GenUtils {
 		List<ColumnEntity> columsList = new ArrayList<>();
 		for (Map<String, String> column : columns) {
 			ColumnEntity columnEntity = new ColumnEntity();
+			columnEntity.setUpperColumnName(column.get("columnName").toUpperCase());
 			columnEntity.setColumnName(column.get("columnName"));
 			columnEntity.setDataType(column.get("dataType"));
 			columnEntity.setComments(column.get("columnComment"));
@@ -156,8 +158,8 @@ public class GenUtils {
 		for (ReferencedTable referencedTable : listReferencedTable) {
 
 			String referencedColumnName = columnToJava(referencedTable.getReferencedColumnName());
-			String refTableName = StringUtils
-					.uncapitalize(tableToJava(referencedTable.getTableName(), config.getString("tablePrefix")));
+			String refTableName = StringUtils.uncapitalize(
+					tableToJava(referencedTable.getTableName(), config.getString("tablePrefix")));
 			String referencedTableName = StringUtils.uncapitalize(
 					tableToJava(referencedTable.getReferencedTableName(), config.getString("tablePrefix")));
 			String refColumnName = columnToJava(referencedTable.getColumnName());
@@ -418,14 +420,16 @@ public class GenUtils {
 	/**
 	 * 获取文件名
 	 */
-	public static String getFileName(String template, String className, String packageName, String moduleName) {
+	private static String getFileName(String template, String className, String packageName,
+			String moduleName) {
 		String packagePath = "main" + File.separator + "java" + File.separator;
 		if (StringUtils.isNotBlank(packageName)) {
-			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName
+					+ File.separator;
 		}
 
 		if (template.contains("Entity.java.vm")) {
-			return packagePath + "entity" + File.separator + className + "Entity.java";
+			return packagePath + "entity" + File.separator + className + ".java";
 		}
 
 		if (template.contains("Dao.java.vm")) {
@@ -437,7 +441,8 @@ public class GenUtils {
 		}
 
 		if (template.contains("ServiceImpl.java.vm")) {
-			return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+			return packagePath + "service" + File.separator + "impl" + File.separator + className
+					+ "ServiceImpl.java";
 		}
 
 		if (template.contains("Controller.java.vm")) {
@@ -445,13 +450,14 @@ public class GenUtils {
 		}
 
 		if (template.contains("Dao.xml.vm")) {
-			return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName
-					+ File.separator + className + "Dao.xml";
+			return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator
+					+ moduleName + File.separator + className + "Dao.xml";
 		}
 
 		if (template.contains("list.html.vm")) {
-			return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + "modules"
-					+ File.separator + moduleName + File.separator + className.toLowerCase() + ".html";
+			return "main" + File.separator + "resources" + File.separator + "templates" + File.separator
+					+ "modules" + File.separator + moduleName + File.separator + className.toLowerCase()
+					+ ".html";
 		}
 
 		if (template.contains("list.js.vm")) {
@@ -466,19 +472,22 @@ public class GenUtils {
 
 		if (template.contains("Api.java.vm")) {
 			/*
-			 * return packagePath + "api" + File.separator + "controller" + File.separator +
-			 * className + "ApiController.java";
+			 * return packagePath + "api" + File.separator + "controller" +
+			 * File.separator + className + "ApiController.java";
 			 */
-			return packagePath + File.separator + "controller" + File.separator + className + "Controller.java";
+			return packagePath + File.separator + "controller" + File.separator + className
+					+ "Controller.java";
 
 		}
 
 		if (template.contains("View.java.vm")) {
-			return packagePath + "entity" + File.separator + "view" + File.separator + className + "View.java";
+			return packagePath + "entity" + File.separator + "view" + File.separator + className
+					+ "View.java";
 		}
 
 		if (template.contains("Model.java.vm")) {
-			return packagePath + "entity" + File.separator + "model" + File.separator + className + "Model.java";
+			return packagePath + "entity" + File.separator + "model" + File.separator + className
+					+ "Model.java";
 		}
 
 		if (template.contains("VO.java.vm")) {
