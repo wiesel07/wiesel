@@ -1,11 +1,10 @@
-// 以下为官方示例
+var prefix = "/generator";
 $().ready(function() {
 	validateRule();
 });
 
 $.validator.setDefaults({
 	submitHandler : function() {
-		console.log('提交修改');
 		update();
 	}
 });
@@ -13,8 +12,8 @@ function update() {
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : "/common/generator/update",
-		data : $('#signupForm').serialize(),// 你的formid
+		url : prefix+"/update",
+		data : $('#editForm').serialize(),// 你的formid
 		async : false,
 		error : function(request) {
 			parent.layer.alert("网络连接超时");
@@ -22,7 +21,8 @@ function update() {
 		success : function(data) {
 			if (data.code == 0) {
 				parent.layer.msg(data.msg);
-
+				 var index = parent.layer.getFrameIndex(window.name);
+				 parent.layer.close(index);
 			} else {
 				parent.layer.msg(data.msg);
 			}
@@ -33,7 +33,7 @@ function update() {
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
+	$("#editForm").validate({
 		rules : {
 			author : {
 				required : true

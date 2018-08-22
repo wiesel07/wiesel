@@ -50,7 +50,7 @@ public class TableEntity {
 	
 	// 判断是否存在
 	private Boolean hasBigDecimal;
-
+	
 	// 关联的字段
 	private List<ReferencedTable> listReferencedTable;
 

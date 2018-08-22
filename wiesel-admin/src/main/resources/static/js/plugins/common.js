@@ -118,10 +118,10 @@ app.apiRoot = function () {
     var jsroot='';
     for(var i=js.length;i>0;i--){
         jsroot=js[i-1].src;
-        if(jsroot.indexOf("/js/common")>-1){
-            jsroot=jsroot.substring(0,jsroot.indexOf("/js/common"));
-            break;
-        }
+//        if(jsroot.indexOf("/js/common")>-1){
+//            jsroot=jsroot.substring(0,jsroot.indexOf("/js/common"));
+//            break;
+//        }
         if(jsroot.indexOf("/js/plugins")>-1){
             jsroot=jsroot.substring(0,jsroot.indexOf("/js/plugins"));
             break;

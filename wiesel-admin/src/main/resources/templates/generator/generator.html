@@ -17,6 +17,13 @@
 						</form>
 						<div class="columns pull-left ml10">
 							<button class="btn btn-success" onclick="query()">查询</button>
+							<button type="button" class="btn  btn-primary"
+								onclick="batchCode()">
+								<i class="" aria-hidden="true"></i>批量生成
+							</button>
+							<button type="button" class="btn  btn-warning" onclick="edit()">
+								<i class="" aria-hidden="true"></i>生成策略
+							</button>
 						</div>
 					</div>
 					<table id="table"
@@ -30,57 +37,9 @@
 	</div>
 	<div th:include="include::footer"></div>
 
-	<script type="text/javascript">
-		var prefix = "/generator";
-		$(function() {
-			load();
-		});
-
-		function query() {
-			$('#table').bootstrapTable('refresh');
-		}
+	<script type="text/javascript"
+		src="/js/appjs/generator/generator.js">
 		
-		function load() {
-			app.table('#table', {
-				url : prefix + "/list", // 服务器数据的加载地址
-				dataType : "json", // 服务器返回的数据类型
-				toolbar : '#toolbar',
-				queryParamsType : 'limit' ,
-				method : 'get',
-				columns : [ { // 列配置项
-					// 数据类型，详细参数配置参见文档http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
-					checkbox : true
-				// 列表中显示复选框
-				}, {
-					title : '序号',// 列标题
-					formatter : function(value, row, index) {
-						return index + 1;
-					}
-
-				}, {
-					field : 'tableName', // 列字段名
-					title : '表名', // 列标题
-				}, {
-					field : 'engine',
-					title : 'Engine'
-				}, {
-					field : 'tableComment',
-					title : '表备注'
-				}, {
-					field : 'createTime',
-					title : '创建时间'
-				}, {
-					title : '操作',
-					align : 'center',
-					formatter : function(value, row, index) {
-
-					}
-				} ],
-				params : function() {
-					return $("#queryForm").serializeObject();
-				}
-			});
-		}
 	</script>
 </body>
 
