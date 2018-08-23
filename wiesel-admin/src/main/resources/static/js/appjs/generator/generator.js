@@ -66,7 +66,25 @@ function batchCode() {
 	$.each(rows, function(i, row) {
 		tables[i] = row['tableName'];
 	});
-	location.href = prefix + "/batchCode?tables=" + JSON.stringify(tables);
+	
+	
+
+    location.href = prefix + "/batchCode?tables=" + JSON.stringify(tables);
+//	var url=  prefix + "/batchCode?tables=" + JSON.stringify(tables);
+//
+//	$.ajax({
+//        url: url,
+//        type: "post",
+//        data: {
+//        },
+//        success: function (data) {
+//            if (data.code == 0) {
+//                layer.msg("生成成功");
+//            } else {
+//                layer.msg(data.msg);
+//            }
+//        }
+//    });
 }
 
 function edit(){

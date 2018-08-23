@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 
 /**
  *
- * @ClassName 类名：${className}
+ * @ClassName 类名：${entityName}
  * @Description 功能说明： ${comments}
  *              <p>
  *              TODO
@@ -37,12 +37,13 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("${tableName}")
-public class ${className} extends Model<Role> {
+public class ${entityName} extends Model<${entityName}> {
 
 	private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
-	#if($column.comments　!='' )
+	#if($column.comments!='' )
+	
     /**
 	 * $column.comments
 	 */
