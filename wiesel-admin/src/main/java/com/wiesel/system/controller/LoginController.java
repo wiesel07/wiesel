@@ -57,7 +57,7 @@ public class LoginController extends BaseController {
 	@GetMapping({ "/", "" })
 	String welcome(Model model) {
 		// return "redirect:/blog";
-		return "index_v1";
+		return "index";
 	}
 
 	@ApiIgnore
@@ -91,7 +91,7 @@ public class LoginController extends BaseController {
 		// }
 		model.addAttribute("picUrl", "/img/photo_s.jpg");
 		model.addAttribute("username", getUser().getUsername());
-		return "index_v1";
+		return "index";
 	}
 
 	@ApiOperation(value = "登录", notes = "用户填写账号密码进入后台")
