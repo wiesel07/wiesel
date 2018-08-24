@@ -27,6 +27,7 @@ import com.wiesel.system.mapper.UserMapper;
 import com.wiesel.system.service.IMenuService;
 
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -47,7 +48,7 @@ import lombok.extern.java.Log;
  ***********************************************************************
  *          </p>
  */
-@Log
+@Slf4j
 public class UserRealm extends AuthorizingRealm {
 
 	/**
