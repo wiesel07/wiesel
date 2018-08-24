@@ -27,6 +27,7 @@ import com.wiesel.system.service.IRoleService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
+import wiesel.common.api.ApiResult;
 
 /**
  * 角色
@@ -56,7 +57,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:role")
 	@GetMapping("/list")
 	@ResponseBody()
-	R list(PageReq<Role> pageReq) {
+	public ApiResult<PageResp<Role>> list(PageReq<Role> pageReq) {
 
 		Page<Role> page = new Page<Role>(pageReq.getPageNo(), pageReq.getPageSize());
 		EntityWrapper<Role> wrapper = new EntityWrapper<Role>();
@@ -66,13 +67,13 @@ public class RoleController extends BaseController {
 		page = roleService.selectPage(page, wrapper);
 		pageResp.setRows(page.getRecords());
 		pageResp.setTotal(page.getTotal());
-		return R.ok(pageResp);
+		return  ApiResult.ok(pageResp);
 	}
 
 	@ApiOperation(value = "添加角色")
 	@RequiresPermissions("sys:role:add")
 	@GetMapping("/add")
-	String add() {
+		String add() {
 		return prefix + "/add";
 	}
 
@@ -80,9 +81,9 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:add")
 	@PostMapping("/save")
 	@ResponseBody()
-	R save(RoleReq roleReq) {
+	ApiResult<String> save(RoleReq roleReq) {
 		roleService.addRole(roleReq, getUserId());
-		return R.ok();
+		return ApiResult.ok();
 
 	}
 
@@ -108,7 +109,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:delete")
 	@PostMapping("/delete")
 	@ResponseBody()
-	R delete(String id) {
+	public	R delete(String id) {
 		roleService.deleteRole(Long.valueOf(id));
 		return R.ok();
 	}
@@ -117,7 +118,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:batchDelete")
 	@PostMapping("/batchDelete")
 	@ResponseBody
-	R batchDelete(@RequestParam("ids[]") String[] ids) {
+	public	R batchDelete(@RequestParam("ids[]") String[] ids) {
 		List<Long> params = new ArrayList<>();
 		for (String id : ids) {
 			params.add(Long.valueOf(id));

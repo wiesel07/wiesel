@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wiesel.common.base.entity.ZtreeNode;
-import com.wiesel.common.exception.CommonException;
 import com.wiesel.common.utils.IDUtils;
-import com.wiesel.common.utils.R;
 import com.wiesel.system.controller.req.DeptReq;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.User;
@@ -28,6 +26,9 @@ import com.wiesel.system.service.IUserService;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
+import wiesel.common.api.ApiResult;
+import wiesel.common.enums.ApiErrorCode;
+import wiesel.common.exception.ApiException;
 
 /**
  * <p>
@@ -98,19 +99,20 @@ public class DeptController {
 
 	/**
 	 * 保存
+	 * @param <T>
 	 */
 	@ApiOperation(value = "保存部门")
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("sys:dept:add")
-	public R save(DeptReq deptReq) {
+	public ApiResult<String> save(DeptReq deptReq) {
 		Dept dept = new Dept();
 		BeanUtil.copyProperties(deptReq, dept);
 		dept.setDeptId(IDUtils.newID());
 		if (!deptService.insert(dept)) {
-			throw new CommonException("新增部门出错");
+			throw new ApiException(ApiErrorCode.DB_INSERT_FAIL);
 		}
-		return R.ok();
+		return ApiResult.ok();
 	}
 
 	/**
@@ -120,46 +122,46 @@ public class DeptController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("sys:dept:edit")
-	public R update(DeptReq deptReq) {
+	public ApiResult<String> update(DeptReq deptReq) {
 		Dept dept = new Dept();
 		BeanUtil.copyProperties(deptReq, dept);
 		if (!deptService.updateById(dept)) {
-			throw new CommonException("部门修改过程出错");
+			throw new ApiException(ApiErrorCode.DB_UPDATE_FAIL);
 		}
-		return R.ok();
+		return ApiResult.ok();
 	}
 
 	@ApiOperation(value = "删除部门")
 	@PostMapping("/delete")
 	@ResponseBody
 	@RequiresPermissions("sys:dept:delete")
-	public R delete(String id) {
+	public ApiResult<String> delete(String id) {
 		Long pId = Long.valueOf(id);
 
 		EntityWrapper<Dept> deptWrapper = new EntityWrapper<>();
 		deptWrapper.eq(Dept.PARENT_ID, pId);
 		if (deptService.selectCount(deptWrapper) > 0) {
-			throw new CommonException("包含下级部门，不允许删除");
+			throw new ApiException("包含下级部门，不允许删除");
 		}
 		EntityWrapper<User> userWrapper = new EntityWrapper<>();
 		userWrapper.eq(User.DEPT_ID, pId);
 		if (userService.selectCount(userWrapper) > 0) {
-			throw new CommonException("部门包含用户,不允许删除");
+			throw new ApiException("部门包含用户,不允许删除");
 		}
 
 		if (!deptService.deleteById(pId)) {
-			throw new CommonException("部门删除过程出错");
+			throw new ApiException(ApiErrorCode.DB_DELETE_FAIL);
 		}
-		return R.ok();
+		return ApiResult.ok();
 	}
 
 	@ApiOperation(value = "批量删除部门")
 	@PostMapping("/batchDelete")
 	@ResponseBody
 	@RequiresPermissions("sys:delete:batchDelete")
-	public R batchDelete(@RequestParam("ids[]") Long[] deptIds) {
+	public ApiResult<String> batchDelete(@RequestParam("ids[]") String[] deptIds) {
 
-		return R.ok();
+		return ApiResult.ok("");
 	}
 
 	

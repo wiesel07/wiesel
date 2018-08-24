@@ -26,6 +26,7 @@ import com.wiesel.shiro.UserRealm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.CacheManager;
 
 /**
@@ -47,7 +48,7 @@ import net.sf.ehcache.CacheManager;
  ***********************************************************************
  *          </p>
  */
-@Log
+@Slf4j
 @Configuration
 public class ShiroConfig {
 	@Value("${spring.redis.host}")
@@ -91,6 +92,7 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSuccessUrl("/index");
 		shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+		 filterChainDefinitionMap.put("/login","anon");
 		filterChainDefinitionMap.put("/css/**", "anon");
 		filterChainDefinitionMap.put("/js/**", "anon");
 		filterChainDefinitionMap.put("/fonts/**", "anon");
@@ -201,7 +203,7 @@ public class ShiroConfig {
 		sessionManager.setGlobalSessionTimeout(tomcatTimeout * 1000);
 		sessionManager.setSessionDAO(sessionDAO());
 		Collection<SessionListener> listeners = new ArrayList<SessionListener>();
-		listeners.add(new BDSessionListener());
+		listeners.add(new OnlineSessionListener());
 		sessionManager.setSessionListeners(listeners);
 		return sessionManager;
 	}
