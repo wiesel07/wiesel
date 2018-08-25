@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wiesel.common.controller.BaseController;
-import com.wiesel.common.utils.MD5Utils;
+import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.common.utils.ShiroUtils;
 import com.wiesel.system.entity.Menu;
+import com.wiesel.system.entity.User;
 import com.wiesel.system.service.IMenuService;
 
 import io.swagger.annotations.ApiModel;
@@ -95,16 +96,17 @@ public class LoginController extends BaseController {
 	@ApiOperation(value = "登录", notes = "用户填写账号密码进入后台")
 	@ResponseBody
 	@PostMapping(value = "/login")
-	public ApiResult<String> ajaxLogin(String username, String password) {
+	public ApiResult<String> ajaxLogin(User user) {
 
-		password = MD5Utils.encrypt(username, password);
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		PasswordHelper.encryptPassword(user);
+		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.login(token);
 			
 			return ApiResult.ok();
 		} catch (AuthenticationException e) {
+			e.printStackTrace();
 			return ApiResult.error("用户或密码错误");
 		}
 	}

@@ -11,14 +11,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+
 /**
- * <p>
- * 用户与角色对应关系
- * </p>
- *
- * @author wuj
- * @since 2018-07-04
- */
+*
+* @ClassName 类名：UserRole
+* @Description 功能说明：用户与角色对应关系
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月4日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月4日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)

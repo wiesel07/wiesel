@@ -31,13 +31,24 @@ import wiesel.common.exception.ApiException;
 import wiesel.common.utils.IDUtils;
 
 /**
- * <p>
- * 部门管理 前端控制器
- * </p>
- *
- * @author wuj123
- * @since 2018-08-03
- */
+*
+* @ClassName 类名：MenuController
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年8月3日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年8月3日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 @Controller
 @RequestMapping("/sys/dept")
 public class DeptController {

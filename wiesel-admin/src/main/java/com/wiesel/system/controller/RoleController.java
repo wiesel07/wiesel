@@ -28,14 +28,27 @@ import wiesel.common.api.ApiResult;
 import wiesel.common.base.entity.PageReq;
 import wiesel.common.base.entity.PageResp;
 
-/**
- * 角色
- * 
- * @author wuj
- * @email 502393098@qq.com
- * @date 2018-07-23 17:23:28
- */
 
+
+/**
+*
+* @ClassName 类名：RoleController
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月23日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月23日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 @ApiModel(value = "角色管理相应接口")
 @Controller
 @RequestMapping("/sys/role")

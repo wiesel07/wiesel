@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.system.entity.User;
 import com.wiesel.system.entity.UserRole;
 import com.wiesel.system.mapper.UserMapper;
@@ -19,13 +20,24 @@ import wiesel.common.enums.ApiErrorCode;
 import wiesel.common.exception.ApiException;
 
 /**
- * <p>
- * 服务实现类
- * </p>
- *
- * @author wuj
- * @since 2018-07-04
- */
+*
+* @ClassName 类名：UserServiceImpl
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月4日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月4日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
@@ -69,6 +81,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 	@Transactional
 	@Override
 	public void addUser(User user, List<Long> roleIds) {
+		
+		EntityWrapper<User> wrapper = new EntityWrapper<>();
+		wrapper.eq(User.USERNAME, user.getUsername());
+		if (this.baseMapper.selectCount(wrapper)>0) {
+			throw new ApiException(ErrorCode.USERNAME_EXIST);
+		}
+		
 		List<UserRole> userRoles = new ArrayList<>();
 		Long userId = user.getUserId();
 		for (Long roleId : roleIds) {

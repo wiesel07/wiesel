@@ -84,6 +84,17 @@ public class ShiroConfig {
 		return new ShiroDialect();
 	}
 
+	 /**
+     * ShiroFilterFactoryBean 处理拦截资源文件问题。
+     * 注意：单独一个ShiroFilterFactoryBean配置是或报错的，因为在
+     * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager
+     *
+     Filter Chain定义说明
+     1、一个URL可以配置多个Filter，使用逗号分隔
+     2、当设置多个过滤器时，全部验证通过，才视为通过
+     3、部分过滤器可指定参数，如perms，roles
+     *
+     */
 	@Bean
 	ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -233,12 +244,12 @@ public class ShiroConfig {
      *
      * @return
      */
-    @Bean(name = "hashedCredentialsMatcher")
+    @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        // 采用MD5方式加密
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-        // 设置加密次数
+        // 散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+       // 散列的次数，比如散列两次，相当于 md5(md5(""));
         hashedCredentialsMatcher.setHashIterations(1);
         return hashedCredentialsMatcher;
     }

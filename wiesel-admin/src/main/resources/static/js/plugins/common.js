@@ -54,8 +54,8 @@
 
 /** 消息状态码 */
 web_status = {
-    SUCCESS: 0,
-    FAIL: 500
+    SUCCESS: '0',
+    FAIL: '500'
 };
 
 /** 弹窗状态码 */

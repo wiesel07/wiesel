@@ -7,12 +7,24 @@ import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
 
 /**
- * 角色
- * 
- * @author wuj
- * @email 502393098@qq.com
- * @date 2018-07-23 17:23:28
- */
+*
+* @ClassName 类名：IRoleService
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月23日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月23日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 public interface IRoleService extends IService<Role>{
 	/**
 	 * 

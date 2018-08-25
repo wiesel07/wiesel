@@ -1,15 +1,12 @@
 package com.wiesel.shiro;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -19,6 +16,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 import com.wiesel.common.config.ApplicationContextRegister;
 import com.wiesel.common.utils.ShiroUtils;
@@ -26,7 +24,6 @@ import com.wiesel.system.entity.User;
 import com.wiesel.system.mapper.UserMapper;
 import com.wiesel.system.service.IMenuService;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -51,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
 
+	
 	/**
 	 * 认证.登录
 	 */
@@ -59,10 +57,7 @@ public class UserRealm extends AuthorizingRealm {
 		log.info("认证:" + new Date());
 		UsernamePasswordToken utoken = (UsernamePasswordToken) token;// 获取用户输入的token
 		String username = utoken.getUsername();
-
-		Map<String, Object> map = new HashMap<>(16);
-		map.put("username", username);
-		String password = new String((char[]) utoken.getPassword());
+		//String password = new String((char[]) utoken.getPassword());
 
 		UserMapper userMapper = ApplicationContextRegister.getBean(UserMapper.class);
 		User user = new User();
@@ -71,28 +66,27 @@ public class UserRealm extends AuthorizingRealm {
 
 		// 账号不存在
 		if (user == null||user.getUserId()==null) {
-			throw new UnknownAccountException("账号或密码不正确");
+			throw new UnknownAccountException("用户不存在");
 		}
 
-		// 密码错误
-		if (!password.equals(user.getPassword())) {
-			throw new IncorrectCredentialsException("账号或密码不正确");
-		}
+//		// 密码错误
+//		if (!password.equals(user.getPassword())) {
+//			throw new IncorrectCredentialsException("账号或密码不正确");
+//		}
 
 		// 账号锁定
 		if (user.getStatus() == 0) {
 			throw new LockedAccountException("账号已被锁定,请联系管理员");
 		}
 		// 明文: 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user,user.getPassword(), getName());
-
+		//SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user,user.getPassword(), getName());
+	    SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
+	                user, //用户
+	                user.getPassword(), //密码
+	                ByteSource.Util.bytes(String.valueOf(user.getUserId())),
+	                getName()  //realm name
+	        );
 		
-//		 SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-//	                user, //用户
-//	                user.getPassword(), //密码
-//	                ByteSource.Util.bytes(username),
-//	                getName()  //realm name
-//	        );
 		
 		// 当验证都通过后，把用户信息放在session里
 		Session session = SecurityUtils.getSubject().getSession();

@@ -6,13 +6,24 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.wiesel.system.entity.Menu;
 
 /**
- * <p>
- * 菜单管理 Mapper 接口
- * </p>
- *
- * @author wuj
- * @since 2018-07-04
- */
+*
+* @ClassName 类名：MenuMapper
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月4日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月4日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 public interface MenuMapper extends BaseMapper<Menu> {
 	/**
 	 * 

@@ -25,6 +25,7 @@ $.validator.setDefaults({
 });
 
 function save() {
+	//app.doSave({url:'/sys/role/save',data : $('#addForm').serialize()});
 	app.doSave({url:prefix+'/save',data : $('#addForm').serialize(),action:ACTION.ADD});
 }
 function validateRule() {

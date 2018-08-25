@@ -1,22 +1,32 @@
 package com.wiesel.system.mapper;
 
-import com.wiesel.system.entity.RoleMenu;
-import com.wiesel.system.entity.UserRole;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.wiesel.system.entity.UserRole;
+
 
 /**
- * <p>
- * 用户与角色对应关系 Mapper 接口
- * </p>
- *
- * @author wu
- * @since 2018-07-04
- */
+*
+* @ClassName 类名：UserRoleMapper
+* @Description 功能说明：
+*              <p>
+*              TODO
+*              </p>
+************************************************************************
+* @date 创建日期：2018年7月23日
+* @author 创建人：wuj
+* @version 版本号：V1.0
+*          <p>
+***************************          修订记录*************************************
+* 
+*          2018年7月23日 wuj 创建该类功能。
+*
+***********************************************************************
+*          </p>
+*/
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
 	/**

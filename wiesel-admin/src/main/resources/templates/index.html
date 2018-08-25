@@ -99,8 +99,12 @@
 						</form> -->
 					</div>
 					<ul class="nav navbar-top-links navbar-right">
-						<li class="hidden-xs"><a href="/blog" target="_Blank"
-							class=""><i class="fa fa-rss-square"></i>admin</a></li>
+						<li class="hidden-xs">
+							<a href="javascript:void(0);" target="_Blank" class="">
+							    <i class="fa fa-rss-square"></i >
+								<span  th:text="${username}">基础信息</span>
+						    </a>
+					    </li>
 					<!-- 	<li class="dropdown"><a class="dropdown-toggle count-info"
 							data-toggle="dropdown" href="#"> <i class="fa fa-envelope"></i>
 								<span class="label label-warning">{{total}}</span>通知
