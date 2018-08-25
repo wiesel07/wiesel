@@ -1,11 +1,11 @@
-package com.wiesel.common.utils;
+package wiesel.common.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.wiesel.common.base.entity.Tree;
+import wiesel.common.base.entity.Tree;
 
 /** 
 *
@@ -26,7 +26,7 @@ import com.wiesel.common.base.entity.Tree;
 ***********************************************************************
 *</p>
 */
-public class BuildTree {
+public class BuildTreeUtils {
 
 	public static <T> Tree<T> build(List<Tree<T>> nodes) {
 

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.wiesel.common.constant.GlobalConstant;
 import com.wiesel.shiro.UserRealm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
@@ -117,7 +118,7 @@ public class ShiroConfig {
 		securityManager.setRealm(userRealm());
 		// 自定义缓存实现 使用redis
 		log.info("shiro自定义缓存实现【" + cacheType+"】");
-		if (CommonConstant.CACHE_TYPE_REDIS.equals(cacheType)) {
+		if (GlobalConstant.CACHE_TYPE_REDIS.equals(cacheType)) {
 			securityManager.setCacheManager(cacheManager());
 		} else {
 
@@ -187,7 +188,7 @@ public class ShiroConfig {
 
 	@Bean
 	public SessionDAO sessionDAO() {
-		if (CommonConstant.CACHE_TYPE_REDIS.equals(cacheType)) {
+		if (GlobalConstant.CACHE_TYPE_REDIS.equals(cacheType)) {
 			return redisSessionDAO();
 		} else {
 			return new MemorySessionDAO();

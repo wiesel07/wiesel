@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.wiesel.common.base.entity.PageReq;
-import com.wiesel.common.base.entity.PageResp;
 import com.wiesel.common.controller.BaseController;
-import com.wiesel.common.utils.R;
 import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
 import com.wiesel.system.service.IRoleService;
@@ -28,6 +25,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
+import wiesel.common.base.entity.PageReq;
+import wiesel.common.base.entity.PageResp;
 
 /**
  * 角色
@@ -81,7 +80,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:add")
 	@PostMapping("/save")
 	@ResponseBody()
-	ApiResult<String> save(RoleReq roleReq) {
+	public 	ApiResult<String> save(RoleReq roleReq) {
 		roleService.addRole(roleReq, getUserId());
 		return ApiResult.ok();
 
@@ -90,7 +89,7 @@ public class RoleController extends BaseController {
 	@ApiOperation(value = "编辑角色")
 	@RequiresPermissions("sys:role:edit")
 	@GetMapping("/edit/{id}")
-	String edit(@PathVariable("id") Long id, Model model) {
+	 String edit(@PathVariable("id") Long id, Model model) {
 		Role role = roleService.selectById(id);
 		model.addAttribute("role", role);
 		return prefix + "/edit";
@@ -100,30 +99,30 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:edit")
 	@PostMapping("/update")
 	@ResponseBody()
-	R update(RoleReq roleReq) {
+	public ApiResult<String> update(RoleReq roleReq) {
 		roleService.updateRole(roleReq, getUserId());
-		return R.ok();
+		return ApiResult.ok();
 	}
 
 	@ApiOperation(value = "删除角色")
 	@RequiresPermissions("sys:role:delete")
 	@PostMapping("/delete")
 	@ResponseBody()
-	public	R delete(String id) {
+	public	ApiResult<String> delete(String id) {
 		roleService.deleteRole(Long.valueOf(id));
-		return R.ok();
+		return ApiResult.ok();
 	}
 
 	@ApiOperation(value = "批量删除角色")
 	@RequiresPermissions("sys:role:batchDelete")
 	@PostMapping("/batchDelete")
 	@ResponseBody
-	public	R batchDelete(@RequestParam("ids[]") String[] ids) {
+	public	ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
 		List<Long> params = new ArrayList<>();
 		for (String id : ids) {
 			params.add(Long.valueOf(id));
 		}
 		roleService.batchDeleteRole(params);
-		return R.ok();
+		return ApiResult.ok();
 	}
 }

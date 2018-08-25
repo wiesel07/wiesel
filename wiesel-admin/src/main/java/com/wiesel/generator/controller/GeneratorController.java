@@ -24,11 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.wiesel.common.base.entity.PageReq;
-import com.wiesel.common.base.entity.PageResp;
 import com.wiesel.common.utils.GenUtils;
-import com.wiesel.common.utils.R;
 import com.wiesel.generator.service.IGeneratorService;
+
+import wiesel.common.api.ApiResult;
+import wiesel.common.base.entity.PageReq;
+import wiesel.common.base.entity.PageResp;
 
 /**
  *
@@ -59,7 +60,7 @@ public class GeneratorController {
 	private IGeneratorService generatorService;
 
 	@GetMapping("")
-	String user(Model model) {
+	public String user(Model model) {
 		return prefix + "/generator";
 	}
 
@@ -71,7 +72,7 @@ public class GeneratorController {
 	@ResponseBody
 	@RequiresPermissions("common:generator")
 	@GetMapping("/list")
-	public <T> R list(PageReq<T> pageReq, @RequestParam Map<String, Object> params) {
+	public <T> ApiResult<PageResp<Map<String, Object>>> list(PageReq<T> pageReq, @RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		List<Map<String, Object>> list = generatorService.queryList(params);
 		int total = generatorService.queryTotal(params);
@@ -80,7 +81,7 @@ public class GeneratorController {
 		pageResp.setRows(list);
 		pageResp.setTotal(total);
 
-		return R.ok(pageResp);
+		return ApiResult.ok(pageResp);
 	}
 
 	@RequestMapping("/code/{tableName}")
@@ -138,7 +139,7 @@ public class GeneratorController {
 
 	@ResponseBody
 	@PostMapping("/update")
-	R update(@RequestParam Map<String, Object> map) {
+	public	ApiResult<String> update(@RequestParam Map<String, Object> map) {
 		try {
 			PropertiesConfiguration conf = new PropertiesConfiguration("generator.properties");
 			conf.setProperty("author", map.get("author"));
@@ -148,9 +149,9 @@ public class GeneratorController {
 			conf.setProperty("tablePrefix", map.get("tablePrefix"));
 			conf.save();
 		} catch (ConfigurationException e) {
-			return R.error("保存配置文件出错");
+			return ApiResult.error("保存配置文件出错");
 		}
-		return R.ok();
+		return ApiResult.ok();
 	}
 	
 	//

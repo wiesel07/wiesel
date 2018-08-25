@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wiesel.common.utils.R;
-
 import lombok.extern.slf4j.Slf4j;
+import wiesel.common.api.ApiResult;
+import wiesel.common.exception.ApiException;
 
 /**
  *
@@ -33,19 +33,20 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @ControllerAdvice
-public class CommonExceptionHandler {
+public class GlobalExceptionHandler {
 
 	/**
 	 * 拦截Exception类的异常
+	 * @param <T>
 	 * 
 	 * @param e
 	 * @return
 	 */
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public R exceptionHandler(Exception e) {
+	public <T> ApiResult<T> exceptionHandler(Exception e) {
 		e.printStackTrace();
-		return R.error();
+		return ApiResult.error("系统未知异常");
 	}
 
 	/**
@@ -54,30 +55,30 @@ public class CommonExceptionHandler {
 	 * @param e
 	 * @return
 	 */
-	@ExceptionHandler(CommonException.class)
+	@ExceptionHandler(ApiException.class)
 	@ResponseBody
-	public R exceptionHandler(CommonException e) {
-		log.info("CommonException异常");
+	public <T> ApiResult<T> exceptionHandler(ApiException e) {
+		log.info("ApiException异常");
 		
-		return R.error(e.getMessage());
+		return ApiResult.error(e.getMessage());
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public R handleBindException(MethodArgumentNotValidException ex) {
+	public <T> ApiResult<T> handleBindException(MethodArgumentNotValidException ex) {
 		FieldError fieldError = ex.getBindingResult().getFieldError();
 		log.info("参数校验异常:{}({})", fieldError.getDefaultMessage(), fieldError.getField());
 
-		return R.error(01002, fieldError.getDefaultMessage());
+		return ApiResult.error( fieldError.getDefaultMessage());
 
 	}
 
 	@ExceptionHandler(BindException.class)
-	public R handleBindException(BindException ex) {
+	public <T> ApiResult<T> handleBindException(BindException ex) {
 		// 校验 除了 requestbody 注解方式的参数校验 对应的 bindingresult 为 BeanPropertyBindingResult
 		FieldError fieldError = ex.getBindingResult().getFieldError();
 
 		log.info("必填校验异常:{}({})", fieldError.getDefaultMessage(), fieldError.getField());
-		return R.error(01002, fieldError.getDefaultMessage());
+		return ApiResult.error( fieldError.getDefaultMessage());
 	}
 	
 	@ExceptionHandler(AuthorizationException.class)

@@ -1,4 +1,7 @@
 package wiesel.common.api;
+
+import lombok.experimental.Accessors;
+
 /** 
 *
 * @ClassName   类名：IErrorCode 

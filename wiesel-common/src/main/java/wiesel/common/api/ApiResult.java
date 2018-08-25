@@ -62,11 +62,11 @@ public class ApiResult<T> {
 		return restResult(data, ApiErrorCode.SUCCESS);
 	}
 
-	public static <T> ApiResult<T> failed(String msg) {
+	public static <T> ApiResult<T> error(String msg) {
 		return restResult(null, ApiErrorCode.FAILED.getCode(), msg);
 	}
 
-	public static <T> ApiResult<T> failed(IErrorCode errorCode) {
+	public static <T> ApiResult<T> error(IErrorCode errorCode) {
 		return restResult(null, errorCode);
 	}
 
@@ -82,17 +82,17 @@ public class ApiResult<T> {
 		return apiResult;
 	}
 
-//	public boolean ok() {
-//		return ApiErrorCode.SUCCESS.getCode().equals(this.code);
-//	}
-//
-//	/**
-//	 * 服务间调用非业务正常，异常直接释放
-//	 */
-//	public T serviceData() {
-//		if (!ok()) {
-//			throw new ApiException(this.msg);
-//		}
-//		return data;
-//	}
+	public boolean isOk() {
+		return ApiErrorCode.SUCCESS.getCode().equals(this.code);
+	}
+
+	/**
+	 * 服务间调用非业务正常，异常直接释放
+	 */
+	public T serviceData() {
+		if (!isOk()) {
+			throw new ApiException(this.msg);
+		}
+		return data;
+	}
 }

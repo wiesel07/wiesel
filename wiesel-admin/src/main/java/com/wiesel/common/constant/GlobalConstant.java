@@ -1,4 +1,4 @@
-package com.wiesel.common.config;
+package com.wiesel.common.constant;
 /** 
 *
 * @ClassName   类名：CommonConstant 
@@ -18,6 +18,6 @@ package com.wiesel.common.config;
 ***********************************************************************
 *</p>
 */
-public class CommonConstant {
+public class GlobalConstant {
 	  public static String CACHE_TYPE_REDIS ="redis";
 }

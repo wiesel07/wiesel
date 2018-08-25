@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.wiesel.common.base.entity.ZtreeNode;
 import com.wiesel.system.controller.req.MenuReq;
 import com.wiesel.system.entity.Menu;
 import com.wiesel.system.service.IMenuService;
@@ -22,6 +21,7 @@ import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
+import wiesel.common.base.entity.ZtreeNode;
 import wiesel.common.enums.ApiErrorCode;
 import wiesel.common.exception.ApiException;
 
@@ -42,14 +42,14 @@ public class MenuController {
 
 	@RequiresPermissions("sys:menu:menu")
 	@GetMapping()
-	String menu(Model model) {
+	 String menu(Model model) {
 		return prefix+"/menu";
 	}
 
 	@RequiresPermissions("sys:menu:menu")
 	@RequestMapping("/list")
 	@ResponseBody
-	List<Menu> list() {
+	public List<Menu> list() {
 		EntityWrapper<Menu> wrapper = new EntityWrapper<>();
 		List<Menu> menus = menuService.selectList(wrapper);
 		return menus;
@@ -58,7 +58,7 @@ public class MenuController {
 	@ApiOperation(value = "新增菜单")
 	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
-	String add(Model model, @PathVariable("pId") String pId) {
+	public String add(Model model, @PathVariable("pId") String pId) {
 		Long menuId = Long.valueOf(pId);
 		model.addAttribute("pId", menuId);
 		if (menuId == 0) {
@@ -72,7 +72,7 @@ public class MenuController {
 	@ApiOperation(value = "编辑菜单")
 	@RequiresPermissions("sys:menu:edit")
 	@GetMapping("/edit/{pId}")
-	String edit(Model model, @PathVariable("pId") String pId) {
+	public String edit(Model model, @PathVariable("pId") String pId) {
 		Long menuId = Long.valueOf(pId);
 		Menu menu = menuService.selectById(menuId);
 		Long parentId = menu.getParentId();
@@ -89,7 +89,7 @@ public class MenuController {
 	@RequiresPermissions("sys:menu:add")
 	@PostMapping("/save")
 	@ResponseBody
-	ApiResult<String> save(MenuReq menuReq) {
+	public ApiResult<String> save(MenuReq menuReq) {
 		Menu menu = new Menu();
 		BeanUtil.copyProperties(menuReq, menu);
 		
@@ -103,7 +103,7 @@ public class MenuController {
 	@RequiresPermissions("sys:menu:edit")
 	@PostMapping("/update")
 	@ResponseBody
-	ApiResult<String> update(MenuReq menuReq) {
+	public ApiResult<String> update(MenuReq menuReq) {
 		Menu menu = new Menu();
 		BeanUtil.copyProperties(menuReq, menu);
 		
@@ -117,7 +117,7 @@ public class MenuController {
 	@RequiresPermissions("sys:menu:delete")
 	@PostMapping("/delete")
 	@ResponseBody
-	ApiResult<String> remove(String id) {
+	public ApiResult<String> remove(String id) {
 		Long menuId = Long.valueOf(id);
 		if (!menuService.deleteById(menuId)) {
 			throw new ApiException(ApiErrorCode.DB_DELETE_FAIL);
@@ -128,21 +128,21 @@ public class MenuController {
 	
 	@GetMapping("/tree")
 	@ResponseBody
-	List<ZtreeNode> tree() {
+	public List<ZtreeNode> tree() {
 		List<ZtreeNode>  trees = menuService.getTree();
 		return trees;
 	}
 	
 	@GetMapping("/tree/{roleId}")
 	@ResponseBody
-	List<ZtreeNode> tree(@PathVariable("roleId") Long roleId) {
+	public 	List<ZtreeNode> tree(@PathVariable("roleId") Long roleId) {
 		List<ZtreeNode>  trees = menuService.getTree(roleId);
 		return trees;
 	}
 	
 	@ApiIgnore
 	@GetMapping("/treeView/{id}")
-	String treeView(@PathVariable("id") String id,Model model) {
+	 String treeView(@PathVariable("id") String id,Model model) {
 		model.addAttribute("treeId", id);
 		return prefix + "/menuTree";
 	}

@@ -1,4 +1,4 @@
-package com.wiesel.common.utils;
+package wiesel.common.utils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

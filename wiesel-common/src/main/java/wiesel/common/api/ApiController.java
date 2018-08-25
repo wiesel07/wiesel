@@ -50,7 +50,7 @@ public class ApiController {
 	 * @return
 	 */
 	protected ApiResult<Object> failed(String msg) {
-		return ApiResult.failed(msg);
+		return ApiResult.error(msg);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class ApiController {
 	 * @return
 	 */
 	protected ApiResult<Object> failed(IErrorCode errorCode) {
-		return ApiResult.failed(errorCode);
+		return ApiResult.error(errorCode);
 	}
 
 }

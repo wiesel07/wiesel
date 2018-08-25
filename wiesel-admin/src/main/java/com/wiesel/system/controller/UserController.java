@@ -16,13 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.wiesel.common.base.entity.PageReq;
-import com.wiesel.common.base.entity.PageResp;
+import com.wiesel.common.annotation.Log;
 import com.wiesel.common.controller.BaseController;
-import com.wiesel.common.exception.CommonException;
-import com.wiesel.common.utils.IDUtils;
 import com.wiesel.common.utils.PasswordHelper;
-import com.wiesel.common.utils.R;
 import com.wiesel.system.controller.req.UserReq;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.Role;
@@ -38,6 +34,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import wiesel.common.api.ApiResult;
+import wiesel.common.base.entity.PageReq;
+import wiesel.common.base.entity.PageResp;
+import wiesel.common.exception.ApiException;
+import wiesel.common.utils.IDUtils;
 
 /**
  * <p>
@@ -72,11 +73,12 @@ public class UserController extends BaseController {
 		return prefix + "/user";
 	}
 
+	@Log(value="获取用户列表")
 	@ApiOperation(value = "获取用户列表")
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("/list")
 	@ResponseBody()
-	R list(PageReq<User> pageReq, UserReq userReq) {
+	public ApiResult<PageResp<User>> list(PageReq<User> pageReq, UserReq userReq) {
 
 		Page<User> page = new Page<User>(pageReq.getPageNo(), pageReq.getPageSize());
 		EntityWrapper<User> wrapper = new EntityWrapper<User>();
@@ -93,7 +95,7 @@ public class UserController extends BaseController {
 		PageResp<User> pageResp = new PageResp<User>();
 		pageResp.setRows(page.getRecords());
 		pageResp.setTotal(page.getTotal());
-		return R.ok(pageResp);
+		return ApiResult.ok(pageResp);
 	}
 
 	@ApiOperation(value = "添加用户")
@@ -109,7 +111,7 @@ public class UserController extends BaseController {
 	@ApiOperation(value = "编辑用户")
 	@RequiresPermissions("sys:user:edit")
 	@GetMapping("/edit/{id}")
-	String edit(Model model, @PathVariable("id") String id) {
+	public String edit(Model model, @PathVariable("id") String id) {
 		Long userId = Long.valueOf(id);
 		User user = userService.selectById(userId);
 		model.addAttribute("user", user);
@@ -150,14 +152,15 @@ public class UserController extends BaseController {
 		return prefix + "/edit";
 	}
 
+	@Log(value="保存用户")
 	@ApiOperation(value = "保存用户")
 	@RequiresPermissions("sys:user:add")
 	@PostMapping("/save")
 	@ResponseBody
-	R save(UserReq userReq, String[] role) {
+	public ApiResult<String> save(UserReq userReq, String[] role) {
 
 		User user = new User();
-		
+
 		BeanUtil.copyProperties(userReq, user);
 		user.setUserId(IDUtils.newID()).setUserIdCreate(getUserId());
 		PasswordHelper.encryptPassword(user);
@@ -167,14 +170,15 @@ public class UserController extends BaseController {
 			roleIds.add(Long.valueOf(roleId));
 		}
 		userService.addUser(user, roleIds);
-		return R.ok();
+		return ApiResult.ok();
 	}
 
+	@Log(value="更新用户")
 	@ApiOperation(value = "更新用户")
 	@RequiresPermissions("sys:user:edit")
 	@PostMapping("/update")
 	@ResponseBody
-	R update(UserReq userReq, String[] role) {
+	public ApiResult<String> update(UserReq userReq, String[] role) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
 
@@ -183,37 +187,40 @@ public class UserController extends BaseController {
 			roleIds.add(Long.valueOf(roleId));
 		}
 		userService.updateUser(user, roleIds);
-		return R.ok();
+		return ApiResult.ok();
 	}
 
+	@Log(value="删除用户")
 	@ApiOperation(value = "删除用户")
 	@RequiresPermissions("sys:user:delete")
 	@PostMapping("/delete")
 	@ResponseBody
-	R delete(String id) {
+	public ApiResult<String> delete(String id) {
 		Long userId = Long.valueOf(id);
 
 		userService.deleteUser(userId);
-		return R.ok();
+		return ApiResult.ok();
 	}
 
+	@Log(value="批量用户")
 	@ApiOperation(value = "批量删除用户")
 	@RequiresPermissions("sys:user:batchDelete")
 	@PostMapping("/batchDelete")
 	@ResponseBody
-	R batchDelete(@RequestParam("ids[]") String[] ids) {
+	public ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
 		List<Long> userIds = new ArrayList<>();
 		for (String id : ids) {
 			userIds.add(Long.valueOf(id));
 		}
 		userService.batchDeleteUser(userIds);
-		return R.ok();
+		return ApiResult.ok();
 	}
 
+	
 	@ApiOperation(value = "用户密码修改")
 	@RequiresPermissions("sys:user:resetPwd")
 	@GetMapping("/resetPwd/{id}")
-	String resetPwd(@PathVariable("id") String id, Model model) {
+	public String resetPwd(@PathVariable("id") String id, Model model) {
 
 		Long userId = Long.valueOf(id);
 
@@ -222,52 +229,48 @@ public class UserController extends BaseController {
 		return prefix + "/reset_pwd";
 	}
 
+	@Log(value="用户密码修改")
 	@ApiOperation(value = "用户密码修改")
 	@RequiresPermissions("sys:user:resetPwd")
 	@PostMapping("/resetPwd")
 	@ResponseBody
-	R resetPwd(UserReq userReq, String newPassword, String confirmPassword) {
+	public ApiResult<String> resetPwd(UserReq userReq, String newPassword, String confirmPassword) {
 		User user = new User();
 		BeanUtil.copyProperties(userReq, user);
 
 		String password = user.getPassword();
 		if (StrUtil.isEmpty(newPassword) || StrUtil.isEmpty(confirmPassword) || StrUtil.isEmpty(password)) {
-			return R.error("密码不能为空");
+			return ApiResult.error("密码不能为空");
 		}
 		if (!newPassword.equals(confirmPassword)) {
-			return R.error("两次输入密码不一致");
+			return ApiResult.error("两次输入密码不一致");
 		}
 
 		PasswordHelper.encryptPassword(user);
-		password= user.getPassword();
-	
+		password = user.getPassword();
+
 		EntityWrapper<User> wrapper = new EntityWrapper<>();
 		wrapper.eq(User.USER_ID, user.getUserId());
 		wrapper.eq(User.PASSWORD, password);
-		
+
 		user.setPassword(newPassword);
 		if (!userService.update(user, wrapper)) {
-			throw new CommonException("旧密码不正确");
+			throw new ApiException("旧密码不正确");
 		}
-		return R.ok();
+		return ApiResult.ok();
 	}
 
+	
 	@ApiOperation(value = "校验用户名是否存在")
 	@PostMapping("/checkUsername")
 	@ResponseBody
-	boolean checkUsername(@RequestParam String username) {
+	public boolean checkUsername(@RequestParam String username) {
 
 		EntityWrapper<User> wrapper = new EntityWrapper<>();
 		wrapper.eq(User.USERNAME, username);
 
 		return !(userService.selectCount(wrapper) > 0);
 	}
-
-
-//	@GetMapping("/treeView")
-//	String treeView() {
-//		return prefix + "/userTree";
-//	}
 
 	// @ResponseBody
 	// @PostMapping("/uploadImg")

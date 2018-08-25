@@ -1,7 +1,4 @@
-package com.wiesel.common.base.entity;
-
-import java.util.ArrayList;
-import java.util.List;
+package wiesel.common.base.entity;
 
 /**
  *

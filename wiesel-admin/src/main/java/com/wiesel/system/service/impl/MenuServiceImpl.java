@@ -15,14 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.wiesel.common.base.entity.Tree;
-import com.wiesel.common.base.entity.ZtreeNode;
-import com.wiesel.common.utils.BuildTree;
 import com.wiesel.system.entity.Menu;
 import com.wiesel.system.entity.RoleMenu;
 import com.wiesel.system.mapper.MenuMapper;
 import com.wiesel.system.mapper.RoleMenuMapper;
 import com.wiesel.system.service.IMenuService;
+
+import wiesel.common.base.entity.Tree;
+import wiesel.common.base.entity.ZtreeNode;
+import wiesel.common.utils.BuildTreeUtils;
 
 /**
  * <p>
@@ -67,7 +68,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整
-		List<Tree<Menu>> list = BuildTree.buildList(trees, "0");
+		List<Tree<Menu>> list = BuildTreeUtils.buildList(trees, "0");
 		return list;
 	}
 

@@ -1,12 +1,14 @@
-package com.wiesel.common.base.entity;
+package wiesel.common.base.entity;
+
+import java.util.List;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
  *
- * @ClassName 类名：PageReq
- * @Description 功能说明：请求参数
+ * @ClassName 类名：PageResp
+ * @Description 功能说明：
  *              <p>
  *              TODO
  *              </p>
@@ -23,27 +25,17 @@ import lombok.experimental.Accessors;
  *          </p>
  */
 @Data
-@Accessors(chain = true)
-public class PageReq<T> {
+@Accessors(chain = true)//使用链式创建
+public class PageResp<T> {
 
 	/**
-	 * 页数
+	 * 总数
 	 */
-	private Integer pageNo;
+	private Integer total;
 
 	/**
-	 * 每页大小
+	 * 数据
 	 */
-	private Integer pageSize;
-
-	/**
-	 * 开始日期
-	 */
-	private String startDate;
-
-	/**
-	 * 结束日期
-	 */
-	private String endDate;
+	private List<T> rows;
 
 }

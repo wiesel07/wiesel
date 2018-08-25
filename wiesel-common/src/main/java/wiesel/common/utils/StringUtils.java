@@ -1,4 +1,4 @@
-package com.wiesel.common.utils;
+package wiesel.common.utils;
 
 import java.io.Serializable;
 import java.util.Collection;

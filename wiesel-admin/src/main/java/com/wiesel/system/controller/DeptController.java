@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.wiesel.common.base.entity.ZtreeNode;
-import com.wiesel.common.utils.IDUtils;
 import com.wiesel.system.controller.req.DeptReq;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.User;
@@ -27,8 +25,10 @@ import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
+import wiesel.common.base.entity.ZtreeNode;
 import wiesel.common.enums.ApiErrorCode;
 import wiesel.common.exception.ApiException;
+import wiesel.common.utils.IDUtils;
 
 /**
  * <p>
@@ -83,7 +83,7 @@ public class DeptController {
 	@ApiOperation(value = "编辑部门")
 	@GetMapping("/edit/{pId}")
 	@RequiresPermissions("sys:dept:edit")
-	String edit(@PathVariable("pId") String pId, Model model) {
+	public String edit(@PathVariable("pId") String pId, Model model) {
 		Long deptId = Long.valueOf(pId);
 		Dept dept = deptService.selectById(deptId);
 		model.addAttribute("dept", dept);
@@ -99,6 +99,7 @@ public class DeptController {
 
 	/**
 	 * 保存
+	 * 
 	 * @param <T>
 	 */
 	@ApiOperation(value = "保存部门")
@@ -164,7 +165,6 @@ public class DeptController {
 		return ApiResult.ok("");
 	}
 
-	
 	@ApiOperation(value = "获取部门树结构")
 	@GetMapping("/tree")
 	@ResponseBody
@@ -187,7 +187,7 @@ public class DeptController {
 
 	@ApiIgnore
 	@GetMapping("/treeView/{id}")
-	String treeView(@PathVariable("id") String id,Model model) {
+	String treeView(@PathVariable("id") String id, Model model) {
 		model.addAttribute("treeId", id);
 		return prefix + "/deptTree";
 	}

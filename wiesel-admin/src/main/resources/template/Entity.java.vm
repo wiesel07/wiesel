@@ -49,7 +49,7 @@ public class ${entityName} extends Model<${entityName}> {
 	 */
     #end
     #if($column.columnName == $pk.columnName)
-    @TableId(value = "role_Id", type = IdType.ID_WORKER)
+    @TableId(value = "$column.attrname", type = IdType.ID_WORKER)
 	#end
 	private $column.attrType $column.attrname;
 #end

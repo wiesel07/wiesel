@@ -9,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.wiesel.common.exception.CommonException;
 import com.wiesel.system.entity.User;
 import com.wiesel.system.entity.UserRole;
 import com.wiesel.system.mapper.UserMapper;
 import com.wiesel.system.mapper.UserRoleMapper;
 import com.wiesel.system.service.IUserService;
+
+import wiesel.common.enums.ApiErrorCode;
+import wiesel.common.exception.ApiException;
 
 /**
  * <p>
@@ -42,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 		// 删除用户信息
 		if (this.baseMapper.deleteById(userId) <= 0) {
-			throw new CommonException("用户删除失败");
+			throw new ApiException(ApiErrorCode.DB_DELETE_FAIL);
 		}
 
 	}
@@ -59,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 		// 删除用户信息
 		if (this.baseMapper.deleteBatchIds(userIds) <= 0) {
-			throw new CommonException("用户删除失败");
+			throw new ApiException(ApiErrorCode.DB_DELETE_FAIL);
 		}
 
 	}
@@ -80,10 +82,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 		// 新增用户信息
 		if (this.baseMapper.insert(user) <= 0) {
-			throw new CommonException("用户新增失败");
+			throw new ApiException(ApiErrorCode.DB_INSERT_FAIL);
 		}
 	}
 
+	
+	@Transactional
 	@Override
 	public void updateUser(User user, List<Long> roleIds) {
 
@@ -106,7 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 		// 新增用户信息
 		if (this.baseMapper.updateById(user) <= 0) {
-			throw new CommonException("用户新增失败");
+			throw new ApiException(ApiErrorCode.DB_INSERT_FAIL);
 		}
 
 	}

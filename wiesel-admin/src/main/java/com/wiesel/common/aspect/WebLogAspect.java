@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,9 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.wiesel.common.utils.IPUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import wiesel.common.utils.IPUtils;
 
 /** 
 *
@@ -81,5 +81,20 @@ public class WebLogAspect {
         log.info("耗时 : " + (System.currentTimeMillis() - startTime));
         return ob;
     }
+    
+    /**
+     * 指定拦截器规则；也可直接使用within(@org.springframework.web.bind.annotation.RestController *)
+     * 这样简单点 可以通用
+     * @param 异常对象
+     */
+//    @AfterThrowing(pointcut="pointcut()",throwing="e")
+//    public void afterThrowable(Throwable e) {
+//        log.error("切面发生了异常：", e);
+//        //这里可以做个统一异常处理
+//        //自定义一个异常 包装后排除
+//      
+//    }
 }
+
+
 

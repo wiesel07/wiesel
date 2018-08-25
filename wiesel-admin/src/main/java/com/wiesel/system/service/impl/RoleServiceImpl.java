@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.wiesel.common.exception.CommonException;
-import com.wiesel.common.utils.IDUtils;
 import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
 import com.wiesel.system.entity.RoleMenu;
@@ -21,6 +19,8 @@ import com.wiesel.system.mapper.UserRoleMapper;
 import com.wiesel.system.service.IRoleService;
 
 import cn.hutool.core.bean.BeanUtil;
+import wiesel.common.exception.ApiException;
+import wiesel.common.utils.IDUtils;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 		EntityWrapper<Role>  wrapper = new EntityWrapper<>();
 		wrapper.eq(Role.ROLE_SIGN, role.getRoleSign());
 		if (this.baseMapper.selectCount(wrapper)>0) {
-			throw new CommonException("角色标识【"+role.getRoleSign()+"】已存在");
+			throw new ApiException("角色标识【"+role.getRoleSign()+"】已存在");
 		}
 		
 		Long roleId = IDUtils.newID();
@@ -80,7 +80,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 		// 判断该角色是否已被用户使用
 		if (userRoleMapper.selectCount(userRoleWrapper) > 0) {
-			throw new CommonException("角色已被使用");
+			throw new ApiException("角色已被使用");
 		} else {
 			// 删除角色的菜单信息
 			EntityWrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
@@ -100,7 +100,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 		// 判断该角色是否已被用户使用
 		if (userRoleMapper.selectCount(userRoleWrapper) > 0) {
-			throw new CommonException("角色已被使用");
+			throw new ApiException("角色已被使用");
 		} else {
 			// 删除角色的菜单信息
 			EntityWrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
@@ -121,7 +121,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 		Integer result = this.baseMapper.updateById(role);
 		if (result != 1) {
-			throw new CommonException("角色信息不存在");
+			throw new ApiException("角色信息不存在");
 		}
 
 		// 删除该角色旧的菜单信息
