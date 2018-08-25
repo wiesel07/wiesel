@@ -219,16 +219,6 @@ public class ShiroConfig {
 		return sessionManager;
 	}
 
-	/**
-	 * shiro session的管理
-	 */
-	// @Bean
-	// public DefaultWebSessionManager sessionManager() {
-	// DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-	// sessionManager.setSessionDAO(redisSessionDAO());
-	// return sessionManager;
-	//
-	// }
 
 	@Bean
 	public EhCacheManager ehCacheManager() {

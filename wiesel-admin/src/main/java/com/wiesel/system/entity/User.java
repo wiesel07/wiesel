@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.wiesel.common.enums.SexEnum;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -79,7 +80,7 @@ public class User extends Model<User> {
     /**
      * 性别
      */
-    private Long sex;
+    private SexEnum sex;
     /**
      * 出身日期
      */

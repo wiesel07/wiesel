@@ -1,4 +1,4 @@
-bootdo:
+wiesel:
   uploadPath: D:/var/uploaded_files/
 logging:
   level:
@@ -66,6 +66,8 @@ spring:
         
 # ====================MybatisPlus====================
 mybatisPlus:
+  typeEnumsPackage: com.wiesel.common.enums
+  typeHandlersPackage : com.wiesel.common.enums.handler
   globalConfig:
     #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     idType: 2
@@ -74,9 +76,10 @@ mybatisPlus:
     #驼峰下划线转换
     dbColumnUnderline: true
     #刷新mapper 调试神器
-    isRefresh: true
+    refreshMapper: true
     #数据库大写下划线转换
-    isCapitalMode: true
+    #isCapitalMode: true
+    capital-mode: true
     #逻辑删除配置
     logicDeleteValue: 0
     logicNotDeleteValue: 1
