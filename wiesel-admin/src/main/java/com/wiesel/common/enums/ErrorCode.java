@@ -80,13 +80,13 @@ public enum ErrorCode implements IErrorCode {
 	@Override
 	public String getCode() {
 		// TODO Auto-generated method stub
-		return null;
+		return code;
 	}
 
 	@Override
 	public String getMsg() {
 		// TODO Auto-generated method stub
-		return null;
+		return msg;
 	}
 
 	@Override

@@ -178,9 +178,12 @@ public class UserController extends BaseController {
 		PasswordHelper.encryptPassword(user);
 
 		List<Long> roleIds = new ArrayList<>();
-		for (String roleId : role) {
-			roleIds.add(Long.valueOf(roleId));
+		if (role!=null) {
+			for (String roleId : role) {
+				roleIds.add(Long.valueOf(roleId));
+			}
 		}
+	
 		userService.addUser(user, roleIds);
 		return ApiResult.ok();
 	}
@@ -195,8 +198,10 @@ public class UserController extends BaseController {
 		BeanUtil.copyProperties(userReq, user);
 
 		List<Long> roleIds = new ArrayList<>();
-		for (String roleId : role) {
-			roleIds.add(Long.valueOf(roleId));
+		if (role!=null) {
+			for (String roleId : role) {
+				roleIds.add(Long.valueOf(roleId));
+			}
 		}
 		userService.updateUser(user, roleIds);
 		return ApiResult.ok();
