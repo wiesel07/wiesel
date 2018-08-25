@@ -26,7 +26,6 @@ import com.wiesel.common.constant.GlobalConstant;
 import com.wiesel.shiro.UserRealm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.CacheManager;
 
@@ -103,7 +102,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/upload/**", "anon");
 		filterChainDefinitionMap.put("/files/**", "anon");
 		filterChainDefinitionMap.put("/logout", "logout");
-		filterChainDefinitionMap.put("/", "anon");
+		//filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/blog", "anon");
 		filterChainDefinitionMap.put("/blog/open/**", "anon");
 		filterChainDefinitionMap.put("/**", "authc");

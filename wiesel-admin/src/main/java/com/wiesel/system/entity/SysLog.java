@@ -78,7 +78,7 @@ public class SysLog extends Model<SysLog> {
     /**
 	 * 创建时间
 	 */
-	private Date gmtCreate;
+	private String gmtCreate;
 
     public static final String ID = "id";
     public static final String USER_ID = "user_id";

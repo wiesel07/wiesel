@@ -61,11 +61,11 @@ public class Menu extends Model<Menu> {
     /**
      * 创建时间
      */
-    private Date gmtCreate;
+    private String gmtCreate;
     /**
      * 修改时间
      */
-    private Date gmtModified;
+    private String gmtModified;
 
 
     public static final String MENU_ID = "menu_id";

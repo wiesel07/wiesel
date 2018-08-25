@@ -59,11 +59,11 @@ public class User extends Model<User> {
     /**
      * 创建时间
      */
-    private Date gmtCreate;
+    private String gmtCreate;
     /**
      * 修改时间
      */
-    private Date gmtModified;
+    private String gmtModified;
     /**
      * 性别
      */

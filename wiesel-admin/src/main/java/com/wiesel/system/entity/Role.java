@@ -51,9 +51,9 @@ public class Role extends Model<Role> {
 	// 创建用户id
 	private Long userIdCreate;
 	// 创建时间
-	private Date gmtCreate;
+	private String gmtCreate;
 	// 创建时间
-	private Date gmtModified;
+	private String gmtModified;
 	// 角色状态:0正常,1禁用
 	private Integer status;
 

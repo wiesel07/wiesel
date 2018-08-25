@@ -34,6 +34,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
 import wiesel.common.base.entity.PageReq;
 import wiesel.common.base.entity.PageResp;
@@ -67,6 +68,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private IDeptService deptService;
 
+	@ApiIgnore
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("")
 	String user(Model model) {
