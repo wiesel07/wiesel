@@ -1,10 +1,14 @@
 package com.wiesel.common.config;
 
+import java.time.Duration;
+
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -58,15 +62,24 @@ public class RedisConfig {
 		return template;
 	}
 
+//	@Bean
+//	public CacheManager cacheManager(RedisTemplate<String, String> redisTemplate) {
+//		RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
+//		// 使用前缀
+//		rcm.setUsePrefix(true);
+//		// 缓存分割符 默认为 ":"
+//		// rcm.setCachePrefix(new DefaultRedisCachePrefix(":"));
+//		// 设置缓存过期时间
+//		// rcm.setDefaultExpiration(60);//秒
+//		return rcm;
+//	}
+	
 	@Bean
-	public CacheManager cacheManager(RedisTemplate<String, String> redisTemplate) {
-		RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
-		// 使用前缀
-		rcm.setUsePrefix(true);
-		// 缓存分割符 默认为 ":"
-		// rcm.setCachePrefix(new DefaultRedisCachePrefix(":"));
-		// 设置缓存过期时间
-		// rcm.setDefaultExpiration(60);//秒
-		return rcm;
-	}
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofHours(1)); // 设置缓存有效期一小时
+        return RedisCacheManager
+                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
+                .cacheDefaults(redisCacheConfiguration).build();
+    }
 }
