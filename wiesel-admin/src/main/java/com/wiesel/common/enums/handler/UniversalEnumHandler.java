@@ -60,6 +60,8 @@ public final class UniversalEnumHandler<E extends BaseEnum<?, ?>> extends BaseTy
         ps.setObject(i,objVal == null ? objVal : String.valueOf(objVal), jdbcType.TYPE_CODE);   
     }  
   
+
+    
     @Override  
     public E getNullableResult(ResultSet rs, String columnName)  
             throws SQLException {  

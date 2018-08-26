@@ -3,6 +3,8 @@ package com.wiesel.system.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -80,11 +82,12 @@ public class User extends Model<User> {
     /**
      * 性别
      */
-    private SexEnum sex;
+    
+    private Integer sex;
     /**
      * 出身日期
      */
-    private Date birth;
+    private String birth;
     private Long picId;
     /**
      * 现居住地

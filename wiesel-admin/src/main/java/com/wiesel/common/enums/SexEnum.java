@@ -1,11 +1,10 @@
 package com.wiesel.common.enums;
 
-import java.io.Serializable;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
-//import com.baomidou.mybatisplus.enums.IEnum;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.baomidou.mybatisplus.core.enums.IEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+//import com.baomidou.mybatisplus.enums.IEnum; um;
 /**
  *
  * @ClassName 类名：SexEnum
@@ -25,27 +24,56 @@ import com.baomidou.mybatisplus.core.enums.IEnum;
  ***********************************************************************
  *          </p>
  */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum SexEnum implements IEnum<Integer>{
-	MAN(1, "男"), WOMAN(2, "女");
+//@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum SexEnum implements  BaseEnum<SexEnum,String>{
+	MALE(1, "男"), FEMALE(2, "女");
 
-	private int value;
+	private int code;
 
-	private String desc;
+	private String name;
 
-	SexEnum(final int value, final String desc) {
-		this.value = value;
-		this.desc = desc;
+	SexEnum(final int code, final String name) {
+		this.code = code;
+		this.name = name;
 	}
 
-	
-	
-	public Integer getValue() {
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getValue() {
 		// TODO Auto-generated method stub
-		return this.value;
+		return String.valueOf(this.code);
 	}
-	@JsonValue
-	public String getDesc() {
-		return this.desc;
+
+	@Override
+	public String getDisplayName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
+
+
+	static Map<String,SexEnum> enumMap=new HashMap<String, SexEnum>();  
+    static {  
+        for(SexEnum type:SexEnum.values()){  
+            enumMap.put(String.valueOf(type.getValue()), type);  
+        }  
+    }  
+	public static SexEnum parse(String value) {
+		return enumMap.get(value);
 	}
 }
