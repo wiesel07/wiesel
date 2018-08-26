@@ -1,15 +1,12 @@
 package com.wiesel;
 
-import java.util.Arrays;
-
 import org.springframework.boot.Banner;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -43,11 +40,17 @@ import com.wiesel.common.config.LongObjectSerializer;
 // @MapperScan("com.wiesel.**.mapper")
 @SpringBootApplication
 @EnableCaching
-public class WieselAdminApplication {
+public class WieselAdminApplication  extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		// SpringApplication.run(WieselAdminApplication.class, args);
 		new SpringApplicationBuilder(WieselAdminApplication.class).bannerMode(Banner.Mode.OFF).run(args);
 		System.out.println("ヾ(◍°∇°◍)ﾉﾞ    wiesel-admin启动成功      ヾ(◍°∇°◍)ﾉﾞ\n");
+	}
+
+	// web容器中进行部署
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(WieselAdminApplication.class);
 	}
 
 	
