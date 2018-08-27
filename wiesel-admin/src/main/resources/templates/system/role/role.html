@@ -8,40 +8,38 @@
 		<div class="col-sm-12">
 			<div class="ibox">
 				<div class="ibox-body">
-					<div id=toolbar role="group">
+					<div id=toolbar>
 
-						<form id="queryForm">
+						<form id="queryForm" class="form-group fl ">
 							<div class="fl">
 								<div class="input-group w350">
 									<span class="input-group-addon">条件</span> <input
-										class="form-control" name="merchantcode"
-										placeholder="请输入条件查询">
+										class="form-control" name="merchantcode" placeholder="请输入条件查询">
 								</div>
 							</div>
-							<!--   <div class="fl">
-		                            <div class="input-group w350">
-		                                <span class="input-group-addon">条件</span>
-		                                <input class="form-control" name="merchantName" placeholder="请输入收款商户名称查询">
-		                            </div>
-		                        </div> -->
+						</form>
+						<div class="columns pull-left ml10">
 							<button shiro:hasPermission="sys:role:add" type="button"
 								class="btn btn-primary fl ml5" onclick="add()">
-								<!-- <i class="fa fa-plus" aria-hidden="true"></i> -->添加
+								<!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
+								添加
 							</button>
 							<button shiro:hasPermission="sys:role:batchDelete" type="button"
 								class="btn btn-danger fl ml5" onclick="batchDelete()">
-								<!-- <i class="fa fa-trash" aria-hidden="true"></i> -->删除
+								<!-- <i class="fa fa-trash" aria-hidden="true"></i> -->
+								删除
 							</button>
-						</form>
-
+						</div>
 
 					</div>
-						<table id="table"  class="bootstrap-table table table-bordered table-hover " data-mobile-responsive="true">
+					<table id="table"
+						class="bootstrap-table table table-bordered table-hover "
+						data-mobile-responsive="true">
 					</table>
 				</div>
 			</div>
 		</div>
-		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<!--shiro控制bootstraptable行内按钮看见性 -->
 		<div>
 			<script type="text/javascript">
 				var s_edit_h = 'hidden';

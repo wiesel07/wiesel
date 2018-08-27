@@ -5,41 +5,37 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <link rel="shortcut icon" href="favicon.ico">
-<link href="css/plugins/bootstrap/bootstrap.min.css?v=3.3.6"
-	th:href="@{/css/plugins/bootstrap/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
-<link href="/css/font-awesome.css?v=4.4.0"
-	th:href="@{/css/font-awesome.css?v=4.4.0}" rel="stylesheet">
-<link href="/css/plugins/bootstrap-table/bootstrap-table.min.css"
-	th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}"
+
+<link th:href="@{/lib/bootstrap/css/bootstrap.min.css?v=3.3.7}"
 	rel="stylesheet">
-<link href="/css/plugins/bootstrap-treetable/bootstrap-treetable.css"
-	th:href="@{/css/plugins/bootstrap-treetable/bootstrap-treetable.css}"
+<link th:href="@{/lib/adminlte/css/font-awesome.min.css?v=4.5.0}"
 	rel="stylesheet">
 
-<link href="css/animate.css" th:href="@{/css/animate.css}"
-		  rel="stylesheet">
-
-	<link href="/css/checkbox.css" th:href="@{/css/checkbox.css}" rel="stylesheet"/>
-<link href="css/common.css?v=3.3.6" th:href="@{/css/common.css?v=3.3.6}"
+<link 	th:href="@{/lib/bootstrap-table/bootstrap-table.min.css}"
 	rel="stylesheet">
+<link  th:href="@{/lib/bootstrap-treetable/bootstrap-treetable.css}"
+	rel="stylesheet">
+
+<link th:href="@{/lib/adminlte/css/animate.css}" rel="stylesheet">
+
+<link th:href="@{/css/checkbox.css}" rel="stylesheet" />
+<link th:href="@{/css/common.css}" rel="stylesheet">
 </head>
 <div th:fragment="footer">
-	<script src="/js/plugins/jquery/jquery.min.js?v=2.2.3"></script>
-	<script src="/js/plugins/bootstrap/bootstrap.min.js?v=3.3.6"></script>
-	<script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-	<script src="/js/plugins/bootstrap-treetable/bootstrap-treetable.js"></script>
+	<script th:src="@{/lib/jquery/jquery.min.js?v=2.2.3}"></script>
+	<script th:src="@{/lib/bootstrap/js/bootstrap.min.js?v=3.3.7}"></script>
 	
-	<script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script th:src="@{/lib/bootstrap-table/bootstrap-table.min.js?v=1.12.1}"></script>
+	<script th:src="@{/lib/bootstrap-treetable/bootstrap-treetable.js}"></script>
+
+	<script th:src="@{/lib/bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js?v=1.12.1}"></script>
 	<script
-		src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-	<script src="/js/plugins/validate/jquery.validate.min.js"></script>
-	<script src="/js/plugins/validate/messages_zh.min.js"></script>
+		th:src="@{/lib/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+	<script th:src="@{/lib/validate/jquery.validate.min.js}"></script>
+	<script th:src="@{/lib/validate/messages_zh.min.js}"></script>
 
-
-	
-	<script src="/js/plugins/layer/layer.js"></script>
-	
-	<script src="/js/plugins/ajax-util.js"></script>
-	<script src="/js/plugins/app-core.js"></script>
-	<script src="/js/plugins/common.js"></script>
+	<script th:src="@{/lib/layer/layer.js}"></script>
+	<script th:src="@{/js/plugins/ajax-util.js}"></script>
+	<script th:src="@{/js/plugins/app-core.js}"></script>
+	<script th:src="@{/js/plugins/common.js}"></script>
 </div>
