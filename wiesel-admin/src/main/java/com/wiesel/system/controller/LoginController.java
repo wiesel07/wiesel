@@ -54,26 +54,26 @@ public class LoginController extends BaseController {
 
 	@ApiIgnore
 	@GetMapping({ "/", "" })
-	public String welcome(Model model) {
+	 String welcome(Model model) {
 		// return "redirect:/blog";
 		return "index";
 	}
 
 	@ApiIgnore
 	@GetMapping("/login")
-	public String login() {
+	 String login() {
 		return "login";
 	}
 
 	@ApiIgnore
 	@GetMapping("/api")
-	public String api() {
+     String api() {
 		return "redirect:/swagger-ui.html";
 	}
 
 	@ApiIgnore
-	@GetMapping({ "/index" })
-	public String index(Model model) {
+	@GetMapping({ "index" })
+	 String index(Model model) {
 
 		List<Tree<Menu>> menus = menuService.listMenuTree(getUserId());
 		model.addAttribute("menus", menus);
@@ -95,7 +95,7 @@ public class LoginController extends BaseController {
 
 	@ApiOperation(value = "登录", notes = "用户填写账号密码进入后台")
 	@ResponseBody
-	@PostMapping(value = "/login")
+	@PostMapping(value = "login")
 	public ApiResult<String> ajaxLogin(User user) {
 
 		PasswordHelper.encryptPassword(user);
@@ -119,7 +119,7 @@ public class LoginController extends BaseController {
 	}
 
 	@ApiIgnore
-	@GetMapping("/main")
+	@GetMapping("main")
 	public 	String main() {
 		return "main";
 	}
