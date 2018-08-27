@@ -8,11 +8,11 @@
     <title>WIESEL-ADMIN</title>
     <meta name="keywords" content="WIESEL-ADMIN管理系统">
     <meta name="description" content="Wiesel管理系统">
-    <link href="/css/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="/css/animate.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/login.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
@@ -94,14 +94,14 @@
 </div>
 <script th:inline="javascript"> var ctx = [[@{/}]] ; </script>
 <!-- 全局js -->
-<script src="/js/plugins/jquery/jquery.min.js?v=2.2.3" th:src="@{/js/plugins/jquery/jquery.min.js?v=2.2.3}"></script>
-<script src="/js/plugins/bootstrap/bootstrap.min.js?v=3.3.6" th:src="@{/js/plugins/bootstrap/bootstrap.min.js?v=3.3.6}"></script>
+<script src="/js/plugins/jquery/jquery.min.js?v=2.2.3" th:src="@{js/plugins/jquery/jquery.min.js?v=2.2.3}"></script>
+<script src="/js/plugins/bootstrap/bootstrap.min.js?v=3.3.6" th:src="@{js/plugins/bootstrap/bootstrap.min.js?v=3.3.6}"></script>
 
 <!-- jQuery Validation plugin javascript-->
-<script src="/js/plugins/ajax-util.js"></script>
-<script src="/js/plugins/validate/jquery.validate.min.js" th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
-<script src="/js/plugins/validate/messages_zh.min.js" th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
-<script src="/js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script src="js/plugins/ajax-util.js"></script>
+<script src="js/plugins/validate/jquery.validate.min.js" th:src="@{js/plugins/validate/jquery.validate.min.js}"></script>
+<script src="js/plugins/validate/messages_zh.min.js" th:src="@{js/plugins/validate/messages_zh.min.js}"></script>
+<script src="js/plugins/layer/layer.min.js" th:src="@{js/plugins/layer/layer.min.js}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#login").on('click',function(){$("#signupForm").submit();});
@@ -126,7 +126,7 @@
                     var index = layer.load(1, {
                         shade: [0.1,'#fff'] //0.1透明度的白色背景
                     });
-                    parent.location.href = '/index';
+                    parent.location.href = 'index';
                 } else {
                     layer.msg(r.msg);
                 }
