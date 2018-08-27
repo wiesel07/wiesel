@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.system.controller.req.DeptReq;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.User;
@@ -50,10 +51,10 @@ import wiesel.common.utils.IDUtils;
 *          </p>
 */
 @Controller
-@RequestMapping("/sys/dept")
+@RequestMapping(UrlConstant.root+"sys/dept")
 public class DeptController {
 
-	private String prefix = "system/dept";
+	private String prefix = UrlConstant.prefix+"system/dept";
 	@Autowired
 	private IDeptService deptService;
 

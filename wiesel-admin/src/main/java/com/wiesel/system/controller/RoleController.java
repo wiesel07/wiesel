@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
 import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
@@ -51,9 +52,9 @@ import wiesel.common.base.entity.PageResp;
 */
 @ApiModel(value = "角色管理相应接口")
 @Controller
-@RequestMapping("/sys/role")
+@RequestMapping(UrlConstant.root+"/sys/role")
 public class RoleController extends BaseController {
-	String prefix = "system/role";
+	String prefix =UrlConstant.prefix+ "system/role";
 
 	@Autowired
 	private IRoleService roleService;

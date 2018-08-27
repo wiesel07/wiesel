@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.wiesel.common.annotation.Log;
+import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
 import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.system.controller.req.UserReq;
@@ -62,10 +63,10 @@ import wiesel.common.utils.IDUtils;
 */
 @Api("用户表相应接口")
 @Controller
-@RequestMapping("/sys/user")
+@RequestMapping(UrlConstant.root+"/sys/user")
 public class UserController extends BaseController {
 
-	private String prefix = "system/user";
+	private String prefix =UrlConstant.prefix+ "system/user";
 
 	@Autowired
 	private IUserService userService;

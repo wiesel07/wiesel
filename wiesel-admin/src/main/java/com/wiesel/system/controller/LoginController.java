@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
 import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.common.utils.ShiroUtils;
@@ -46,6 +48,7 @@ import wiesel.common.base.entity.Tree;
  *          </p>
  */
 @ApiModel(value = "用户登录接口")
+@RequestMapping(UrlConstant.root)
 @Controller
 public class LoginController extends BaseController {
 

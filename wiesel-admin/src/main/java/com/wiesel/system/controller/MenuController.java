@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.system.controller.req.MenuReq;
 import com.wiesel.system.entity.Menu;
 import com.wiesel.system.service.IMenuService;
@@ -45,9 +46,9 @@ import wiesel.common.exception.ApiException;
 *          </p>
 */
 @Controller
-@RequestMapping("/sys/menu")
+@RequestMapping(UrlConstant.root+"/sys/menu")
 public class MenuController {
-	String prefix = "system/menu";
+	String prefix = UrlConstant.prefix+"system/menu";
 	@Autowired
 	private IMenuService menuService;
 
