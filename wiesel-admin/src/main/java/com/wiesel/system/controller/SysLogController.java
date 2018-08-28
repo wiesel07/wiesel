@@ -62,7 +62,7 @@ public class SysLogController extends BaseController {
 		if ("admin".equalsIgnoreCase(getUsername())) {
 			wrapper.eq(SysLog.USER_ID, getUserId());
 		}
-
+		wrapper.orderBy(SysLog.GMT_CREATE, false);
 		if (StrUtil.isNotBlank(username)) {
 			wrapper.eq(SysLog.USERNAME, username);
 		}

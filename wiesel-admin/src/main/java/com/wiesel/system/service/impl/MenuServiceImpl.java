@@ -147,7 +147,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 			tree.setName(menu.getName());
 			tree.setChecked(false);
 			for (RoleMenu roleMenu : roleMenus) {
-				if (menu.getMenuId() == roleMenu.getMenuId()) {
+				if (menu.getMenuId().longValue() == roleMenu.getMenuId().longValue()) {
 					tree.setChecked(true);
 					break;
 				}
