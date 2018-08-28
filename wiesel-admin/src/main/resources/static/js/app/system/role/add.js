@@ -1,7 +1,6 @@
-//var menuTree;
 
 // 树结构初始化加载
-
+var prefix = "/sys/role"
 var menuTrees;
 $(function() {
 	loadTree();
@@ -52,12 +51,11 @@ function getAllSelectNodes() {
         }
     }
 	$('#menuIds').val(menuIds);
-//    return menuIds;
 }
 
 //新增
 function save() {
-	app.doSave({url:'/sys/role/save',data : $('#addForm').serialize()});
+	app.doSave({url:prefix+'/save',data : $('#addForm').serialize(),action:ACTION.ADD});
 }
 
 
