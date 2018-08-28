@@ -61,7 +61,8 @@
                 <input type="text" name="username" class="form-control uname"
                        value="admin"/>
                 <input type="password" name="password"
-                       class="form-control pword m-b" value="111111"/>
+                       class="form-control pword m-b" value="123456"/>
+                 
                 <a id="login" class="btn btn-login btn-block">登录</a>
                 <!--按钮模块-->
                 <div class="outside-login">
@@ -95,7 +96,9 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript"> var ctx = [[@{/}]] ; </script>
+<script th:inline="javascript"> var ctx = [[@{/}]] ;
+
+</script>
 <!-- 全局js -->
 <script  th:src="@{lib/jquery/jquery.min.js?v=2.2.3}"></script>
 <script th:src="@{lib/bootstrap/js/bootstrap.min.js?v=3.3.7}"></script>

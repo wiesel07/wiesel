@@ -18,6 +18,12 @@
 								class="btn btn-danger" onclick="batchDelete()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
 							</button>
+							<!-- <button th:if="${'sys:menu:batchDelete' != 'sys:menu:batchDelete'}" type="button"
+								class="btn btn-danger" onclick="batchDelete()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button> -->
+							
+                            
 						</div>
 					</div>
 					<table id="bootstrap-treeTable" data-mobile-responsive="true">
@@ -25,30 +31,12 @@
 				</div>
 			</div>
 		</div>
-		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-		<div>
-			<script type="text/javascript">
-				var s_add_h = 'hidden';
-				var s_edit_h = 'hidden';
-				var s_delete_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:menu:add">
-			<script type="text/javascript">
-				s_add_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:menu:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:menu:delete">
-			<script type="text/javascript">
-				var s_delete_h = '';
-			</script>
-		</div>
 	</div>
+	<script th:inline="javascript">
+		  var s_add_h    =  [[${@permService.hasPermi('sys:menu:add')}]];
+		  var s_edit_h   =  [[${@permService.hasPermi('sys:menu:edit')}]];
+		  var s_delete_h =  [[${@permService.hasPermi('sys:menu:delete')}]];
+    </script>
 	<div th:include="include::footer"></div>
 	<script src="/js/app/system/menu/menu.js"></script>
 </body>

@@ -39,30 +39,14 @@
 				</div>
 			</div>
 		</div>
-		<!--shiro控制bootstraptable行内按钮看见性 -->
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_delete_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:role:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:role:delete">
-			<script type="text/javascript">
-				var s_delete_h = '';
-			</script>
-		</div>
-
 	</div>
+	
+	<script th:inline="javascript">
+		  var s_add_h    =  [[${@permService.hasPermi('sys:role:add')}]];
+		  var s_edit_h   =  [[${@permService.hasPermi('sys:role:edit')}]];
+		  var s_delete_h =  [[${@permService.hasPermi('sys:role:delete')}]];
+    </script>
 	<div th:include="include::footer"></div>
-	<!-- <script th:inline="javascript">
-		var editFlag = [[${@permissionService.hasPermi('system:role:edit')}]];
-		var removeFlag = [[${@permissionService.hasPermi('system:role:remove')}]];
-	</script> -->
 	<script type="text/javascript" src="/js/app/system/role/role.js">
 		
 	</script>

@@ -35,29 +35,12 @@
 			</div>
 		</div>
 	</div>
-	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-	<div>
-		<script type="text/javascript">
-			var s_add_h = 'hidden';
-			var s_edit_h = 'hidden';
-			var s_delete_h = 'hidden';
-		</script>
-	</div>
-	<div shiro:hasPermission="sys:dept:edit">
-		<script type="text/javascript">
-			s_edit_h = '';
-		</script>
-	</div>
-	<div shiro:hasPermission="sys:dept:add">
-		<script type="text/javascript">
-			s_add_h = '';
-		</script>
-	</div>
-	<div shiro:hasPermission="sys:dept:delete">
-		<script type="text/javascript">
-			s_delete_h = '';
-		</script>
-	</div>
+	
+	<script th:inline="javascript">
+		  var s_add_h    =  [[${@permService.hasPermi('sys:dept:add')}]];
+		  var s_edit_h   =  [[${@permService.hasPermi('sys:dept:edit')}]];
+		  var s_delete_h =  [[${@permService.hasPermi('sys:dept:delete')}]];
+    </script>
 	<div th:include="include :: footer"></div>
 	<script type="text/javascript" src="/js/app/system/dept/dept.js">
 		

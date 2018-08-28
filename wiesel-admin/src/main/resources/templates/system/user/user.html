@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<meta charset="utf-8">
+
 <head th:include="include :: header"></head>
-<link href="/css/plugins/zTree/metroStyle/metroStyle.css"
-	rel="stylesheet" />
+<div th:replace="include :: zTree_css"></div> 
+
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<div class="row">
@@ -49,33 +49,15 @@
 				</div>
 			</div>
 		</div>
-		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_delete_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:user:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:user:delete">
-			<script type="text/javascript">
-				var s_delete_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:user:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
-			</script>
-		</div>
 	</div>
+	
+	<script th:inline="javascript">
+		  var s_edit_h    =  [[${@permService.hasPermi('sys:user:edit')}]];
+		  var s_delete_h   =  [[${@permService.hasPermi('sys:user:delete')}]];
+		  var s_resetPwd_h =  [[${@permService.hasPermi('sys:user:resetPwd')}]];
+    </script>
 	<div th:include="include :: footer"></div>
-	<script type="text/javascript"
-		src="/js/plugins/zTree/jquery.ztree.all.js"></script>
+    <div th:replace="include :: zTree_js"></div> 
 	<script type="text/javascript" src="/js/app/system/user/user.js"></script>
 </body>
 </html>

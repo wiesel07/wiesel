@@ -1,3 +1,8 @@
+server:
+  tomcat:
+    accesslog:
+      directory: d:\log
+      enabled: true
 wiesel:
   uploadPath: D:/var/uploaded_files/
 logging:
