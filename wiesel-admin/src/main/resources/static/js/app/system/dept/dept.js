@@ -1,4 +1,3 @@
-
 var prefix = "/sys/dept"
 $(function() {
 	load();
@@ -60,12 +59,17 @@ function load() {
 	    $.treeTable.init(options);
 }
 function reLoad() {
-	load();
+	$.treeTable.refresh();
 }
 
-
+var $tree={};
+function getTreeObj(){
+	return $tree;
+}
 //新增
 function add(pId) {
+	$tree=$.treeTable;
+	console.log("输出:"+JSON.stringify($.treeTable._option))
 	var url=prefix + '/add/'+pId;
 	app.layer_show({title:'添加部门',content : url});
 }
@@ -120,10 +124,19 @@ function batchDelete() {
 							ids[i] = row['deptId'];
 						});
 						var data ={"ids":ids};
-						app._ajax(	{url : prefix + "/batchDelete",
-								     data :data
-								})
-	                    }			
-	 );
+						$.ajax({
+							url :  prefix + "/batchDelete",
+							type : "post",
+							data :data,
+							success : function(r) {
+								if (r.code == 0) {
+									layer.msg(r.msg,{time:600});
+									reLoad();
+								} else {
+									layer.msg(r.msg,{time:600});
+								}
+							}
+						});
+	    })			
 }
 

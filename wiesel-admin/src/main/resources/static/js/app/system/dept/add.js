@@ -1,6 +1,8 @@
 var prefix = "/sys/dept"
+var $treeTable={};
 $().ready(function() {
 	validateRule();
+	$treeTable=window.parent.getTreeObj();
 });
 
 $.validator.setDefaults({
@@ -17,6 +19,7 @@ function selectDeptTree(){
 }
 
 function save() {
+	//app.doSave({url:prefix+'/save',data : $('#addForm').serialize(),action:ACTION.ADD});
 	$.ajax({
 		cache : true,
 		type : "POST",
@@ -29,10 +32,10 @@ function save() {
 		success : function(data) {
 			if (data.code == 0) {
 				parent.layer.msg("操作成功");
-				parent.reLoad();
+				//parent.location.reload();
+				$treeTable.refresh();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 				parent.layer.close(index);
-
 			} else {
 				parent.layer.alert(data.msg)
 			}

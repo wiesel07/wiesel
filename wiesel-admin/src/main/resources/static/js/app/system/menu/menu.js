@@ -83,10 +83,6 @@ function load() {
 	   $.treeTable.init(options);
 }
 
-function reLoad() {
-	load();
-}
-
 
 function add(pId) {
 	var url=prefix + '/add/'+pId;
@@ -112,7 +108,7 @@ function del(id) {
             success: function (data) {
                 if (data.code == 0) {
                     layer.msg("删除成功");
-                    reLoad();
+                    $.treeTable.refresh();
                 } else {
                     layer.msg(data.msg);
                 }

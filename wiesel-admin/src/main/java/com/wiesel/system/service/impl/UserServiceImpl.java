@@ -16,6 +16,7 @@ import com.wiesel.system.mapper.UserMapper;
 import com.wiesel.system.mapper.UserRoleMapper;
 import com.wiesel.system.service.IUserService;
 
+import cn.hutool.core.collection.CollectionUtil;
 import wiesel.common.enums.ApiErrorCode;
 import wiesel.common.exception.ApiException;
 
@@ -96,9 +97,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 			userRole.setUserId(userId);
 			userRoles.add(userRole);
 		}
-		// 新增用户角色信息
-		userRoleMapper.insertBatchUserRole(userRoles);
-
+		if (CollectionUtil.isNotEmpty(userRoles)) {
+			// 新增用户角色信息
+			userRoleMapper.insertBatchUserRole(userRoles);
+		}
+	
 		// 新增用户信息
 		if (this.baseMapper.insert(user) <= 0) {
 			throw new ApiException(ApiErrorCode.DB_INSERT_FAIL);
@@ -124,8 +127,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 			userRole.setUserId(userId);
 			userRoles.add(userRole);
 		}
-		// 新增用户角色信息
-		userRoleMapper.insertBatchUserRole(userRoles);
+		if (CollectionUtil.isNotEmpty(userRoles)) {
+			// 新增用户角色信息
+			userRoleMapper.insertBatchUserRole(userRoles);
+		}
 
 		// 新增用户信息
 		if (this.baseMapper.updateById(user) <= 0) {

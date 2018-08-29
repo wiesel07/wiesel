@@ -289,15 +289,6 @@
 			}
 			return chk_value;
 		},
-		 // 条件查询
-        search: function(formId) {
-        	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-        	var params = {};
-        	$.each($("#" + currentId).serializeArray(), function(i, field) {
-        		params[field.name] = field.value;
-	        });
-        	$.treeTable._treeTable.bootstrapTreeTable('refresh', params);
-        },
 		// 刷新记录
 		refresh : function(target, parms) {
 			if(parms){
