@@ -57,26 +57,26 @@ public class LoginController extends BaseController {
 
 	@ApiIgnore
 	@GetMapping({ "/", "" })
-	 String welcome(Model model) {
+	String welcome(Model model) {
 		// return "redirect:/blog";
 		return "index";
 	}
 
 	@ApiIgnore
 	@GetMapping("/login")
-	 String login() {
+	String login() {
 		return "login";
 	}
 
 	@ApiIgnore
 	@GetMapping("/api")
-     String api() {
+	String api() {
 		return "redirect:/swagger-ui.html";
 	}
 
 	@ApiIgnore
 	@GetMapping({ "index" })
-	 String index(Model model) {
+	String index(Model model) {
 
 		List<Tree<Menu>> menus = menuService.listMenuTree(getUserId());
 		model.addAttribute("menus", menus);
@@ -106,7 +106,7 @@ public class LoginController extends BaseController {
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.login(token);
-			
+
 			return ApiResult.ok();
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
@@ -116,14 +116,14 @@ public class LoginController extends BaseController {
 
 	@ApiOperation(value = "登出")
 	@GetMapping("/logout")
-	public String logout() {
+	String logout() {
 		ShiroUtils.logout();
 		return "redirect:/login";
 	}
 
 	@ApiIgnore
 	@GetMapping("main")
-	public 	String main() {
+	String main() {
 		return "main";
 	}
 }

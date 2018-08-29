@@ -27,7 +27,6 @@ import ${package}.service.${serviceName};
  ***********************************************************************
  *          </p>
  */
-
 @Service
 public class ${serviceImplName} extends ServiceImpl<${mapperName}, ${entityName}> implements ${serviceName} {
 

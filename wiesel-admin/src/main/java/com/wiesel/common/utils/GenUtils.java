@@ -37,8 +37,6 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
-import com.alibaba.druid.sql.visitor.functions.If;
-import com.alibaba.druid.util.MapComparator;
 import com.wiesel.generator.entity.ColumnEntity;
 import com.wiesel.generator.entity.ReferencedTable;
 import com.wiesel.generator.entity.TableEntity;
@@ -99,9 +97,9 @@ public class GenUtils {
 		map.put("columns", tableEntity.getColumns());
 		map.put("listReferencedTable", tableEntity.getListReferencedTable());
 		map.put("hasBigDecimal", tableEntity.getHasBigDecimal());
-		// map.put("mainPath", mainPath);
+	   // map.put("mainPath", mainPath);
 		map.put("package", config.getString("package"));
-		// map.put("moduleName", config.getString("moduleName"));
+	    map.put("moduleName", config.getString("moduleName"));
 		map.put("author", config.getString("author"));
 		map.put("datetime", DateUtil.format(DateUtil.date(), DatePattern.NORM_DATETIME_PATTERN));
 		map.put("entityName", String.format(config.getString("entityName"), tableEntity.getClassName()));

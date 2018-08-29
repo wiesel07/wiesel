@@ -3,6 +3,7 @@ package com.wiesel.system.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.system.controller.req.RoleReq;
 import com.wiesel.system.entity.Role;
 import com.wiesel.system.service.IRoleService;
@@ -29,32 +31,30 @@ import wiesel.common.api.ApiResult;
 import wiesel.common.base.entity.PageReq;
 import wiesel.common.base.entity.PageResp;
 
-
-
 /**
-*
-* @ClassName 类名：RoleController
-* @Description 功能说明：
-*              <p>
-*              TODO
-*              </p>
-************************************************************************
-* @date 创建日期：2018年7月23日
-* @author 创建人：wuj
-* @version 版本号：V1.0
-*          <p>
-***************************          修订记录*************************************
-* 
-*          2018年7月23日 wuj 创建该类功能。
-*
-***********************************************************************
-*          </p>
-*/
+ *
+ * @ClassName 类名：RoleController
+ * @Description 功能说明：
+ *              <p>
+ *              TODO
+ *              </p>
+ ************************************************************************
+ * @date 创建日期：2018年7月23日
+ * @author 创建人：wuj
+ * @version 版本号：V1.0
+ *          <p>
+ ***************************          修订记录*************************************
+ * 
+ *          2018年7月23日 wuj 创建该类功能。
+ *
+ ***********************************************************************
+ *          </p>
+ */
 @ApiModel(value = "角色管理相应接口")
 @Controller
-@RequestMapping(UrlConstant.root+"/sys/role")
+@RequestMapping(UrlConstant.root + "/sys/role")
 public class RoleController extends BaseController {
-	String prefix =UrlConstant.prefix+ "system/role";
+	String prefix = UrlConstant.prefix + "system/role";
 
 	@Autowired
 	private IRoleService roleService;
@@ -70,7 +70,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:role")
 	@GetMapping("/list")
 	@ResponseBody()
-	public ApiResult<PageResp<Role>> list(PageReq<Role> pageReq) {
+	ApiResult<PageResp<Role>> list(PageReq<Role> pageReq) {
 
 		Page<Role> page = new Page<Role>(pageReq.getPageNo(), pageReq.getPageSize());
 		EntityWrapper<Role> wrapper = new EntityWrapper<Role>();
@@ -80,13 +80,13 @@ public class RoleController extends BaseController {
 		page = roleService.selectPage(page, wrapper);
 		pageResp.setRows(page.getRecords());
 		pageResp.setTotal(page.getTotal());
-		return  ApiResult.ok(pageResp);
+		return ApiResult.ok(pageResp);
 	}
 
 	@ApiOperation(value = "添加角色")
 	@RequiresPermissions("sys:role:add")
 	@GetMapping("/add")
-		String add() {
+	String add() {
 		return prefix + "/add";
 	}
 
@@ -94,7 +94,7 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:add")
 	@PostMapping("/save")
 	@ResponseBody()
-	public 	ApiResult<String> save(RoleReq roleReq) {
+	public ApiResult<String> save(RoleReq roleReq) {
 		roleService.addRole(roleReq, getUserId());
 		return ApiResult.ok();
 
@@ -103,7 +103,7 @@ public class RoleController extends BaseController {
 	@ApiOperation(value = "编辑角色")
 	@RequiresPermissions("sys:role:edit")
 	@GetMapping("/edit/{id}")
-	 String edit(@PathVariable("id") Long id, Model model) {
+	String edit(@PathVariable("id") Long id, Model model) {
 		Role role = roleService.selectById(id);
 		model.addAttribute("role", role);
 		return prefix + "/edit";
@@ -122,7 +122,10 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:delete")
 	@PostMapping("/delete")
 	@ResponseBody()
-	public	ApiResult<String> delete(String id) {
+	public ApiResult<String> delete(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
 		roleService.deleteRole(Long.valueOf(id));
 		return ApiResult.ok();
 	}
@@ -131,7 +134,10 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:batchDelete")
 	@PostMapping("/batchDelete")
 	@ResponseBody
-	public	ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
+	public ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
+		if (ids == null || ids.length <= 0) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
 		List<Long> params = new ArrayList<>();
 		for (String id : ids) {
 			params.add(Long.valueOf(id));

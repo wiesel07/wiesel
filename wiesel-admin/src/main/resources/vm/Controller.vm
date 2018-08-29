@@ -1,4 +1,4 @@
-package com.wiesel.system.controller;
+package ${package}.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.wiesel.common.enums.ErrorCode;
-import com.wiesel.system.controller.req.DeptReq;
-import com.wiesel.system.entity.Dept;
-import com.wiesel.system.service.IDeptService;
 
+import com.wiesel.system.controller.req.DeptReq;
+
+import ${package}.entity.${entityName};
+import ${package}.service.${serviceImplName};
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
@@ -30,28 +31,28 @@ import wiesel.common.base.entity.PageResp;
 
 /**
  *
- * @ClassName 类名：Dept2Controller
- * @Description 功能说明：
+ * @ClassName 类名：${serviceImplName}
+ * @Description 功能说明： ${comments}
  *              <p>
  *              TODO
  *              </p>
- ************************************************************************
- * @date 创建日期：2018年8月23日
- * @author 创建人：wuj
+ ***********************************************************************
+ * @date 创建日期：${datetime}
+ * @author 创建人：${author}
  * @version 版本号：V1.0
  *          <p>
- ***************************          修订记录*************************************
+ ****************************修订记录************************************
  * 
- *          2018年8月23日 wuj 创建该类功能。
+ *          ${datetime} ${author} 创建该类功能。
  *
  ***********************************************************************
  *          </p>
  */
 @Controller
-@RequestMapping("/sys/dept")
+@RequestMapping("/${moduleName}/dept")
 public class Dept2Controller {
 
-	private String prefix = "system/dept";
+	private String prefix = "${moduleName}/dept";
 
 	@Autowired
 	private IDeptService deptService;

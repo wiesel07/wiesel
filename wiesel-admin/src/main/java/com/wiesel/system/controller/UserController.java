@@ -3,6 +3,7 @@ package com.wiesel.system.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.wiesel.common.annotation.Log;
 import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.system.controller.req.UserReq;
 import com.wiesel.system.entity.Dept;
@@ -43,30 +45,30 @@ import wiesel.common.exception.ApiException;
 import wiesel.common.utils.IDUtils;
 
 /**
-*
-* @ClassName 类名：UserController
-* @Description 功能说明：
-*              <p>
-*              TODO
-*              </p>
-************************************************************************
-* @date 创建日期：2018年7月4日
-* @author 创建人：wuj
-* @version 版本号：V1.0
-*          <p>
-***************************          修订记录*************************************
-* 
-*          2018年7月4日 wuj 创建该类功能。
-*
-***********************************************************************
-*          </p>
-*/
+ *
+ * @ClassName 类名：UserController
+ * @Description 功能说明：
+ *              <p>
+ *              TODO
+ *              </p>
+ ************************************************************************
+ * @date 创建日期：2018年7月4日
+ * @author 创建人：wuj
+ * @version 版本号：V1.0
+ *          <p>
+ ***************************          修订记录*************************************
+ * 
+ *          2018年7月4日 wuj 创建该类功能。
+ *
+ ***********************************************************************
+ *          </p>
+ */
 @Api("用户表相应接口")
 @Controller
-@RequestMapping(UrlConstant.root+"/sys/user")
+@RequestMapping(UrlConstant.root + "/sys/user")
 public class UserController extends BaseController {
 
-	private String prefix =UrlConstant.prefix+ "system/user";
+	private String prefix = UrlConstant.prefix + "system/user";
 
 	@Autowired
 	private IUserService userService;
@@ -87,12 +89,12 @@ public class UserController extends BaseController {
 		return prefix + "/user";
 	}
 
-	@Log(value="获取用户列表")
+	@Log(value = "获取用户列表")
 	@ApiOperation(value = "获取用户列表")
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("/list")
 	@ResponseBody()
-	public ApiResult<PageResp<User>> list(PageReq<User> pageReq, UserReq userReq) {
+    ApiResult<PageResp<User>> list(PageReq<User> pageReq, UserReq userReq) {
 
 		Page<User> page = new Page<User>(pageReq.getPageNo(), pageReq.getPageSize());
 		EntityWrapper<User> wrapper = new EntityWrapper<User>();
@@ -125,7 +127,7 @@ public class UserController extends BaseController {
 	@ApiOperation(value = "编辑用户")
 	@RequiresPermissions("sys:user:edit")
 	@GetMapping("/edit/{id}")
-	public String edit(Model model, @PathVariable("id") String id) {
+	String edit(Model model, @PathVariable("id") String id) {
 		Long userId = Long.valueOf(id);
 		User user = userService.selectById(userId);
 		model.addAttribute("user", user);
@@ -166,7 +168,7 @@ public class UserController extends BaseController {
 		return prefix + "/edit";
 	}
 
-	@Log(value="保存用户")
+	@Log(value = "保存用户")
 	@ApiOperation(value = "保存用户")
 	@RequiresPermissions("sys:user:add")
 	@PostMapping("/save")
@@ -179,17 +181,17 @@ public class UserController extends BaseController {
 		PasswordHelper.encryptPassword(user);
 
 		List<Long> roleIds = new ArrayList<>();
-		if (role!=null) {
+		if (role != null) {
 			for (String roleId : role) {
 				roleIds.add(Long.valueOf(roleId));
 			}
 		}
-	
+
 		userService.addUser(user, roleIds);
 		return ApiResult.ok();
 	}
 
-	@Log(value="更新用户")
+	@Log(value = "更新用户")
 	@ApiOperation(value = "更新用户")
 	@RequiresPermissions("sys:user:edit")
 	@PostMapping("/update")
@@ -199,7 +201,7 @@ public class UserController extends BaseController {
 		BeanUtil.copyProperties(userReq, user);
 
 		List<Long> roleIds = new ArrayList<>();
-		if (role!=null) {
+		if (role != null) {
 			for (String roleId : role) {
 				roleIds.add(Long.valueOf(roleId));
 			}
@@ -208,24 +210,31 @@ public class UserController extends BaseController {
 		return ApiResult.ok();
 	}
 
-	@Log(value="删除用户")
+	@Log(value = "删除用户")
 	@ApiOperation(value = "删除用户")
 	@RequiresPermissions("sys:user:delete")
 	@PostMapping("/delete")
 	@ResponseBody
 	public ApiResult<String> delete(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
 		Long userId = Long.valueOf(id);
 
 		userService.deleteUser(userId);
 		return ApiResult.ok();
 	}
 
-	@Log(value="批量用户")
+	@Log(value = "批量用户")
 	@ApiOperation(value = "批量删除用户")
 	@RequiresPermissions("sys:user:batchDelete")
 	@PostMapping("/batchDelete")
 	@ResponseBody
 	public ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
+		if (ids == null || ids.length <= 0) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
+
 		List<Long> userIds = new ArrayList<>();
 		for (String id : ids) {
 			userIds.add(Long.valueOf(id));
@@ -234,7 +243,6 @@ public class UserController extends BaseController {
 		return ApiResult.ok();
 	}
 
-	
 	@ApiOperation(value = "用户密码修改")
 	@RequiresPermissions("sys:user:resetPwd")
 	@GetMapping("/resetPwd/{id}")
@@ -247,7 +255,7 @@ public class UserController extends BaseController {
 		return prefix + "/reset_pwd";
 	}
 
-	@Log(value="用户密码修改")
+	@Log(value = "用户密码修改")
 	@ApiOperation(value = "用户密码修改")
 	@RequiresPermissions("sys:user:resetPwd")
 	@PostMapping("/resetPwd")
@@ -278,11 +286,10 @@ public class UserController extends BaseController {
 		return ApiResult.ok();
 	}
 
-	
 	@ApiOperation(value = "校验用户名是否存在")
 	@PostMapping("/checkUsername")
 	@ResponseBody
-	public boolean checkUsername(@RequestParam String username) {
+	boolean checkUsername(@RequestParam String username) {
 
 		EntityWrapper<User> wrapper = new EntityWrapper<>();
 		wrapper.eq(User.USERNAME, username);
@@ -290,23 +297,4 @@ public class UserController extends BaseController {
 		return !(userService.selectCount(wrapper) > 0);
 	}
 
-	// @ResponseBody
-	// @PostMapping("/uploadImg")
-	// R uploadImg(@RequestParam("avatar_file") MultipartFile file, String
-	// avatar_data, HttpServletRequest request) {
-	// if ("test".equals(getUsername())) {
-	// return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-	// }
-	// Map<String, Object> result = new HashMap<>();
-	// try {
-	// result = userService.updatePersonalImg(file, avatar_data, getUserId());
-	// } catch (Exception e) {
-	// return R.error("更新图像失败！");
-	// }
-	// if (result != null && result.size() > 0) {
-	// return R.ok(result);
-	// } else {
-	// return R.error("更新图像失败！");
-	// }
-	// }
 }

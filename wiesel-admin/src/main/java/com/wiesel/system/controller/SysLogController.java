@@ -3,6 +3,7 @@ package com.wiesel.system.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.wiesel.common.controller.BaseController;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.system.entity.SysLog;
 import com.wiesel.system.service.ISysLogService;
 
@@ -80,6 +82,9 @@ public class SysLogController extends BaseController {
 	@ResponseBody
 	@PostMapping("/delete")
 	public ApiResult<String> delete(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
 		sysLogService.deleteById(Long.valueOf(id));
 		return ApiResult.ok();
 	}
@@ -89,7 +94,9 @@ public class SysLogController extends BaseController {
 	@ResponseBody
 	@PostMapping("/batchDelete")
 	public ApiResult<String> batchDelete(@RequestParam("ids[]") String[] ids) {
-
+		if (ids==null||ids.length <= 0) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
 		List<Long> logIds = new ArrayList<>();
 		for (String id : ids) {
 			logIds.add(Long.valueOf(id));

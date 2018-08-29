@@ -3,6 +3,7 @@ package com.wiesel.system.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wiesel.common.constant.UrlConstant;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.system.controller.req.DeptReq;
 import com.wiesel.system.entity.Dept;
 import com.wiesel.system.entity.User;
@@ -32,29 +34,29 @@ import wiesel.common.exception.ApiException;
 import wiesel.common.utils.IDUtils;
 
 /**
-*
-* @ClassName 类名：MenuController
-* @Description 功能说明：
-*              <p>
-*              TODO
-*              </p>
-************************************************************************
-* @date 创建日期：2018年8月3日
-* @author 创建人：wuj
-* @version 版本号：V1.0
-*          <p>
-***************************          修订记录*************************************
-* 
-*          2018年8月3日 wuj 创建该类功能。
-*
-***********************************************************************
-*          </p>
-*/
+ *
+ * @ClassName 类名：MenuController
+ * @Description 功能说明：
+ *              <p>
+ *              TODO
+ *              </p>
+ ************************************************************************
+ * @date 创建日期：2018年8月3日
+ * @author 创建人：wuj
+ * @version 版本号：V1.0
+ *          <p>
+ ***************************          修订记录*************************************
+ * 
+ *          2018年8月3日 wuj 创建该类功能。
+ *
+ ***********************************************************************
+ *          </p>
+ */
 @Controller
-@RequestMapping(UrlConstant.root+"sys/dept")
+@RequestMapping(UrlConstant.root + "sys/dept")
 public class DeptController {
 
-	private String prefix = UrlConstant.prefix+"system/dept";
+	private String prefix = UrlConstant.prefix + "system/dept";
 	@Autowired
 	private IDeptService deptService;
 
@@ -72,7 +74,7 @@ public class DeptController {
 	@ResponseBody
 	@GetMapping("/list")
 	@RequiresPermissions("sys:dept:dept")
-	public List<Dept> list() {
+	List<Dept> list() {
 		EntityWrapper<Dept> wrapper = new EntityWrapper<>();
 		return deptService.selectList(wrapper);
 	}
@@ -149,6 +151,10 @@ public class DeptController {
 	@ResponseBody
 	@RequiresPermissions("sys:dept:delete")
 	public ApiResult<String> delete(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
+		}
+
 		Long pId = Long.valueOf(id);
 
 		EntityWrapper<Dept> deptWrapper = new EntityWrapper<>();

@@ -38,7 +38,9 @@ public enum ErrorCode implements IErrorCode {
 	DB_DELETE_FAIL("000003", "数据库删除失败！"), 
 	LOGIN_FAIL("000011", "用户或密码错误!"), 
 	USERNAME_EXIST("0800012", "用户名称已存在!"),
-	ACCOUNT_EXIST("0800013", "用户或密码错误!");
+	ACCOUNT_EXIST("0800013", "用户或密码错误!"),
+	PARAM_IS_NULL("0800014","参数不能为空")
+	;
 
 	private final String code;
 	private final String msg;
