@@ -39,7 +39,7 @@ function validateRule() {
 				required : true,
 				minlength : 2,
 				remote : {
-					url : "/sys/user/checkUsername", // 后台处理程序
+					url : prefix+"/checkUsername", // 后台处理程序
 					type : "post", // 数据发送方式
 					dataType : "json", // 接受数据格式
 					data : { // 要传递的数据
@@ -53,11 +53,6 @@ function validateRule() {
 				required : true,
 				minlength : 6
 			},
-//			confirm_password : {
-//				required : true,
-//				minlength : 6,
-//				equalTo : "#password"
-//			},
 			email : {
 				required : true,
 				email : true
@@ -77,11 +72,6 @@ function validateRule() {
 				required : icon + "请输入您的密码",
 				minlength : icon + "密码必须6个字符以上"
 			},
-//			confirm_password : {
-//				required : icon + "请再次输入密码",
-//				minlength : icon + "密码必须6个字符以上",
-//				equalTo : icon + "两次输入的密码不一致"
-//			},
 			email : icon + "请输入您的E-mail",
 		}
 	})

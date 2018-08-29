@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.system.controller.req.MenuReq;
 import com.wiesel.system.entity.Menu;
+import com.wiesel.system.entity.User;
 import com.wiesel.system.service.IMenuService;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -158,5 +160,17 @@ public class MenuController {
 		model.addAttribute("treeId", id);
 		return prefix + "/menuTree";
 	}
+	
+	@ApiOperation(value = "校验权限标识符是否存在")
+	@PostMapping("/checkPerms")
+	@ResponseBody
+	public boolean checkPerms(@RequestParam String perms) {
+
+		EntityWrapper<Menu> wrapper = new EntityWrapper<>();
+		wrapper.eq(Menu.PERMS, perms);
+
+		return !(menuService.selectCount(wrapper) > 0);
+	}
+
 }
 
