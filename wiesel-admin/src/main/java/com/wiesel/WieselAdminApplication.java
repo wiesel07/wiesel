@@ -42,6 +42,7 @@ import com.wiesel.common.config.LongObjectSerializer;
 @EnableCaching
 public class WieselAdminApplication  extends SpringBootServletInitializer {
 	public static void main(String[] args) {
+		
 		// SpringApplication.run(WieselAdminApplication.class, args);
 		new SpringApplicationBuilder(WieselAdminApplication.class).bannerMode(Banner.Mode.OFF).run(args);
 		System.out.println("ヾ(◍°∇°◍)ﾉﾞ    wiesel-admin启动成功      ヾ(◍°∇°◍)ﾉﾞ\n");
