@@ -43,7 +43,9 @@ import com.wiesel.generator.entity.TableEntity;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import wiesel.common.utils.IDUtils;
 
 /**
  * 飞特超级代码生成器
@@ -59,19 +61,22 @@ public class GenUtils {
 	public static List<String> getTemplates() {
 
 		List<String> templates = new ArrayList<String>();
-		templates.add("template/Entity.java.vm");
-		templates.add("template/Mapper.java.vm");
-		templates.add("template/Mapper.xml.vm");
-		templates.add("template/Service.java.vm");
-		templates.add("template/ServiceImpl.java.vm");
-		// templates.add("template/Controller.java.vm");
-		// templates.add("template/list.html.vm");
-		// templates.add("template/list.js.vm");
-		// templates.add("template/menu.sql.vm");
-		// templates.add("template/Api.java.vm");
-		// templates.add("template/View.java.vm");
-		// templates.add("template/Model.java.vm");
-		// templates.add("template/VO.java.vm");
+		templates.add("vm/java/Entity.java.vm");
+		templates.add("vm/java/Mapper.java.vm");
+		templates.add("vm/xml/Mapper.xml.vm");
+		templates.add("vm/java/Service.java.vm");
+		templates.add("vm/java/ServiceImpl.java.vm");
+		templates.add("vm/java/Controller.java.vm");
+
+		templates.add("vm/html/list.html.vm");
+		templates.add("vm/html/add.html.vm");
+		templates.add("vm/html/edit.html.vm");
+
+		templates.add("vm/js/list.js.vm");
+		templates.add("vm/js/add.js.vm");
+		templates.add("vm/js/edit.js.vm");
+
+		templates.add("vm/sql/menu.sql.vm");
 		return templates;
 	}
 
@@ -97,18 +102,33 @@ public class GenUtils {
 		map.put("columns", tableEntity.getColumns());
 		map.put("listReferencedTable", tableEntity.getListReferencedTable());
 		map.put("hasBigDecimal", tableEntity.getHasBigDecimal());
-	   // map.put("mainPath", mainPath);
+
 		map.put("package", config.getString("package"));
-	    map.put("moduleName", config.getString("moduleName"));
+		String moduleName = config.getString("moduleName");
+		map.put("moduleName", moduleName);
+		if (StrUtil.isNotBlank(moduleName)) {
+			map.put("packageName", config.getString("package") + "." + moduleName);
+		} else {
+			map.put("packageName", config.getString("package") + "." + moduleName);
+		}
 		map.put("author", config.getString("author"));
-		map.put("datetime", DateUtil.format(DateUtil.date(), DatePattern.NORM_DATETIME_PATTERN));
+		map.put("datetime", DateUtil.format(DateUtil.date(), DatePattern.NORM_DATE_PATTERN));
 		map.put("entityName", String.format(config.getString("entityName"), tableEntity.getClassName()));
+		map.put("reqEntityName", map.get("entityName") + "Req");
+		map.put("reqEntityname", map.get("classname") + "Req");
 		map.put("mapperName", String.format(config.getString("mapperName"), tableEntity.getClassName()));
 		map.put("xmlName", String.format(config.getString("xmlName"), tableEntity.getClassName()));
 		map.put("serviceName", String.format(config.getString("serviceName"), tableEntity.getClassName()));
+		map.put("IServiceImpl", String.format(config.getString("serviceName"), tableEntity.getClassname()));
 		map.put("serviceImplName", String.format(config.getString("serviceImplName"), tableEntity.getClassName()));
 		map.put("controllerName", String.format(config.getString("controllerName"), tableEntity.getClassName()));
 
+		// 生成的menu.sql语句中的ID
+		map.put("menuId", IDUtils.newID());
+		map.put("addId", IDUtils.newID());
+		map.put("editId", IDUtils.newID());
+		map.put("deleteId", IDUtils.newID());
+		map.put("batchDeleteId", IDUtils.newID());
 		return new VelocityContext(map);
 	}
 
@@ -198,7 +218,7 @@ public class GenUtils {
 			tpl.merge(context, sw);
 			try {
 				// 添加到zip
-				zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config)));
+				zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity, config)));
 				IOUtils.write(sw.toString(), zip, "UTF-8");
 
 				IOUtils.closeQuietly(sw);
@@ -209,121 +229,6 @@ public class GenUtils {
 			}
 		}
 	}
-
-	// /*
-	// * 生成代码
-	// * @throws IOException
-	// */
-	// public static void generatorAllCode(Map<String, String>
-	// table,List<ReferencedTable> listReferencedTable,
-	// List<Map<String, String>> columns) throws IOException {
-	// //配置信息
-	// Configuration config = getConfig();
-	// TableEntity tableEntity = getTableInfo(config,table,
-	// listReferencedTable,columns);
-	// VelocityContext context = getVelocityContext(config,tableEntity);
-	//
-	// //获取模板列表
-	// List<String> templates = getTemplates();
-	// for(String template : templates){
-	// if("template/Api.java.vm".equals(template)) {
-	// continue;
-	// }
-	// //渲染模板
-	// StringWriter sw = new StringWriter();
-	// Template tpl = Velocity.getTemplate(template, "UTF-8");
-	// tpl.merge(context, sw);
-	//
-	// //获取当前项目的根路径
-	// File directory = new File("");// 参数为空
-	// String courseFile = directory.getCanonicalPath();
-	// String ide = config.getString("ide");
-	// String project = config.getString("adminproject");
-	// if( StringUtils.isNotEmpty(project)){
-	//
-	// int i= StringUtils.lastIndexOf(courseFile, "\\");
-	// if("eclipse".equals(ide)) {
-	// courseFile= courseFile.substring(0, StringUtils.lastIndexOf(courseFile,
-	// "\\"))+"\\"+project;
-	// }else {
-	// courseFile +="\\"+project;
-	// }
-	//
-	// }
-	//
-	// String entityFileName = getFileName(template, tableEntity.getClassName(),
-	// config.getString("package"), config.getString("moduleName"));
-	//
-	// FileUtil.writeString(sw.toString(),FileUtil.touch(
-	// courseFile+"\\src\\"+entityFileName), "UTF-8");
-	// //FileUtil.file(s)
-	//
-	//
-	//
-	// }
-	// }
-	//
-	// /*
-	// * 生成接口代码
-	// * @throws IOException
-	// */
-	// public static void generatorApiCode(Map<String, String>
-	// table,List<ReferencedTable> listReferencedTable,
-	// List<Map<String, String>> columns) throws IOException {
-	// //配置信息
-	// Configuration config = getConfig();
-	//
-	// TableEntity tableEntity = getTableInfo(config,table,
-	// listReferencedTable,columns);
-	// VelocityContext context = getVelocityContext(config,tableEntity);
-	//
-	// //获取模板列表
-	// List<String> templates = getTemplates();
-	// for(String template : templates){
-	// if("template/Controller.java.vm".equals(template)) {
-	// continue;
-	// }
-	// if("template/list.html.vm".equals(template)) {
-	// continue;
-	// }
-	// if("template/list.js.vm".equals(template)) {
-	// continue;
-	// }
-	// if("template/menu.sql.vm".equals(template)) {
-	// continue;
-	// }
-	// //渲染模板
-	// StringWriter sw = new StringWriter();
-	// Template tpl = Velocity.getTemplate(template, "UTF-8");
-	// tpl.merge(context, sw);
-	//
-	// //获取当前项目的根路径
-	// File directory = new File("");// 参数为空
-	// String courseFile = directory.getCanonicalPath();
-	// String ide = config.getString("ide");
-	// String project = config.getString("apiproject");
-	// if( StringUtils.isNotEmpty(project)){
-	//
-	// int i= StringUtils.lastIndexOf(courseFile, "\\");
-	// if("eclipse".equals(ide)) {
-	// courseFile= courseFile.substring(0, StringUtils.lastIndexOf(courseFile,
-	// "\\"))+"\\"+project;
-	// }else {
-	// courseFile +="\\"+project;
-	// }
-	//
-	// }
-	//
-	// String entityFileName = getFileName(template, tableEntity.getClassName(),
-	// config.getString("package"), config.getString("moduleName"));
-	//
-	// FileUtil.writeString(sw.toString(),FileUtil.touch(
-	// courseFile+"\\src\\"+entityFileName), "UTF-8");
-	// //FileUtil.file(s)
-	//
-	//
-	// }
-	// }
 
 	/**
 	 * 列名转换成Java属性名
@@ -424,19 +329,22 @@ public class GenUtils {
 	/**
 	 * 获取文件名
 	 */
-	private static String getFileName(String template, String className, Configuration config) {
+	private static String getFileName(String template, TableEntity tableEntity, Configuration config) {
 
+		String className = tableEntity.getClassName();
+		String classname = tableEntity.getClassname();
 		String packageName = config.getString("package");
 		String moduleName = config.getString("moduleName");
 		String packagePath = "";
-		
-		String entityName=String.format(config.getString("entityName"), className);
-		String mapperName=String.format(config.getString("mapperName"), className);
-		String xmlName=String.format(config.getString("xmlName"), className);
-		String serviceName=String.format(config.getString("serviceName"), className);
-		String serviceImplName=String.format(config.getString("serviceImplName"), className);
-		String controllerName=String.format(config.getString("controllerName"), className);
-		
+
+		String entityName = String.format(config.getString("entityName"), className);
+		String mapperName = String.format(config.getString("mapperName"), className);
+		String xmlName = String.format(config.getString("xmlName"), className);
+		String serviceName = String.format(config.getString("serviceName"), className);
+		String serviceImplName = String.format(config.getString("serviceImplName"), className);
+		String controllerName = String.format(config.getString("controllerName"), className);
+		String reqEntityName = String.format(config.getString("entityName"), className) + "Req";
+
 		if (StringUtils.isNotBlank(packageName)) {
 			packagePath += packageName.replace(".", File.separator) + File.separator;
 		}
@@ -464,45 +372,48 @@ public class GenUtils {
 			return packagePath + "controller" + File.separator + controllerName + ".java";
 		}
 
+		if (template.contains("ReqEntity.java.vm")) {
+			return packagePath + "controller" + File.separator + controllerName + File.separator + "req"
+					+ File.separator + reqEntityName + ".java";
+		}
+
 		if (template.contains("Mapper.xml.vm")) {
-			return  "resources" + File.separator + "mapper" + File.separator + moduleName
-					+ File.separator + xmlName + ".xml";
+			return "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + xmlName
+					+ ".xml";
 		}
-
+        // html 
 		if (template.contains("list.html.vm")) {
-			return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + "modules"
-					+ File.separator + moduleName + File.separator + className.toLowerCase() + ".html";
+			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+					+ File.separator + classname + ".html";
 		}
 
+		if (template.contains("add.html.vm")) {
+			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+					+ File.separator +   "add.html";
+		}
+		if (template.contains("edit.html.vm")) {
+			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+					+ File.separator + "edit.html";
+		}
+
+		// js
 		if (template.contains("list.js.vm")) {
-			return "main" + File.separator + "resources" + File.separator + "statics" + File.separator + "js"
-					+ File.separator + "modules" + File.separator + moduleName + File.separator
-					+ className.toLowerCase() + ".js";
+			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+					+ File.separator + classname + ".js";
+		}
+
+		if (template.contains("add.js.vm")) {
+			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+					+ File.separator + "add.js";
+		}
+		
+		if (template.contains("edit.js.vm")) {
+			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+					+ File.separator + "edit.js";
 		}
 
 		if (template.contains("menu.sql.vm")) {
-			return className.toLowerCase() + "_menu.sql";
-		}
-
-		if (template.contains("Api.java.vm")) {
-			/*
-			 * return packagePath + "api" + File.separator + "controller" + File.separator +
-			 * className + "ApiController.java";
-			 */
-			return packagePath + File.separator + "controller" + File.separator + className + "Controller.java";
-
-		}
-
-		if (template.contains("View.java.vm")) {
-			return packagePath + "entity" + File.separator + "view" + File.separator + className + "View.java";
-		}
-
-		if (template.contains("Model.java.vm")) {
-			return packagePath + "entity" + File.separator + "model" + File.separator + className + "Model.java";
-		}
-
-		if (template.contains("VO.java.vm")) {
-			return packagePath + "entity" + File.separator + "vo" + File.separator + className + "VO.java";
+			return classname + "_menu.sql";
 		}
 
 		return null;

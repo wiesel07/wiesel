@@ -1,21 +1,14 @@
-package ${package}.entity;
+package ${packageName}.controller.req;
 
-import java.io.Serializable;
-import java.util.Date;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  *
- * @ClassName 类名：${entityName}
+ * @ClassName 类名：${reqEntityName}
  * @Description 功能说明： ${comments}
  *              <p>
  *              TODO
@@ -25,7 +18,7 @@ import lombok.experimental.Accessors;
  * @author 创建人：${author}
  * @version 版本号：V1.0
  *          <p>
- ****************************修订记录************************************
+ ****************************修订记录*************************************
  * 
  *          ${datetime} ${author} 创建该类功能。
  *
@@ -34,12 +27,8 @@ import lombok.experimental.Accessors;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("${tableName}")
-public class ${entityName} extends Model<${entityName}> {
-
-	private static final long serialVersionUID = 1L;
+public class ${reqEntityName}  {
 
 #foreach ($column in $columns)
 	#if($column.comments!='' )
@@ -54,13 +43,4 @@ public class ${entityName} extends Model<${entityName}> {
 	private $column.attrType $column.attrname;
 #end
 
-#foreach ($column in $columns)
-    public static final String $column.upperColumnName = "$column.columnName";
-#end
-
-    @Override
-	protected Serializable pkVal() {
-		// TODO Auto-generated method stub
-		return this.${pk.attrname};
-	}
 }

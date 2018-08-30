@@ -1,12 +1,11 @@
-package ${package}.service;
+package ${packageName}.mapper;
 
-import ${package}.entity.${entityName};
-
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import ${packageName}.entity.${entityName};
 
 /**
  *
- * @ClassName 类名：${serviceName}
+ * @ClassName 类名：${mapperName}
  * @Description 功能说明： ${comments}
  *              <p>
  *              TODO
@@ -23,7 +22,7 @@ import com.baomidou.mybatisplus.service.IService;
  ***********************************************************************
  *          </p>
  */
- 
-public interface ${serviceName} extends IService<${entityName}> {
+public interface ${mapperName} extends BaseMapper<${entityName}> {
 
 }
+ 

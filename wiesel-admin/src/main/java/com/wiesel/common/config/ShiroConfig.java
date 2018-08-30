@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -22,10 +24,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.alibaba.fastjson.JSON;
+import com.wiesel.common.config.properties.RedisProperties;
 import com.wiesel.common.constant.GlobalConstant;
 import com.wiesel.shiro.UserRealm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.CacheManager;
 
@@ -51,14 +57,6 @@ import net.sf.ehcache.CacheManager;
 @Slf4j
 @Configuration
 public class ShiroConfig {
-	@Value("${spring.redis.host}")
-	private String host;
-	@Value("${spring.redis.password}")
-	private String password;
-	@Value("${spring.redis.port}")
-	private int port;
-	@Value("${spring.redis.timeout}")
-	private int timeout;
 
 	@Value("${spring.cache.type}")
 	private String cacheType;
@@ -160,6 +158,10 @@ public class ShiroConfig {
 		return authorizationAttributeSourceAdvisor;
 	}
 
+	// redis配置初始化
+	@Resource
+    private RedisProperties redisProperties;
+	
 	/**
 	 * 配置shiro redisManager
 	 *
@@ -168,11 +170,7 @@ public class ShiroConfig {
 	@Bean
 	public RedisManager redisManager() {
 		RedisManager redisManager = new RedisManager();
-		redisManager.setHost(host);
-		redisManager.setPort(port);
-		redisManager.setExpire(1800);// 配置缓存过期时间
-		// redisManager.setTimeout(timeout);
-		redisManager.setPassword(password);
+		redisProperties.config(redisManager);
 		return redisManager;
 	}
 
@@ -211,6 +209,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public DefaultWebSessionManager sessionManager() {
+		log.info(DateUtil.now()+"shiro session的管理");
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 		sessionManager.setGlobalSessionTimeout(tomcatTimeout * 1000);
 		sessionManager.setSessionDAO(sessionDAO());

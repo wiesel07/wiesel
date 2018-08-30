@@ -37,7 +37,6 @@ import com.wiesel.common.config.LongObjectSerializer;
  */
 @EnableTransactionManagement
 @ServletComponentScan
-// @MapperScan("com.wiesel.**.mapper")
 @SpringBootApplication
 @EnableCaching
 public class WieselAdminApplication  extends SpringBootServletInitializer {

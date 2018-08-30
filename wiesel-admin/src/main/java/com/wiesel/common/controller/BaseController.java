@@ -8,7 +8,7 @@ import com.wiesel.system.entity.User;
 /** 
 *
 * @ClassName   类名：BaseController 
-* @Description 功能说明：
+* @Description 功能说明：controller基类 目前用于获取用户的基本信息
 * <p>
 * TODO
 *</p>

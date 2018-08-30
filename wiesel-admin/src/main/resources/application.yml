@@ -4,7 +4,8 @@ server:
 #        max-threads: 1000
 #        min-spare-threads: 30
   port: 8081
-#    uri-encoding: utf-8
+  tomcat:
+    uri-encoding: utf-8
 security:
   basic:
     enabled: false
