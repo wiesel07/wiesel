@@ -60,19 +60,34 @@ public class GeneratorController {
 	private IGeneratorService generatorService;
 
 	@GetMapping("")
-	public String user(Model model) {
+	String user() {
 		return prefix + "/generator";
 	}
 
 	/**
-	 * 列表
 	 * 
-	 * @param <T>
+	 * <p>
+	 * 函数名称：
+	 * </p>
+	 * <p>
+	 * 功能说明：返回表列表
+	 *
+	 * </p>
+	 * <p>
+	 * 参数说明：
+	 * </p>
+	 * 
+	 * @param pageReq
+	 * @param params
+	 * @return
+	 *
+	 * @date 创建时间：2018年8月31日
+	 * @author 作者：wuj
 	 */
 	@ResponseBody
 	@RequiresPermissions("common:generator")
 	@GetMapping("/list")
-	public <T> ApiResult<PageResp<Map<String, Object>>> list(PageReq<T> pageReq, @RequestParam Map<String, Object> params) {
+	<T> ApiResult<PageResp<Map<String, Object>>> list(PageReq<T> pageReq, @RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		List<Map<String, Object>> list = generatorService.queryList(params);
 		int total = generatorService.queryTotal(params);
@@ -84,6 +99,27 @@ public class GeneratorController {
 		return ApiResult.ok(pageResp);
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * 函数名称：
+	 * </p>
+	 * <p>
+	 * 功能说明：根据表名生成代码
+	 *
+	 * </p>
+	 * <p>
+	 * 参数说明：
+	 * </p>
+	 * 
+	 * @param request
+	 * @param response
+	 * @param tableName
+	 * @throws IOException
+	 *
+	 * @date 创建时间：2018年8月31日
+	 * @author 作者：wuj
+	 */
 	@RequestMapping("/code/{tableName}")
 	public void code(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("tableName") String tableName) throws IOException {
@@ -97,6 +133,27 @@ public class GeneratorController {
 		IOUtils.write(data, response.getOutputStream());
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * 函数名称：
+	 * </p>
+	 * <p>
+	 * 功能说明：根据表名数组批量生成代码
+	 *
+	 * </p>
+	 * <p>
+	 * 参数说明：
+	 * </p>
+	 * 
+	 * @param request
+	 * @param response
+	 * @param tables
+	 * @throws IOException
+	 *
+	 * @date 创建时间：2018年8月31日
+	 * @author 作者：wuj
+	 */
 	@RequestMapping("/batchCode")
 	public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables) throws IOException {
 		String[] tableNames = new String[] {};
@@ -109,23 +166,28 @@ public class GeneratorController {
 
 		IOUtils.write(data, response.getOutputStream());
 	}
-	
-	
+
 	/**
 	 * 
-	 * <p>函数名称：        </p>
-	 * <p>功能说明：返回生成策略编辑界面
+	 * <p>
+	 * 函数名称：
+	 * </p>
+	 * <p>
+	 * 功能说明：返回生成策略编辑界面
 	 *
 	 * </p>
-	 *<p>参数说明：</p>
+	 * <p>
+	 * 参数说明：
+	 * </p>
+	 * 
 	 * @param model
 	 * @return
 	 *
-	 * @date   创建时间：2018年8月22日
+	 * @date 创建时间：2018年8月22日
 	 * @author 作者：wuj
 	 */
 	@GetMapping("/edit")
-	public String edit(Model model) {
+	String edit(Model model) {
 		Configuration conf = GenUtils.getConfig();
 		Map<String, Object> property = new HashMap<>(16);
 		property.put("author", conf.getProperty("author"));
@@ -133,13 +195,33 @@ public class GeneratorController {
 		property.put("package", conf.getProperty("package"));
 		property.put("autoRemovePre", conf.getProperty("autoRemovePre"));
 		property.put("tablePrefix", conf.getProperty("tablePrefix"));
+		property.put("moduleName", conf.getProperty("moduleName"));
 		model.addAttribute("property", property);
 		return prefix + "/edit";
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * 函数名称：
+	 * </p>
+	 * <p>
+	 * 功能说明：更新生成策略
+	 *
+	 * </p>
+	 * <p>
+	 * 参数说明：
+	 * </p>
+	 * 
+	 * @param map
+	 * @return
+	 *
+	 * @date 创建时间：2018年8月31日
+	 * @author 作者：wuj
+	 */
 	@ResponseBody
 	@PostMapping("/update")
-	public	ApiResult<String> update(@RequestParam Map<String, Object> map) {
+	public ApiResult<String> update(@RequestParam Map<String, Object> map) {
 		try {
 			PropertiesConfiguration conf = new PropertiesConfiguration("generator.properties");
 			conf.setProperty("author", map.get("author"));
@@ -147,13 +229,14 @@ public class GeneratorController {
 			conf.setProperty("package", map.get("package"));
 			conf.setProperty("autoRemovePre", map.get("autoRemovePre"));
 			conf.setProperty("tablePrefix", map.get("tablePrefix"));
+			conf.setProperty("moduleName", map.get("moduleName"));
 			conf.save();
 		} catch (ConfigurationException e) {
 			return ApiResult.error("保存配置文件出错");
 		}
 		return ApiResult.ok();
 	}
-	
+
 	//
 	// /**
 	// * 更新全部后端代码

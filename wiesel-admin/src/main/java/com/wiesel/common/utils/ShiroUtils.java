@@ -8,7 +8,7 @@ import com.wiesel.system.entity.User;
 /** 
 *
 * @ClassName   类名：ShiroUtils 
-* @Description 功能说明：
+* @Description 功能说明：Shiro工具类
 * <p>
 * TODO
 *</p>

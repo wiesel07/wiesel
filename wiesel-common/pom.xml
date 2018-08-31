@@ -9,7 +9,7 @@
 		<artifactId>wiesel</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>wiesel-common</artifactId>
 	<name>wiesel-common</name>
 	<url>http://maven.apache.org</url>
@@ -19,6 +19,11 @@
 	</properties>
 	<dependencies>
 
+		<!-- <dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency> -->
 		<dependency>
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-core</artifactId>

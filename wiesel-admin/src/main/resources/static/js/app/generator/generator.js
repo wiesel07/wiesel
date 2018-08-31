@@ -43,7 +43,11 @@ function load() {
 			title : '操作',
 			align : 'center',
 			formatter : function(value, row, index) {
-
+				var g = '<a class="btn btn-primary btn-sm " href="#" title="生成"  mce_href="#" onclick="code(\''
+				+ row.tableName
+				+ '\')">生成</a> ';
+				
+				return g;
 			}
 		} ],
 		params : function() {
@@ -66,8 +70,6 @@ function batchCode() {
 	$.each(rows, function(i, row) {
 		tables[i] = row['tableName'];
 	});
-	
-	
 
     location.href = prefix + "/batchCode?tables=" + JSON.stringify(tables);
 //	var url=  prefix + "/batchCode?tables=" + JSON.stringify(tables);
