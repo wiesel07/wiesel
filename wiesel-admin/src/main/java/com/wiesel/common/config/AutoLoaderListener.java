@@ -1,7 +1,5 @@
 package com.wiesel.common.config;
 
-import java.util.Date;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;

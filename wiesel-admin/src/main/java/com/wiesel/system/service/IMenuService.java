@@ -58,22 +58,7 @@ public interface IMenuService extends IService<Menu> {
 	 * @date   创建时间：2018年7月23日
 	 * @author 作者：wuj
 	 */
-	public List<Tree<Menu>> listMenuTree(Long id);
-//
-//	/**
-//	 * 
-//	 * <p>函数名称：        </p>
-//	 * <p>功能说明：根据用户角色获取菜单
-//	 *
-//	 * </p>
-//	 *<p>参数说明：</p>
-//	 * @param id
-//	 * @return
-//	 *
-//	 * @date   创建时间：2018年7月30日
-//	 * @author 作者：wuj
-//	 */
-//	public Tree<Menu> getTree(Long id);
+	 List<Tree<Menu>> listMenuTree(Long id);
 	
 	
 	/**
@@ -88,7 +73,7 @@ public interface IMenuService extends IService<Menu> {
 	 * @date   创建时间：2018年7月30日
 	 * @author 作者：wuj
 	 */
-	public List<ZtreeNode> getTree();
+	 List<ZtreeNode> getTree();
 
 	/**
 	 * 
@@ -103,6 +88,7 @@ public interface IMenuService extends IService<Menu> {
 	 * @date   创建时间：2018年8月2日
 	 * @author 作者：wuj
 	 */
-	public List<ZtreeNode> getTree(Long id);
+	 List<ZtreeNode> getTree(Long id);
+	 
 	
 }

@@ -24,13 +24,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alibaba.fastjson.JSON;
 import com.wiesel.common.config.properties.RedisProperties;
 import com.wiesel.common.constant.GlobalConstant;
 import com.wiesel.shiro.UserRealm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.CacheManager;

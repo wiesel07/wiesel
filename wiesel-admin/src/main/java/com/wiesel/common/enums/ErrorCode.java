@@ -33,13 +33,14 @@ public enum ErrorCode implements IErrorCode {
 	 * 失败
 	 */
 	FAILED("1", "失败"), 
-	DB_INSERT_FAIL("000001", "数据库插入失败！"), 
-	DB_UPDATE_FAIL("000002", "数据库更新失败！"), 
-	DB_DELETE_FAIL("000003", "数据库删除失败！"), 
-	LOGIN_FAIL("000011", "用户或密码错误!"), 
-	USERNAME_EXIST("0800012", "用户名称已存在!"),
-	ACCOUNT_EXIST("0800013", "用户或密码错误!"),
-	PARAM_IS_NULL("0800014","参数不能为空")
+	DB_INSERT_FAIL("000001", "数据库插入失败"), 
+	DB_UPDATE_FAIL("000002", "数据库更新失败"), 
+	DB_DELETE_FAIL("000003", "数据库删除失败"), 
+	LOGIN_FAIL("000011", "用户或密码错误"), 
+	USERNAME_EXIST("0800012", "用户名称已存在"),
+	ACCOUNT_EXIST("0800013", "用户或密码错误"),
+	PARAM_IS_NULL("0800014","参数不能为空"),
+	MENU_HAS_USERD("0800015","菜单已被角色使用")
 	;
 
 	private final String code;

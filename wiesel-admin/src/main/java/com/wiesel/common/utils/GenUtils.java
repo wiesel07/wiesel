@@ -22,7 +22,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 import com.alibaba.fastjson.JSON;
-import com.wiesel.common.annotation.Log;
 import com.wiesel.generator.entity.ColumnEntity;
 import com.wiesel.generator.entity.ReferencedTable;
 import com.wiesel.generator.entity.TableEntity;
@@ -31,7 +30,6 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import springfox.documentation.spring.web.json.Json;
 import wiesel.common.utils.IDUtils;
 
 /**

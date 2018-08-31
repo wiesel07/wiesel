@@ -2,6 +2,7 @@ package com.wiesel.system.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wiesel.common.constant.UrlConstant;
+import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.system.controller.req.MenuReq;
 import com.wiesel.system.entity.Menu;
+import com.wiesel.system.entity.RoleMenu;
 import com.wiesel.system.service.IMenuService;
+import com.wiesel.system.service.IRoleMenuService;
 
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiOperation;
@@ -53,6 +57,9 @@ public class MenuController {
 	@Autowired
 	private IMenuService menuService;
 
+	@Autowired
+	private IRoleMenuService roleMenuService;
+	
 	@RequiresPermissions("sys:menu:menu")
 	@GetMapping()
 	String menu(Model model) {
@@ -72,6 +79,7 @@ public class MenuController {
 	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
 	String add(Model model, @PathVariable("pId") String pId) {
+		
 		Long menuId = Long.valueOf(pId);
 		model.addAttribute("pId", menuId);
 		if (menuId == 0) {
@@ -131,10 +139,19 @@ public class MenuController {
 	@PostMapping("/delete")
 	@ResponseBody
 	public ApiResult<String> delete(String id) {
-		Long menuId = Long.valueOf(id);
-		if (!menuService.deleteById(menuId)) {
-			throw new ApiException(ApiErrorCode.DB_DELETE_FAIL);
+		if (StringUtils.isEmpty(id)) {
+			return ApiResult.error(ErrorCode.PARAM_IS_NULL);
 		}
+		Long menuId = Long.valueOf(id);
+		EntityWrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<RoleMenu>();
+		roleMenuWrapper.eq(RoleMenu.MENU_ID, menuId);
+		
+		if (roleMenuService.selectCount(roleMenuWrapper)>0) {
+			throw new ApiException(ErrorCode.MENU_HAS_USERD);
+		}
+		
+		menuService.deleteById(menuId);
+		
 		return ApiResult.ok();
 	}
 

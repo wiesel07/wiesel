@@ -83,26 +83,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 		return list;
 	}
 
-	// @Override
-	// public Tree<Menu> getTree() {
-	// List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-	//
-	// EntityWrapper< Menu> wrapper = new EntityWrapper<>();
-	//
-	// wrapper.orderBy(false, Menu.MENU_ID);
-	// List<Menu> menus = this.baseMapper.selectList(wrapper);
-	// for (Menu sysMenuDO : menus) {
-	// Tree<Menu> tree = new Tree<Menu>();
-	// tree.setId(sysMenuDO.getMenuId().toString());
-	// tree.setParentId(sysMenuDO.getParentId().toString());
-	// tree.setText(sysMenuDO.getName());
-	// trees.add(tree);
-	// }
-	// // 默认顶级菜单为０，根据数据库实际情况调整
-	// Tree<Menu> t = BuildTree.build(trees);
-	// return t;
-	// }
-
 	@Override
 	public List<ZtreeNode> getTree() {
 		List<ZtreeNode> trees = new ArrayList<ZtreeNode>();
@@ -156,4 +136,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 		}
 		return trees;
 	}
+	
+
 }

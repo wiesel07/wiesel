@@ -1,10 +1,11 @@
 package com.wiesel.system.service.impl;
 
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wiesel.system.entity.UserRole;
 import com.wiesel.system.mapper.UserRoleMapper;
 import com.wiesel.system.service.IUserRoleService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 
 /**
 *

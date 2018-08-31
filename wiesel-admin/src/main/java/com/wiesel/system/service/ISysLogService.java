@@ -1,8 +1,7 @@
 package com.wiesel.system.service;
 
-import com.wiesel.system.entity.SysLog;
-
 import com.baomidou.mybatisplus.service.IService;
+import com.wiesel.system.entity.SysLog;
 
 /**
  *

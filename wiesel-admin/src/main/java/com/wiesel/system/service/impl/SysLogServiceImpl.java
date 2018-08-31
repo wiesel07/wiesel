@@ -4,7 +4,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-
 import com.wiesel.system.entity.SysLog;
 import com.wiesel.system.mapper.SysLogMapper;
 import com.wiesel.system.service.ISysLogService;

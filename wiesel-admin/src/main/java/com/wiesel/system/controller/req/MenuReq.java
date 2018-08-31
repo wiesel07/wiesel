@@ -1,7 +1,5 @@
 package com.wiesel.system.controller.req;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;

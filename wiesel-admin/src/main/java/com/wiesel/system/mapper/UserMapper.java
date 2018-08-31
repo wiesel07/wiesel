@@ -1,7 +1,7 @@
 package com.wiesel.system.mapper;
 
-import com.wiesel.system.entity.User;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.wiesel.system.entity.User;
 
 /**
 *
