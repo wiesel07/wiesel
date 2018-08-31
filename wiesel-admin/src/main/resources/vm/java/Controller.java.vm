@@ -98,9 +98,7 @@ public class ${controllerName} {
 		return prefix + "/edit";
 	}
 
-	/**
-	 * 保存
-	 */
+
 	@ApiOperation(value = "保存")
 	@ResponseBody
 	@PostMapping("/save")
@@ -112,9 +110,7 @@ public class ${controllerName} {
 		return ApiResult.ok();
 	}
 
-	/**
-	 * 修改
-	 */
+
 	@ApiOperation(value = "修改")
 	@ResponseBody
 	@RequestMapping("/update")
@@ -138,6 +134,7 @@ public class ${controllerName} {
 		${IServiceImpl}.deleteById(Long.valueOf(${pk.attrname}));
 		return ApiResult.ok();
 	}
+
 
 	@ApiOperation(value = "批量删除")
 	@PostMapping("/batchDelete")

@@ -332,52 +332,52 @@ public class GenUtils {
 		String controllerName = String.format(config.getString("controllerName"), className);
 		String reqEntityName = String.format(config.getString("entityName"), className) + "Req";
 
-		String packagePath = "java"+File.separator;
+		String packagePath = "src"+File.separator+"main"+File.separator+"java";
 		if (StringUtils.isNotBlank(packageName)) {
-			packagePath += packageName.replace(".", File.separator) + File.separator;
+			packagePath +=File.separator+ packageName.replace(".", File.separator) ;
 		}
 		if (StringUtils.isNotBlank(moduleName)) {
-			packagePath += moduleName + File.separator;
+			packagePath +=File.separator+ moduleName ;
 		}
 
 		if (template.contains("Entity.java.vm")&& !template.contains("Req")) {
-			return packagePath + "entity" + File.separator + entityName + ".java";
+			return packagePath + File.separator+"entity" + File.separator + entityName + ".java";
 		}
 
 		if (template.contains("Mapper.java.vm")) {
-			return packagePath + "mapper" + File.separator + mapperName + ".java";
+			return packagePath + File.separator+"mapper" + File.separator + mapperName + ".java";
 		}
 
 		if (template.contains("Service.java.vm")) {
-			return packagePath + "service" + File.separator + serviceName + ".java";
+			return packagePath + File.separator+"service" + File.separator + serviceName + ".java";
 		}
 
 		if (template.contains("ServiceImpl.java.vm")) {
-			return packagePath + "service" + File.separator + "impl" + File.separator + serviceImplName + ".java";
+			return packagePath +File.separator+ "service" + File.separator + "impl" + File.separator + serviceImplName + ".java";
 		}
 
 		if (template.contains("Controller.java.vm")) {
-			return packagePath + "controller" + File.separator + controllerName + ".java";
+			return packagePath +File.separator+ "controller" + File.separator + controllerName + ".java";
 		}
 
 		if (template.contains("ReqEntity.java.vm")) {
-			return packagePath + "controller" + File.separator +   "req"
+			return packagePath +File.separator+ "controller" + File.separator +   "req"
 					+ File.separator + reqEntityName + ".java";
 		}
 
 	
         // html 
-		String htmlPrefix="";
-		String jsPrefix ="";
-		String xmlPrefix="";
+		String htmlPrefix="src"+File.separator+"main"+File.separator+"resources";
+		String jsPrefix ="src"+File.separator+"main"+File.separator+"resources";
+		String xmlPrefix="src"+File.separator+"main"+File.separator+"resources";
 		if (StrUtil.isNotBlank(moduleName)) {
-			htmlPrefix+="resources" + File.separator + "templates" + File.separator + moduleName ;
-			jsPrefix+="resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName;
-			xmlPrefix+="resources" + File.separator + "mapper" + File.separator + moduleName;
+			htmlPrefix+=File.separator + "templates" + File.separator + moduleName ;
+			jsPrefix+= File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName;
+			xmlPrefix+= File.separator + "mapper" + File.separator + moduleName;
 		}else {
-			htmlPrefix+="resources" + File.separator + "templates";
-			jsPrefix+="resources" + File.separator + "static" + File.separator+"js"+File.separator+"app";
-			xmlPrefix+="resources" + File.separator + "mapper" ;
+			htmlPrefix+= File.separator + "templates";
+			jsPrefix+= File.separator + "static" + File.separator+"js"+File.separator+"app";
+			xmlPrefix+= File.separator + "mapper" ;
 		}
 		
 		if (template.contains("Mapper.xml.vm")) {

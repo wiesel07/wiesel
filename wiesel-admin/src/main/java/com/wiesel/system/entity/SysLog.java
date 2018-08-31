@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 /**
  *
- * @ClassName 类名：Log
+ * @ClassName 类名：SysLog
  * @Description 功能说明： 系统日志
  *              <p>
  *              TODO

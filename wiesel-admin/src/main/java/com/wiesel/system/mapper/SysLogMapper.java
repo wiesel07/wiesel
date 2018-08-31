@@ -22,7 +22,6 @@ import com.wiesel.system.entity.SysLog;
  ***********************************************************************
  *          </p>
  */
- 
 public interface SysLogMapper extends BaseMapper<SysLog> {
 
 }

@@ -111,11 +111,7 @@ public class DeptController {
 		return prefix + "/edit";
 	}
 
-	/**
-	 * 保存
-	 * 
-	 * @param <T>
-	 */
+
 	@ApiOperation(value = "保存部门")
 	@ResponseBody
 	@PostMapping("/save")
@@ -130,9 +126,6 @@ public class DeptController {
 		return ApiResult.ok();
 	}
 
-	/**
-	 * 修改
-	 */
 	@ApiOperation(value = "修改部门")
 	@ResponseBody
 	@RequestMapping("/update")

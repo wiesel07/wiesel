@@ -107,7 +107,7 @@ function del(id) {
             },
             success: function (data) {
                 if (data.code == 0) {
-                    layer.msg("删除成功");
+                    layer.msg("删除成功",{time: 800});
                     $.treeTable.refresh();
                 } else {
                     layer.msg(data.msg);
@@ -115,9 +115,4 @@ function del(id) {
             }
         });
     })
-}
-
-function batchDelete() {
-    // var rows = $('#exampleTable').bootstrapTable('getSelections');
-
 }

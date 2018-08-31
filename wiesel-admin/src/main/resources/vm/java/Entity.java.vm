@@ -32,7 +32,6 @@ import lombok.experimental.Accessors;
  ***********************************************************************
  *          </p>
  */
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
