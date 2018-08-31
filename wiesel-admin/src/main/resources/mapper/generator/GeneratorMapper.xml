@@ -23,7 +23,7 @@
 	</select>
 	<select id="queryTotal" resultType="int">
 		select count(*) from information_schema.tables where table_schema =
-		(select database()) and table_name NOT REGEXP 'sys_|qrtz_|schedule_'
+		(select database()) and table_name NOT REGEXP 'qrtz_|schedule_'
 		<if test="tableName != null and tableName.trim() != ''">
 			and table_name like concat('%', #{tableName}, '%')
 		</if>

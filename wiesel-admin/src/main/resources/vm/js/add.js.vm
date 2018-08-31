@@ -2,7 +2,7 @@
  * @author ${author}
  * @date   ${datetime}
  */
-var prefix = "#if(${moduleName}!='' )${moduleName}#end/${pathName}";
+var prefix = "#if(${moduleName}!='' )/${moduleName}#end/${classname}";
 $(function() {
 	validateRule();
 });
@@ -27,10 +27,12 @@ function validateRule() {
 		rules : {
  #foreach ($column in $columns)
 	#if($column.columnName != $pk.columnName)
-	    #if($column.isNullable =='YES')
+	    #if($column.isNullable =='NO')
+	      #if($column.attrType !='Date' )
 	        $column.columnName : {
 				required : true
 			}#if($foreach.hasNext),#end   
+		  #end	
 	    #end		
 	#end
  #end	
@@ -39,9 +41,11 @@ function validateRule() {
  #foreach ($column in $columns)
 	#if($column.columnName != $pk.columnName)
 	    #if($column.isNullable =='NO')
+	      #if($column.attrType !='Date' )
 	        $column.columnName : {
 				required : icon + "请输入$column.comments"
 			}#if($foreach.hasNext),#end   
+		  #end	
 	    #end		
 	#end
  #end	

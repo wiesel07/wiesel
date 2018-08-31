@@ -15,6 +15,7 @@
 					#foreach ($column in $columns)
 									
 					   #if($column.columnName != $pk.columnName)
+					     #if($column.attrType !='Date' )
 						   <div class="form-group">
 								<label class="col-sm-3 control-label  #if($column.isNullable =='NO')field-required#end">$column.comments：</label>
 								<div class="col-sm-8">
@@ -22,7 +23,8 @@
 										type="text" th:value="*{$column.attrname}">
 								</div>
 							</div>
-						 #end 
+						#end	
+					  #end 
 								  
 					#end	
 							

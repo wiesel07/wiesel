@@ -1,15 +1,15 @@
---菜单sql
+-- 菜单sql
 INSERT INTO  sys_menu
   (menu_id,parent_id, name,
    url,perms, type,
    icon, order_num)
 VALUES
   (${menuId},1,'${comments}', 
-   '#if(${moduleName}!='' )/${moduleName}#end/${pathName}', '#if(${moduleName}!='' )${moduleName}:#end${classname}:{classname}', 1,
+   '#if(${moduleName}!='' )/${moduleName}#end/${classname}', '#if(${moduleName}!='' )${moduleName}:#end${classname}:${classname}', 1,
    'fa fa-heart-o',0
   );
 -- 按钮父菜单ID
---set @parentId = @@identity;  
+-- set @parentId = @@identity;  
   
 -- 菜单对应按钮SQL
 INSERT INTO  sys_menu

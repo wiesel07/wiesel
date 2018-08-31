@@ -1,19 +1,3 @@
-/**
- * Copyright 2018 人人开源 http://www.renren.io
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package com.wiesel.common.utils;
 
 import java.io.File;
@@ -37,6 +21,8 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
+import com.alibaba.fastjson.JSON;
+import com.wiesel.common.annotation.Log;
 import com.wiesel.generator.entity.ColumnEntity;
 import com.wiesel.generator.entity.ReferencedTable;
 import com.wiesel.generator.entity.TableEntity;
@@ -45,6 +31,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.spring.web.json.Json;
 import wiesel.common.utils.IDUtils;
 
 /**
@@ -67,7 +54,8 @@ public class GenUtils {
 		templates.add("vm/java/Service.java.vm");
 		templates.add("vm/java/ServiceImpl.java.vm");
 		templates.add("vm/java/Controller.java.vm");
-
+		templates.add("vm/java/ReqEntity.java.vm");
+		
 		templates.add("vm/html/list.html.vm");
 		templates.add("vm/html/add.html.vm");
 		templates.add("vm/html/edit.html.vm");
@@ -98,7 +86,6 @@ public class GenUtils {
 		map.put("pk", tableEntity.getPk());
 		map.put("className", tableEntity.getClassName());
 		map.put("classname", tableEntity.getClassname());
-		map.put("pathName", tableEntity.getClassname().toLowerCase());
 		map.put("columns", tableEntity.getColumns());
 		map.put("listReferencedTable", tableEntity.getListReferencedTable());
 		map.put("hasBigDecimal", tableEntity.getHasBigDecimal());
@@ -129,6 +116,7 @@ public class GenUtils {
 		map.put("editId", IDUtils.newID());
 		map.put("deleteId", IDUtils.newID());
 		map.put("batchDeleteId", IDUtils.newID());
+	log.info(JSON.toJSONString(map));
 		return new VelocityContext(map);
 	}
 
@@ -218,6 +206,7 @@ public class GenUtils {
 			tpl.merge(context, sw);
 			try {
 				// 添加到zip
+				log.info(template);
 				zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity, config)));
 				IOUtils.write(sw.toString(), zip, "UTF-8");
 
@@ -335,7 +324,7 @@ public class GenUtils {
 		String classname = tableEntity.getClassname();
 		String packageName = config.getString("package");
 		String moduleName = config.getString("moduleName");
-		String packagePath = "";
+		
 
 		String entityName = String.format(config.getString("entityName"), className);
 		String mapperName = String.format(config.getString("mapperName"), className);
@@ -345,6 +334,7 @@ public class GenUtils {
 		String controllerName = String.format(config.getString("controllerName"), className);
 		String reqEntityName = String.format(config.getString("entityName"), className) + "Req";
 
+		String packagePath = "java"+File.separator;
 		if (StringUtils.isNotBlank(packageName)) {
 			packagePath += packageName.replace(".", File.separator) + File.separator;
 		}
@@ -352,7 +342,7 @@ public class GenUtils {
 			packagePath += moduleName + File.separator;
 		}
 
-		if (template.contains("Entity.java.vm")) {
+		if (template.contains("Entity.java.vm")&& !template.contains("Req")) {
 			return packagePath + "entity" + File.separator + entityName + ".java";
 		}
 
@@ -373,42 +363,58 @@ public class GenUtils {
 		}
 
 		if (template.contains("ReqEntity.java.vm")) {
-			return packagePath + "controller" + File.separator + controllerName + File.separator + "req"
+			return packagePath + "controller" + File.separator +   "req"
 					+ File.separator + reqEntityName + ".java";
 		}
 
+	
+        // html 
+		String htmlPrefix="";
+		String jsPrefix ="";
+		String xmlPrefix="";
+		if (StrUtil.isNotBlank(moduleName)) {
+			htmlPrefix+="resources" + File.separator + "templates" + File.separator + moduleName ;
+			jsPrefix+="resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName;
+			xmlPrefix+="resources" + File.separator + "mapper" + File.separator + moduleName;
+		}else {
+			htmlPrefix+="resources" + File.separator + "templates";
+			jsPrefix+="resources" + File.separator + "static" + File.separator+"js"+File.separator+"app";
+			xmlPrefix+="resources" + File.separator + "mapper" ;
+		}
+		
 		if (template.contains("Mapper.xml.vm")) {
-			return "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + xmlName
+			return  xmlPrefix+ File.separator + xmlName
 					+ ".xml";
 		}
-        // html 
+		
+		
 		if (template.contains("list.html.vm")) {
-			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+			return  htmlPrefix+ File.separator+classname
 					+ File.separator + classname + ".html";
 		}
 
 		if (template.contains("add.html.vm")) {
-			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+			return htmlPrefix + File.separator+classname
 					+ File.separator +   "add.html";
 		}
 		if (template.contains("edit.html.vm")) {
-			return "resources" + File.separator + "templates" + File.separator + moduleName + File.separator + classname
+			return htmlPrefix + File.separator + classname
 					+ File.separator + "edit.html";
 		}
 
 		// js
 		if (template.contains("list.js.vm")) {
-			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+			return jsPrefix + File.separator + classname
 					+ File.separator + classname + ".js";
 		}
 
 		if (template.contains("add.js.vm")) {
-			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+			return jsPrefix + File.separator + classname
 					+ File.separator + "add.js";
 		}
 		
 		if (template.contains("edit.js.vm")) {
-			return "resources" + File.separator + "static" + File.separator+"js"+File.separator+"app"+File.separator + moduleName + File.separator + classname
+			return jsPrefix+ File.separator + classname
 					+ File.separator + "edit.js";
 		}
 

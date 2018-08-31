@@ -2,7 +2,7 @@
  * @author ${author}
  * @date   ${datetime}
  */
-var prefix = "#if(${moduleName}!='' )${moduleName}#end/${pathName}";
+var prefix = "#if(${moduleName}!='' )/${moduleName}#end/${classname}";
 $(function() {
 	load();
 });
@@ -27,10 +27,12 @@ function load() {
 						},
 			    #foreach ($column in $columns)
 			         #if($column.columnName != $pk.columnName)
+			           #if($column.attrType !='Date' )
 					    {
 							field : '$column.columnName', // 列字段名
 							title : '$column.comments' // 列标题
 						},
+					   #end	
 			         #end   
 			    #end
 						{

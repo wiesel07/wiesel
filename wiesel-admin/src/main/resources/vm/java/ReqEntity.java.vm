@@ -25,7 +25,6 @@ import lombok.experimental.Accessors;
  ***********************************************************************
  *          </p>
  */
-
 @Data
 @Accessors(chain = true)
 public class ${reqEntityName}  {
@@ -37,10 +36,9 @@ public class ${reqEntityName}  {
 	 * $column.comments
 	 */
     #end
-    #if($column.columnName == $pk.columnName)
-    @TableId(value = "$column.attrname", type = IdType.ID_WORKER)
-	#end
+    #if($column.attrType !='Date' )
 	private $column.attrType $column.attrname;
+	#end
 #end
 
 }
