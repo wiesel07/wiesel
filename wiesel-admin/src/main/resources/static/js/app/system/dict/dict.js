@@ -1,8 +1,8 @@
 /**
- * @author ${author}
- * @date   ${datetime}
+ * @author wuj
+ * @date   2018-09-01
  */
-var prefix = "#if(${moduleName}!='' )/${moduleName}#end/${classname}";
+var prefix = "/system/dict";
 $(function() {
 	load();
 });
@@ -25,25 +25,51 @@ function load() {
 	 						}
 
 						},
-			    #foreach ($column in $columns)
-			         #if($column.columnName != $pk.columnName)
-			           #if($column.attrType !='Date' )
 					    {
-							field : '$column.attrname', // 列字段名
-							title : '$column.comments' // 列标题
+							field : 'dictName', // 列字段名
+							title : '名称' // 列标题
 						},
-					   #end	
-			         #end   
-			    #end
+					    {
+							field : 'dictValue', // 列字段名
+							title : '数据值' // 列标题
+						},
+					    {
+							field : 'dictType', // 列字段名
+							title : '类型' // 列标题
+						},
+					    {
+							field : 'description', // 列字段名
+							title : '描述' // 列标题
+						},
+					    {
+							field : 'sort', // 列字段名
+							title : '排序（升序）' // 列标题
+						},
+					    {
+							field : 'parentId', // 列字段名
+							title : '父级编号' // 列标题
+						},
+					    {
+							field : 'createBy', // 列字段名
+							title : '创建者' // 列标题
+						},
+					    {
+							field : 'remarks', // 列字段名
+							title : '备注信息' // 列标题
+						},
+					    {
+							field : 'delFlag', // 列字段名
+							title : '删除标记' // 列标题
+						},
 						{
 							title : '操作',
 							align : 'center',
 							formatter : function(value, row, index) {
 								var e = '<a class="btn btn-success btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
-										+ row.${pk.attrname}
+										+ row.dictId
 										+ '\')"><i class="fa fa-edit">编辑</i></a> ';
 								var d = '<a class="btn btn-danger btn-sm '+s_delete_h+'" href="#" title="删除"  mce_href="#" onclick="del(\''
-										+ row.${pk.attrname}
+										+ row.dictId
 										+ '\')"><i class="fa fa-remove">删除</i></a> ';
 								return e + d;
 							}
@@ -62,14 +88,14 @@ function add() {
 	app.layer_show({title:'添加',content : prefix + '/add'});
 }
 
-function edit(${pk.attrname}) {
-	var url = prefix + '/edit/' + ${pk.attrname};
+function edit(dictId) {
+	var url = prefix + '/edit/' + dictId;
 	app.layer_show({title:'修改',content : url});
 }
 
-function del(${pk.attrname}) {
+function del(dictId) {
 	
-	var data ={"${pk.attrname}":${pk.attrname}};
+	var data ={"dictId":dictId};
 	app.modalConfirm('确定要删除选中的记录？',
 			function() {
 						app._ajax(	{url : prefix + "/delete",
@@ -89,11 +115,11 @@ function batchDelete() {
 	
 	app.modalConfirm('确定要删除选中的记录？',
 			function() {
-						var ${pk.attrname}s = new Array();
+						var dictIds = new Array();
 						$.each(rows, function(i, row) {
-							${pk.attrname}s[i] = row['${pk.attrname}'];
+							dictIds[i] = row['dictId'];
 						});
-						var data ={"${pk.attrname}s":${pk.attrname}s};
+						var data ={"dictIds":dictIds};
 						app._ajax(	{url : prefix + "/batchDelete",
 								     data :data
 								})

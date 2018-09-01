@@ -223,7 +223,6 @@ public class GenUtils {
 			tpl.merge(context, sw);
 			try {
 				// 添加到zip
-				log.info(template);
 				zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity, config)));
 				IOUtils.write(sw.toString(), zip, "UTF-8");
 
