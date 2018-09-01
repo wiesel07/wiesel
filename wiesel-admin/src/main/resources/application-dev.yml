@@ -8,7 +8,6 @@ wiesel:
 logging:
   level:
     root: info
-    com.wiesel: debug
 swagger :
    enabled: true
    
