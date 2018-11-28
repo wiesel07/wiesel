@@ -32,14 +32,14 @@ public class MysqlGenerator {
     private static final String MODULE_NAME = "system";
     private static final String OUT_PATH = "E:\\develop\\code";
     private static final String AUTHOR = "wuj";
-    private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://47.98.201.218:3306/wiesel?useUnicode=true&characterEncoding=UTF-8";
-    private static final String USER_NAME = "root";
-    private static final String PASSWORD = "123456";
-    private static final DbType DB_TYPE=DbType.MYSQL;
-    
-//    private static final String DB_DRIVER="oracle.jdbc.driver.OracleDriver";
-//    private static final String DB_URL="jdbc:oracle:thin:@192.168.10.231:1521:orcl";
+//    private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+//    private static final String DB_URL = "jdbc:mysql://47.98.201.218:3306/wiesel?useUnicode=true&characterEncoding=UTF-8";
+    private static final String USER_NAME = "tra";
+    private static final String PASSWORD = "bs";
+    private static final DbType DB_TYPE=DbType.ORACLE;
+  
+    private static final String DB_DRIVER="oracle.jdbc.driver.OracleDriver";
+    private static final String DB_URL="jdbc:oracle:thin:@192.168.10.231:1521:orcl";
     /**
      * <p>
      * MySQL 生成演示

@@ -71,7 +71,9 @@ public class LoginController extends BaseController {
 	@ApiIgnore
 	@GetMapping("/api")
 	String api() {
-		return "redirect:/swagger-ui.html";
+		//return "redirect:/swagger-ui.html";
+		// 替换swagger默认ui  使用swagger-bootstrap-ui
+		return "redirect:/doc.html";
 	}
 
 	@ApiIgnore

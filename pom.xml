@@ -18,7 +18,6 @@
 	<modules>
 		<module>wiesel-admin</module>
 		<module>wiesel-common</module>
-		<module>?</module>
 	</modules>
 	<properties>
 		<java.src.version>1.8</java.src.version>
