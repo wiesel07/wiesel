@@ -49,7 +49,7 @@ import wiesel.common.base.entity.PageResp;
  *          </p>
  */
 @Controller
-@RequestMapping("#if(${moduleName}!='' )/${moduleName}#end/${pathName}")
+@RequestMapping("#if(${moduleName}!='' )/${moduleName}#end/${classname}")
 public class ${controllerName} {
 
 	private String prefix = "#if(${moduleName}!='' )${moduleName}#end/${classname}";
@@ -89,7 +89,7 @@ public class ${controllerName} {
 	}
 
 	@ApiOperation(value = "编辑")
-	@GetMapping("/edit/{id}")
+	@GetMapping("/edit/{${pk.attrname}}")
 	@RequiresPermissions("#if(${moduleName}!='' )${moduleName}:#end${classname}:edit")
 	String edit(@PathVariable("${pk.attrname}") String ${pk.attrname}, Model model) {
 		${entityName} ${classname} = ${IServiceImpl}.selectById(Long.valueOf(${pk.attrname}));

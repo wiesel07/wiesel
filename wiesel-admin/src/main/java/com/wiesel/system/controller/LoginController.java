@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wiesel.common.constant.UrlConstant;
 import com.wiesel.common.controller.BaseController;
+import com.wiesel.common.utils.ExceptionUtil;
 import com.wiesel.common.utils.PasswordHelper;
 import com.wiesel.common.utils.ShiroUtils;
 import com.wiesel.system.entity.Menu;
@@ -24,6 +25,7 @@ import com.wiesel.system.service.IMenuService;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
 import wiesel.common.base.entity.Tree;
@@ -47,6 +49,7 @@ import wiesel.common.base.entity.Tree;
  ***********************************************************************
  *          </p>
  */
+@Slf4j
 @ApiModel(value = "用户登录接口")
 @RequestMapping(UrlConstant.root)
 @Controller
@@ -112,6 +115,7 @@ public class LoginController extends BaseController {
 			return ApiResult.ok();
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
+			log.error("用户登录失败，错误信息："+ExceptionUtil.getExceptionStackTrace(e));
 			return ApiResult.error("用户或密码错误");
 		}
 	}

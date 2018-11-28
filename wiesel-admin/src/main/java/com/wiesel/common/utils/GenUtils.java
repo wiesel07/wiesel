@@ -21,7 +21,6 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
-import com.alibaba.fastjson.JSON;
 import com.wiesel.generator.entity.ColumnEntity;
 import com.wiesel.generator.entity.ReferencedTable;
 import com.wiesel.generator.entity.TableEntity;
@@ -29,21 +28,17 @@ import com.wiesel.generator.entity.TableEntity;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import wiesel.common.utils.IDUtils;
 
-/**
- * 飞特超级代码生成器
- * 
- * @author xc
- * @email 171998110@qq.com
- * @date 2018年06月20日 上午10:06:50
- */
+
 @Slf4j
+@UtilityClass
 public class GenUtils {
 	public static final char UNDERLINE = '_';
 
-	public static List<String> getTemplates() {
+	private  List<String> getTemplates() {
 
 		List<String> templates = new ArrayList<String>();
 		templates.add("vm/java/Entity.java.vm");
@@ -66,7 +61,21 @@ public class GenUtils {
 		return templates;
 	}
 
-	private static VelocityContext getVelocityContext(Configuration config, TableEntity tableEntity) {
+	/**
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：模板信息组装
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param config
+	 * @param tableEntity
+	 * @return
+	 *
+	 * @date   创建时间：2018年9月1日
+	 * @author 作者：wuj
+	 */
+	private  VelocityContext getVelocityContext(Configuration config, TableEntity tableEntity) {
 
 		// 设置velocity资源加载器
 		Properties prop = new Properties();
@@ -114,12 +123,11 @@ public class GenUtils {
 		map.put("editId", IDUtils.newID());
 		map.put("deleteId", IDUtils.newID());
 		map.put("batchDeleteId", IDUtils.newID());
-	log.info(JSON.toJSONString(map));
 		return new VelocityContext(map);
 	}
 
 	// 生成渲染表的信息
-	private static TableEntity getTableInfo(Configuration config, Map<String, String> table,
+	private  TableEntity getTableInfo(Configuration config, Map<String, String> table,
 			List<ReferencedTable> listReferencedTable, List<Map<String, String>> columns) {
 		boolean hasBigDecimal = false;
 		// 表信息
@@ -184,11 +192,22 @@ public class GenUtils {
 	}
 
 	/**
-	 * 生成代码
 	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：生成代码
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param table
+	 * @param listReferencedTable
+	 * @param columns
+	 * @param zip
 	 * @throws IOException
+	 *
+	 * @date   创建时间：2018年9月1日
+	 * @author 作者：wuj
 	 */
-	public static void generatorCode(Map<String, String> table, List<ReferencedTable> listReferencedTable,
+	public  void generatorCode(Map<String, String> table, List<ReferencedTable> listReferencedTable,
 			List<Map<String, String>> columns, ZipOutputStream zip) throws IOException {
 		// 配置信息
 		Configuration config = getConfig();
@@ -204,7 +223,6 @@ public class GenUtils {
 			tpl.merge(context, sw);
 			try {
 				// 添加到zip
-				log.info(template);
 				zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity, config)));
 				IOUtils.write(sw.toString(), zip, "UTF-8");
 
@@ -218,9 +236,19 @@ public class GenUtils {
 	}
 
 	/**
-	 * 列名转换成Java属性名
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：列名转换成Java属性名
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param columnName
+	 * @return
+	 *
+	 * @date   创建时间：2018年9月1日
+	 * @author 作者：wuj
 	 */
-	public static String columnToJava(String columnName) {
+	private  String columnToJava(String columnName) {
 		return WordUtils.capitalizeFully(columnName, new char[] { '_' }).replace("_", "");
 	}
 
@@ -244,7 +272,7 @@ public class GenUtils {
 	 * @date 创建时间：2018年8月22日
 	 * @author 作者：wuj
 	 */
-	private static String tableToJava(String tableName, String tablePrefix) {
+	private  String tableToJava(String tableName, String tablePrefix) {
 		if (StringUtils.isNotBlank(tablePrefix)) {
 			tableName = tableName.replace(tablePrefix, "");
 		}
@@ -301,22 +329,43 @@ public class GenUtils {
 	// }
 
 	/**
-	 * 获取配置信息
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：获取配置信息
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @return
+	 *
+	 * @date   创建时间：2018年9月1日
+	 * @author 作者：wuj
 	 */
-	public static Configuration getConfig() {
+	public  Configuration getConfig() {
 		try {
 			return new PropertiesConfiguration("generator.properties");
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
-			log.info("获取配置文件失败");
+			log.error("获取配置文件失败,错误信息:"+ExceptionUtil.getExceptionStackTrace(e));
 		}
 		return null;
 	}
 
 	/**
-	 * 获取文件名
+	 * 
+	 * <p>函数名称：        </p>
+	 * <p>功能说明：获取文件名
+	 *
+	 * </p>
+	 *<p>参数说明：</p>
+	 * @param template
+	 * @param tableEntity
+	 * @param config
+	 * @return
+	 *
+	 * @date   创建时间：2018年9月1日
+	 * @author 作者：wuj
 	 */
-	private static String getFileName(String template, TableEntity tableEntity, Configuration config) {
+	private  String getFileName(String template, TableEntity tableEntity, Configuration config) {
 
 		String className = tableEntity.getClassName();
 		String classname = tableEntity.getClassname();

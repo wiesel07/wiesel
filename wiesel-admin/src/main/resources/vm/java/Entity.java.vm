@@ -1,7 +1,6 @@
 package ${packageName}.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
@@ -48,9 +47,13 @@ public class ${entityName} extends Model<${entityName}> {
 	 */
     #end
     #if($column.columnName == $pk.columnName)
-    @TableId(value = "$column.attrname", type = IdType.ID_WORKER)
+    @TableId(value = "$column.columnName", type = IdType.ID_WORKER)
 	#end
+	#if($column.attrType=='Date')
+		private String $column.attrname;
+	#else
 	private $column.attrType $column.attrname;
+	#end
 #end
 
 #foreach ($column in $columns)

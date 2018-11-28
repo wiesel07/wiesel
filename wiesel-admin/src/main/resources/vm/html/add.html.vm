@@ -20,7 +20,7 @@
 								<label class="col-sm-3 control-label  #if($column.isNullable =='NO')field-required#end">$column.comments：</label>
 								<div class="col-sm-8">
 									<input id="$column.attrname" name="$column.attrname" class="form-control"
-										type="text" th:value="*{$column.attrname}">
+										type="text" >
 								</div>
 							</div>
 						#end	
