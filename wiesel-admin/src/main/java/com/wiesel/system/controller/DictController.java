@@ -155,6 +155,6 @@ public class DictController {
 	}
 	
 	public void batchAdd() {
-		
+		String[] arr = new String[] {"英超",""};
 	}
 }

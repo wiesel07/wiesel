@@ -5,6 +5,7 @@
 var prefix = "/soccer/soccer";
 $(function() {
 	load();
+	 app.datetimepicker('#startDate');
 });
 
 function load() {

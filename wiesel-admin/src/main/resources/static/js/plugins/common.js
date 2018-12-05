@@ -401,3 +401,247 @@ app.isEmpty = function (obj){
         return false;
     }
 }
+
+
+
+
+/**
+ * 日期选择
+ * http://www.bootcss.com/p/bootstrap-datetimepicker/
+ * @param id
+ * @param options
+ * {
+ *  date:'yyyy-MM-dd(当天日期)',
+ *  startDate:'yyyy-MM-dd(最小日期)',
+ *  endDate:'yyyy-MM-dd(最大日期)',
+ *  change:function (date) {//日期选择事件}
+ *  pickerPosition: 默认"bottom-left" "bottom-right" "top-left" "top-right"
+ *  }
+ *  @return date yyyy-MM-dd(当前日期)
+ */
+app.datetimepicker = function (id,options) {
+    var nowDate;
+    if (options&&options.date){
+        nowDate = options.date;
+    }else{
+        nowDate = $(id).find('.form-control').val();
+        if (nowDate == undefined || nowDate == ''){
+            nowDate = new Date().format("yyyy-MM-dd");
+        }
+    }
+    $(id).find('.form-control').val(nowDate);
+    var defaultOptions = {
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn: true,
+        autoclose: true,
+        todayHighlight: true,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        // endDate:new Date().format("yyyy-MM-dd"),
+        zIndex:11111,
+        pickerPosition: "bottom-left"
+    };
+    $.extend(defaultOptions,options);
+    $(id).datetimepicker(defaultOptions).on('changeDate',function (ev) {
+        $(id).find('.form-control').val(ev.date.format("yyyy-MM-dd"));
+        var dateVal = app.datePickerFormat(id);
+        if(options&&options.change){
+            options.change(dateVal);
+        }
+    });
+
+
+    app.datePickerFormat(id);
+
+    return nowDate;
+};
+
+/**
+ * 更新日期
+ * @param id
+ * @param date
+ */
+app.datePickerUpdate = function (id,date) {
+    $(id).find('.form-control').val(date);
+    $(id).datetimepicker('update');
+    return app.datePickerFormat(id);
+};
+
+/**
+ * 日期格式化
+ * @param id
+ * @return {*|jQuery}
+ */
+app.datePickerFormat = function (id) {
+    var linkFormat = $(id).attr('data-link-format');
+    if (linkFormat) {
+        var dateValue = $(id).find('.form-control').val();
+        var dateId = $(id).attr('data-link-field');
+        if (dateId) {
+            $('#' + dateId).val(app.formatDate(dateValue, linkFormat));
+        }
+    }
+
+    var dateFormat = $(id).attr('data-date-format');
+    if (dateFormat) {
+        var dateValue = $(id).find('.form-control').val();
+        var dateId = $(id).attr('data-link-field');
+        if (dateId) {
+            $(id).find('.form-control').val(app.formatDate(dateValue, dateFormat));
+            $(id).find('.form-control').attr('value', app.formatDate(dateValue, dateFormat));
+        }
+    }
+    return $('#' + dateId).val();
+};
+
+/**
+ * 月份选择
+ * http://www.bootcss.com/p/bootstrap-datetimepicker/
+ * {
+ *  date:'yyyy-MM-dd(当天日期)',
+ *  startDate:'yyyy-MM-dd(最小日期)',
+ *  endDate:'yyyy-MM-dd(最大日期)',
+ *  change:function (date) {//日期选择事件}
+ *  }
+ *  @return date yyyy-MM-dd(当前日期)
+ */
+app.monthPicker = function (id, options) {
+    var defaultOptions = {
+        startView: 3,
+        minView: 3,
+        todayBtn: false,
+    };
+    $.extend(defaultOptions,options);
+    return bs.datetimepicker(id,defaultOptions);
+};
+
+
+/**
+ * 上个月选择
+ * @param id
+ * @param date
+ * @returns {*}
+ */
+app.monthPickerPre = function (id, date) {
+    date = app.preMonth(date);
+    $(id+' input').val(date);
+    $(id).datetimepicker('update');
+    $(id+' input').val(app.formatDate(date,"yyyy年mm月"));
+    return date;
+};
+
+/**
+ * 下个月选择
+ * @param id
+ * @param date
+ * @returns {*}
+ */
+app.monthPickerNext = function (id, date) {
+    date = app.nextMonth(date);
+    $(id+' input').val(date);
+    $(id).datetimepicker('update');
+    $(id+' input').val(app.formatDate(date,"yyyy年mm月"));
+    return date;
+};
+
+/**
+ * 上个月
+ * @param date
+ * @return {string}
+ */
+app.preMonth = function (date) {
+    var arr = date.split('-');
+    var year = arr[0]; //获取当前日期的年份
+    var month = arr[1]; //获取当前日期的月份
+    var day = arr[2]; //获取当前日期的日
+    var days = new Date(year, month, 0);
+    var year2 = year;
+    var month2 = parseInt(month) - 1;
+    if (month2 == 0) {
+        year2 = parseInt(year2) - 1;
+        month2 = 12;
+    }
+    var day2 = day;
+    var days2 = new Date(year2, month2, 0);
+    days2 = days2.getDate();
+    if (day2 > days2) {
+        day2 = days2;
+    }
+    if (month2 < 10) {
+        month2 = '0' + month2;
+    }
+    var t2 = year2 + '-' + month2 + '-' + day2;
+    return t2;
+};
+
+/**
+ * 下个月
+ * @param date
+ * @return {string}
+ */
+app.nextMonth = function (date) {
+    var arr = date.split('-');
+    var year = arr[0]; //获取当前日期的年份
+    var month = arr[1]; //获取当前日期的月份
+    var day = arr[2]; //获取当前日期的日
+    var days = new Date(year, month, 0);
+    var year2 = year;
+    var month2 = parseInt(month) + 1;
+    if (month2 == 13) {
+        year2 = parseInt(year2) + 1;
+        month2 = 1;
+    }
+    var day2 = day;
+    var days2 = new Date(year2, month2, 0);
+    days2 = days2.getDate();
+    if (day2 > days2) {
+        day2 = days2;
+    }
+    if (month2 < 10) {
+        month2 = '0' + month2;
+    }
+
+    var t2 = year2 + '-' + month2 + '-' + day2;
+    return t2;
+};
+
+
+
+/**
+ * 格式化时间
+ * @param timestamp 时间戳
+ * @param dateFormat yyyy-MM-dd hh:mm:ss.S
+ * @return
+ */
+app.formatTimestamp = function (timestamp,dateFormat) {
+    if(timestamp == null || timestamp == ""){
+        return "";
+    }
+    var date = new Date();
+    date.setTime(timestamp);
+    return date.format(dateFormat);
+};
+
+/**
+ * 格式化日期
+ * @param dateValue yyyy-mm-dd
+ * @param dateFormat
+ * @return {string|XML}
+ */
+app.formatDate = function (dateValue, dateFormat) {
+    if (dateFormat){
+        var year = dateValue.substring(0,4);
+        var month = dateValue.substring(5,7);
+        var day = dateValue.substring(8,11);
+        return dateFormat.replace('yyyy',year).replace('mm',month).replace('dd',day);
+    }
+    if(dateValue==null || dateValue==undefined || dateValue== "null"){
+        return "";
+    }
+    if (dateValue.length == 8) {
+        return dateValue.substring(0,4)+"-"+dateValue.substring(4,6)+"-"+dateValue.substring(6,8);
+    }
+    return dateValue;
+};
