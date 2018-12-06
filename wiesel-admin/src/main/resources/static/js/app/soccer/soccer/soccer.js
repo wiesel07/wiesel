@@ -5,7 +5,7 @@
 var prefix = "/soccer/soccer";
 $(function() {
 	load();
-	 app.datetimepicker('#startDate');
+	 app.datetimepicker('#soccerShowStartDate');
 });
 
 function load() {
@@ -28,7 +28,7 @@ function load() {
 						},
 						{
 	                        field: 'gmtCreate',
-	                        title: '创建时间',
+	                        title: '创建日期',
 	                        formatter: function (value, row, index) {
 	 							return value.substr(0,10);
 	 						}

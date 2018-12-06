@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.sun.org.apache.bcel.internal.generic.I2F;
 import com.wiesel.common.enums.ErrorCode;
 import com.wiesel.soccer.controller.req.SoccerReq;
 import com.wiesel.soccer.entity.Soccer;
 import com.wiesel.soccer.service.ISoccerService;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import wiesel.common.api.ApiResult;
@@ -76,6 +79,11 @@ public class SoccerController {
 		EntityWrapper<Soccer> wrapper = new EntityWrapper<>(soccer);
 		wrapper.orderBy(Soccer.USER_NAME);
 		wrapper.orderBy(Soccer.GMT_CREATE, false);
+		
+		if (StrUtil.isNotBlank(pageReq.getStartDate())) {
+			//wrapper.eq("DATE_FORMAT("+Soccer.GMT_CREATE+", '%Y%m%d')", pageReq.getStartDate());
+			wrapper.like(Soccer.GMT_CREATE, pageReq.getStartDate(), SqlLike.RIGHT);
+		}
 
 		page = IsoccerService.selectPage(page, wrapper);
 

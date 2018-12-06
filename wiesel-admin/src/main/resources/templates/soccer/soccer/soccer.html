@@ -11,19 +11,21 @@
 					<div id=toolbar>
 
 						<form id="queryForm" class="form-group fl ">
-								<div class="fl">
-								<div id="startDate" class="input-group date w250 "
-									data-date-format="yyyy-mm-dd" data-link-field="startDate"
-									data-link-format="yyyymmdd">
+							<input type="hidden" id="soccer_startDate" name="startDate" value=""/>	
+							<div class="fl">
+								<div id="soccerShowStartDate" class="input-group date w250 "
+									data-date-format="yyyy-mm-dd" data-link-field="soccer_startDate"
+									data-link-format="yyyy-mm-dd">
 									<span class="input-group-addon">
 	                                                                                                 创建日期
-									<input class="form-control " size="16" readonly> <span
-										class="input-group-addon"> <span
-										class="glyphicon glyphicon-calendar"></span>
+	                                </span>                                                                 
+									<input class="form-control " size="16" readonly>
+								   <span class="input-group-addon"> 
+									    <span class="glyphicon glyphicon-calendar"></span>
 									</span>
 								</div>
 							</div>	
-							<div class="fl">
+							<div class="fl ml5">
 								<div class="input-group w250">
 									<span class="input-group-addon">推荐人</span> <input
 										class="form-control" name="userName" placeholder="请输入推荐人查询">
