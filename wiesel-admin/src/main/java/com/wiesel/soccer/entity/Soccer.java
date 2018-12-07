@@ -102,6 +102,12 @@ public class Soccer extends Model<Soccer> {
 	 */
 	private Integer totalScore;
 	
+	
+	/**
+	 * 是否有水位，1有水位，0无水位
+	 */
+	private Integer waterLevel;
+	
     /**
 	 * ID
 	 */
@@ -121,6 +127,7 @@ public class Soccer extends Model<Soccer> {
     public static final String GUEST_SCORE = "guest_score";
     public static final String DIFF_SCORE = "diff_score";
     public static final String TOTAL_SCORE = "total_score";
+    public static final String WATER_LEVEL = "water_level";
     public static final String ID = "id";
 
     @Override

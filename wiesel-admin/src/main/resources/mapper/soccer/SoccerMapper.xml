@@ -5,6 +5,6 @@
 
    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        code,        type,        home_team,        guest_team,        prediction,        user_name,        result,        gmt_create,        gmt_modified,        home_score,        guest_score,        diff_score,        total_score,        id    </sql>
+       water_level, code,        type,        home_team,        guest_team,        prediction,        user_name,        result,        gmt_create,        gmt_modified,        home_score,        guest_score,        diff_score,        total_score,        id    </sql>
 
 </mapper>
