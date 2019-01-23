@@ -101,6 +101,7 @@ public class MybatisPlusConfig {
         performanceInterceptor.setMaxTime(3000);
         /*<!--SQL是否格式化 默认false-->*/
         performanceInterceptor.setFormat(false);
+       // performanceInterceptor.setWriteInLog(false);
         return performanceInterceptor;
     }
 	
