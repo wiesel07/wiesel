@@ -110,7 +110,7 @@ public class LoginController extends BaseController {
 		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		try {
-			subject.login(token);
+		   subject.login(token);
 
 			return ApiResult.ok();
 		} catch (AuthenticationException e) {

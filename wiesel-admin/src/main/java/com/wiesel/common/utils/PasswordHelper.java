@@ -42,15 +42,15 @@ public class PasswordHelper {
 		}
 		
 		
-//		public static void main(String[] args) {
-//			User user = new User();
-//			user.setUsername("admin");
-//			user.setPassword("123456");
-//			
-//			String newPassword = new SimpleHash("MD5", user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), 1).toHex();
-//			//String newPassword = new SimpleHash(algorithmName, user.getPassword()).toHex();
-//			user.setPassword(newPassword);
-//		System.out.println(user.getPassword());
-//		
-//		}
+		public static void main(String[] args) {
+			User user = new User();
+			user.setUsername("admin");
+			user.setPassword("123456");
+			
+			String newPassword = new SimpleHash(algorithmName, user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), 1).toHex();
+			//String newPassword = new SimpleHash(algorithmName, user.getPassword()).toHex();
+			user.setPassword(newPassword);
+		System.out.println(user.getPassword());
+		
+		}
 }

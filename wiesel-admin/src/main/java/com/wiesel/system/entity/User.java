@@ -45,11 +45,13 @@ public class User extends Model<User> {
      * 用户名
      */
     private String username;
+    
     private String name;
     /**
      * 密码
      */
     private String password;
+    
     private Long deptId;
     /**
      * 邮箱
